@@ -1,33 +1,36 @@
-# ENG1
+All source files are located in ```game/core/src/main/java/io/example/test```.
 
-A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
+# Build instructions
 
-This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.
+To build the jar file, clone the project and then in command prompt:
+```
+cd ProjectDir/game
+gradlew build
+```
+The build will be located in ```ProjectDir/game/lwjgl3/build/libs/ProjectName.jar```.
 
-## Platforms
 
-- `core`: Main module with the application logic shared by all platforms.
-- `lwjgl3`: Primary desktop platform using LWJGL3; was called 'desktop' in older docs.
+# Run instructions
 
-## Gradle
+## Using CMD
+To run game, clone the project and then in command prompt:
+```
+cd ProjectDir/game
+gradlew lwjgl3:run
+```
+This should run the game.
 
-This project uses [Gradle](https://gradle.org/) to manage dependencies.
-The Gradle wrapper was included, so you can run Gradle tasks using `gradlew.bat` or `./gradlew` commands.
-Useful Gradle tasks and flags:
+## Using VSCode
 
-- `--continue`: when using this flag, errors will not stop the tasks from running.
-- `--daemon`: thanks to this flag, Gradle daemon will be used to run chosen tasks.
-- `--offline`: when using this flag, cached dependency archives will be used.
-- `--refresh-dependencies`: this flag forces validation of all dependencies. Useful for snapshot versions.
-- `build`: builds sources and archives of every project.
-- `cleanEclipse`: removes Eclipse project data.
-- `cleanIdea`: removes IntelliJ project data.
-- `clean`: removes `build` folders, which store compiled classes and built archives.
-- `eclipse`: generates Eclipse project data.
-- `idea`: generates IntelliJ project data.
-- `lwjgl3:jar`: builds application's runnable jar, which can be found at `lwjgl3/build/libs`.
-- `lwjgl3:run`: starts the application.
-- `test`: runs unit tests (if any).
+If you are using VSCode, when you click open the project there should be an elephant symbol on the left bar. Click on it and navigate to ```lwjgl3/tasks/application``` and there is
+a run command which should run the game.
 
-Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
-For example, `core:clean` removes `build` folder only from the `core` project.
+
+# Test instructions
+
+## Using CMD
+To test the game, clone the project then in command prompt:
+```
+cd ProjectDir/game
+gradlew test
+```
