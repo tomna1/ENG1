@@ -1,20 +1,20 @@
-All source files are located in ```core/src/main/java/io/example/test```.
+All source files are located in ```game/core/src/main/java/io/example/test```.
 
 # Build instructions
 
 To build the jar file, clone the project and then in command prompt:
 ```
-cd ProjectDir
+cd ProjectDir/game
 gradlew build
 ```
-The build will be located in ```ProjectDir/lwjgl3/build/libs/ProjectName.jar```.
+The build will be located in ```ProjectDir/game/lwjgl3/build/libs/ProjectName.jar```.
 
 # Run instructions
 
 ## Using CMD
 To run game, clone the project and then in command prompt:
 ```
-cd ProjectDir
+cd ProjectDir/game
 gradlew lwjgl3:run
 ```
 This should run the game.
