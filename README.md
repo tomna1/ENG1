@@ -1,25 +1,8 @@
-All source files are located in ```game/core/src/main/java/io/example/test```.
+# Repository rules
 
-# Build instructions
+Nothing should be directly committed to the repo, instead use pull requests. Each branch of a pull request should be named ```--username-branch-name``` where ```username``` is the username (or shortened version if the full username is too long) and ```branch-name``` is a name that describes what the purpose of the branch is (add-screens if the point of the branch is to add screens to the game). ```--tomna1-leaderboard``` is an example of what a branch should be called where the purpose of the branch is to add a leaderboard.
 
-To build the jar file, clone the project and then in command prompt:
-```
-cd ProjectDir/game
-gradlew build
-```
-The build will be located in ```ProjectDir/game/lwjgl3/build/libs/ProjectName.jar```.
 
-# Run instructions
+# Build, Test and Run instructions
 
-## Using CMD
-To run game, clone the project and then in command prompt:
-```
-cd ProjectDir/game
-gradlew lwjgl3:run
-```
-This should run the game.
-
-## Using VSCode
-
-If you are using VSCode, when you click open the project there should be an elephant symbol on the left bar. Click on it and navigate to ```lwjgl3/tasks/application``` and there is
-a run command which should run the game.
+Instructions to build, test and run the game can be found [here](#game/README.md)
