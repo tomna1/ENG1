@@ -5,4 +5,4 @@ Nothing should be directly committed to the repo, instead use pull requests. Eac
 
 # Build, Test and Run instructions
 
-Instructions to build, test and run the game can be found [here](#game/README.md)
+Instructions to build, test and run the game can be found [here](game/README.md)
