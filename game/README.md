@@ -1,4 +1,4 @@
-All source files are located in ```game/core/src/main/java/io/example/test```.
+All source files are located in ```game/core/src/main/java/io/github/archessmn/ENG1```.
 
 # Build instructions
 
@@ -22,8 +22,7 @@ This should run the game.
 
 ## Using VSCode
 
-If you are using VSCode, when you click open the project there should be an elephant symbol on the left bar. Click on it and navigate to ```lwjgl3/tasks/application``` and there is
-a run command which should run the game.
+If you are using VSCode, when you click open the ```ProjectDir/game``` folder and there should be an elephant symbol on the left bar. Click on it and navigate to ```lwjgl3/tasks/application``` and there is a run command which should run the game.
 
 
 # Test instructions
