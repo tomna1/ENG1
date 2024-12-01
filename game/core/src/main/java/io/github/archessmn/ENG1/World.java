@@ -58,21 +58,21 @@ public class World {
         assetManager.load("construction.png", Texture.class);
         assetManager.load("missing_texture.png", Texture.class);
 
-        shapeRenderer = new ShapeRenderer();
-        gridRenderer = new ShapeRenderer();
+        // shapeRenderer = new ShapeRenderer();
+        // gridRenderer = new ShapeRenderer();
 
         for (Building.Use use : Building.Use.values()) {
             buildingUseCounts.put(use, 0);
         }
 
-        batch = new SpriteBatch();
+        // batch = new SpriteBatch();
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("ui/Arial.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = (int) (0.05f * Gdx.graphics.getHeight());
-        font = generator.generateFont(parameter);
-        font.getData().setScale(viewport.getWorldHeight() / Gdx.graphics.getHeight());
-        generator.dispose();
+        // FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("ui/Arial.ttf"));
+        // FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        // parameter.size = (int) (0.05f * Gdx.graphics.getHeight());
+        // font = generator.generateFont(parameter);
+        // font.getData().setScale(viewport.getWorldHeight() / Gdx.graphics.getHeight());
+        // generator.dispose();
 
         buildings = new Array<>();
 
@@ -83,7 +83,7 @@ public class World {
      * Draws the grid using {@link GridUtils}
      */
     public void drawGrid() {
-        GridUtils.drawGrid(gridRenderer);
+        // GridUtils.drawGrid(gridRenderer);
     }
 
     /**
@@ -116,7 +116,7 @@ public class World {
      * Draw all the buildings into the world.
      */
     public void drawBuildings() {
-        for (Building building : buildings) building.draw(batch);
+        // for (Building building : buildings) building.draw(batch);
     }
 
     /**
