@@ -6,10 +6,11 @@ import io.github.archessmn.eng1.World;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WorldTest extends AbstractHeadlessGdxTest {
+    private World world;
 
     @Test
     public void worldDimensionsTest() {
-        World world = new World(1, 1, 13, 23);
+        world = new World(1, 1, 13, 23);
         assertEquals(23, world.height,
             "The world height should be the same as the number in its constructor.");
         assertEquals(13, world.width,
