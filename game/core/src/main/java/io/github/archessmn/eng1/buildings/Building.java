@@ -1,4 +1,4 @@
-package io.github.archessmn.ENG1.Buildings;
+package io.github.archessmn.eng1.buildings;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -7,12 +7,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import io.github.archessmn.ENG1.Util.GridCoordTuple;
-import io.github.archessmn.ENG1.Util.GridUtils;
-import io.github.archessmn.ENG1.World;
+import io.github.archessmn.eng1.util.GridCoordTuple;
+import io.github.archessmn.eng1.util.GridUtils;
+import io.github.archessmn.eng1.World;
 
 /**
- * Base class for each building type ({@link io.github.archessmn.ENG1.Buildings.Building.Type}),
+ * Base class for each building type ({@link io.github.archessmn.eng1.buildings.Building.Type}),
  * stores information about the building and provides utility classes for interacting with it.
  */
 public class Building {

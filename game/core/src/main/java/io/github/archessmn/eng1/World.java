@@ -1,4 +1,4 @@
-package io.github.archessmn.ENG1;
+package io.github.archessmn.eng1;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
@@ -9,9 +9,9 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import io.github.archessmn.ENG1.Buildings.Building;
-import io.github.archessmn.ENG1.Util.GridCoordTuple;
-import io.github.archessmn.ENG1.Util.GridUtils;
+import io.github.archessmn.eng1.buildings.Building;
+import io.github.archessmn.eng1.util.GridCoordTuple;
+import io.github.archessmn.eng1.util.GridUtils;
 
 import java.util.HashMap;
 
@@ -100,7 +100,7 @@ public class World {
      * Run the tick() method on each building in the world building store
      * and update the counts for buildings of each use.
      */
-    public void tickBuildings() {
+    public void tickbuildings() {
 
         for (Building.Use use : Building.Use.values()) {
             buildingUseCounts.put(use, 0);
@@ -115,7 +115,7 @@ public class World {
     /**
      * Draw all the buildings into the world.
      */
-    public void drawBuildings() {
+    public void drawbuildings() {
         for (Building building : buildings) building.draw(batch);
     }
 

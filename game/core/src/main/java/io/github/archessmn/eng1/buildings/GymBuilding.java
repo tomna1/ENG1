@@ -1,6 +1,6 @@
-package io.github.archessmn.ENG1.Buildings;
+package io.github.archessmn.eng1.buildings;
 
-import io.github.archessmn.ENG1.World;
+import io.github.archessmn.eng1.World;
 
 /**
  * Wrapper of {@link Building} that creates a building with the GYM type.
