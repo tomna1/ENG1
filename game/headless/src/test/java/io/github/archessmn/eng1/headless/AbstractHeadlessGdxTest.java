@@ -1,4 +1,4 @@
-package io.github.archessmn.ENG1.headless;
+package io.github.archessmn.eng1.headless;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;

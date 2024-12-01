@@ -1,7 +1,7 @@
-package io.github.archessmn.ENG1.headless;
+package io.github.archessmn.eng1.headless;
 
 import org.junit.jupiter.api.Test;
-import io.github.archessmn.ENG1.World;
+import io.github.archessmn.eng1.World;
 
 import static org.junit.jupiter.api.Assertions.*;
 
