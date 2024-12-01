@@ -15,7 +15,7 @@ if (JavaVersion.current().isJava9Compatible()) {
  */
 sourceSets.test.resources.srcDirs += [ rootProject.file('assets').path ]
 
-mainClassName = 'io.github.archessmn.ENG1.headless.HeadlessLauncher'
+mainClassName = 'io.github.archessmn.eng1.headless.HeadlessLauncher'
 application.setMainClass(mainClassName)
 eclipse.project.name = appName + '-headless'
 
