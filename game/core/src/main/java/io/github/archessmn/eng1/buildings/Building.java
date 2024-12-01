@@ -16,16 +16,16 @@ import io.github.archessmn.eng1.World;
  * stores information about the building and provides utility classes for interacting with it.
  */
 public class Building {
-    public float x;
-    public float y;
+    private float x;
+    private float y;
 
-    public int gridX;
-    public int gridY;
+    private int gridX;
+    private int gridY;
 
     public final int id;
 
-    public float width;
-    public float height;
+    private float width;
+    private float height;
 
     public float initialBuildTime;
     public float timeUntilBuilt;
@@ -68,13 +68,15 @@ public class Building {
      * @param built Whether the building should be marked as built upon creation.
      */
     public Building(World world, Type buildingType, float x, float y, float width, float height, float timeUntilBuilt, boolean built) {
+        this.world = world;
+        this.buildingType = buildingType;
         this.id = world.buildings.size - 1;
-
+        
         this.x = x;
         this.y = y;
-
         this.width = width;
         this.height = height;
+        this.bounds = new Rectangle(this.x, this.y, this.width, this.height);
 
         this.initialBuildTime = timeUntilBuilt;
         this.timeUntilBuilt = timeUntilBuilt;
@@ -96,12 +98,15 @@ public class Building {
         this.sprite = new Sprite(world.assetManager.get(spriteFileName, Texture.class));
         this.sprite.setSize(width, height);
 
-        this.world = world;
-
-        this.buildingType = buildingType;
-
         this.bounds = new Rectangle(this.x, this.y, this.width, this.height);
     }
+
+    public float getX() { return this.x; }
+    public float getY() { return this.y; }
+    public int getGridX() { return this.gridX; }
+    public int getGridY() { return this.gridY; }
+    public float getWidth() { return this.width; }
+    public float getHeight() { return this.height; }
 
     /**
      * Draws the building into the game using the provided {@link SpriteBatch}.
@@ -124,10 +129,10 @@ public class Building {
      * @param deltaTime The amount of time to advance by.
      */
     public void tick(float deltaTime) {
-        this.setX(MathUtils.clamp(this.x, 0, world.width - this.width));
-        this.setY(MathUtils.clamp(this.y, 0, world.height - this.height));
+        this.setX(MathUtils.clamp(this.x, 0, world.getWidth() - this.width));
+        this.setY(MathUtils.clamp(this.y, 0, world.getHeight() - this.height));
 
-        if (placed && timeUntilBuilt >= 0) this.timeUntilBuilt -= deltaTime;
+        if (placed && timeUntilBuilt > 0) this.timeUntilBuilt -= deltaTime;
         if (timeUntilBuilt <= 0) built = true;
     }
 
@@ -137,7 +142,7 @@ public class Building {
      * get the amount of time to advance by.
      */
     public void tick() {
-        tick(Gdx.graphics.getDeltaTime());
+        this.tick(Gdx.graphics.getDeltaTime());
     }
 
     /**
