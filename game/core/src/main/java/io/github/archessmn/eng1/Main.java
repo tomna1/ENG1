@@ -1,4 +1,4 @@
-package io.github.archessmn.ENG1;
+package io.github.archessmn.eng1;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -18,8 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import io.github.archessmn.ENG1.Buildings.*;
-import io.github.archessmn.ENG1.Buildings.Building;
+import io.github.archessmn.eng1.buildings.*;
+import io.github.archessmn.eng1.buildings.Building;
 
 import java.util.HashMap;
 
@@ -46,7 +46,7 @@ public class Main extends ApplicationAdapter {
     Vector2 touchPos;
     Vector2 unprojectedTouchPos;
 
-    Array<Building> draggableBuildings;
+    Array<Building> draggablebuildings;
 //    Array<Building> buildings;
 
     float gameTimer;
@@ -78,7 +78,7 @@ public class Main extends ApplicationAdapter {
         Label.LabelStyle labelStyle = skin.get(Label.LabelStyle.class);
         TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
 
-        Label label = new Label("ENG1 CH2 GRP3 UniSim", labelStyle);
+        Label label = new Label("eng1 CH2 GRP3 UniSim", labelStyle);
         timerLabel = new Label("Timer", labelStyle);
 
         for (Building.Use buildingUse : Building.Use.values()) {
@@ -89,7 +89,7 @@ public class Main extends ApplicationAdapter {
             buildingUseCountLabels.put(buildingUse, new Label("0", labelStyle));
         }
 
-        TextButton button = new TextButton("Clear Buildings", textButtonStyle);
+        TextButton button = new TextButton("Clear buildings", textButtonStyle);
 
 
         stage = new Stage();
@@ -122,13 +122,13 @@ public class Main extends ApplicationAdapter {
         unprojectedTouchPos = new Vector2();
 
 //        buildings = new Array<>();
-        draggableBuildings = new Array<>();
+        draggablebuildings = new Array<>();
 
-        draggableBuildings.add(new GymBuilding(world, 660, 40, true));
-        draggableBuildings.add(new HallsBuilding(world, 720, 40, true));
-        draggableBuildings.add(new LectureHallBuilding(world, 780, 40, true));
-        draggableBuildings.add(new OfficeBuilding(world, 840, 40, true));
-        draggableBuildings.add(new PiazzaBuilding(world, 900, 40, true));
+        draggablebuildings.add(new GymBuilding(world, 660, 40, true));
+        draggablebuildings.add(new HallsBuilding(world, 720, 40, true));
+        draggablebuildings.add(new LectureHallBuilding(world, 780, 40, true));
+        draggablebuildings.add(new OfficeBuilding(world, 840, 40, true));
+        draggablebuildings.add(new PiazzaBuilding(world, 900, 40, true));
 
         gameTimer = 0f;
 
@@ -177,8 +177,8 @@ public class Main extends ApplicationAdapter {
         isClicked = Gdx.input.isTouched();
 
         if (Gdx.input.justTouched()) {
-            for (int i = draggableBuildings.size - 1; i >= 0; i--) {
-                Building building = draggableBuildings.get(i);
+            for (int i = draggablebuildings.size - 1; i >= 0; i--) {
+                Building building = draggablebuildings.get(i);
 
                 if (building.getBounds().contains(unprojectedTouchPos)) {
                     buildingClicked = world.addBuilding(building.makeCopy());
@@ -207,7 +207,7 @@ public class Main extends ApplicationAdapter {
 
         float delta = Gdx.graphics.getDeltaTime();
 
-        world.tickBuildings();
+        world.tickbuildings();
 
         gameTimer += delta;
 
@@ -250,16 +250,16 @@ public class Main extends ApplicationAdapter {
 
         world.batch.begin();
 
-        for (Building building : draggableBuildings) {
+        for (Building building : draggablebuildings) {
             building.draw(world.batch);
         }
 
-        world.drawBuildings();
+        world.drawbuildings();
 
         timerLabel.setText(String.format("Year: %d, Day: %d", (int) (gameTimer / 60) + 1, (int) ((gameTimer % 60) / (60 / (double) 365)) + 1));
         if (buildingClicked != -1) {
             if (world.doesBuildingOverlap(buildingClicked)) {
-                font.draw(world.batch, "Buildings overlap", 20, 520);
+                font.draw(world.batch, "buildings overlap", 20, 520);
             }
         }
 

@@ -1,4 +1,4 @@
-package io.github.archessmn.ENG1.Util;
+package io.github.archessmn.eng1.util;
 
 /**
  * Utility class for storing the grid coordinates of a building.

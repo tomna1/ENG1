@@ -1,12 +1,12 @@
-package io.github.archessmn.ENG1.Util;
+package io.github.archessmn.eng1.util;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
-import static io.github.archessmn.ENG1.Main.VIEWPORT_HEIGHT;
-import static io.github.archessmn.ENG1.Main.VIEWPORT_WIDTH;
+import static io.github.archessmn.eng1.Main.VIEWPORT_HEIGHT;
+import static io.github.archessmn.eng1.Main.VIEWPORT_WIDTH;
 
 /**
  * Utilities to assist with usage of the world grid.
