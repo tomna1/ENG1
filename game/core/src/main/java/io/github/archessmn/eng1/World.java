@@ -18,7 +18,7 @@ public class World {
     public AssetManager assetManager;
     private ShapeRenderer gridRenderer;
     private Integer width, height;
-    public Array<Building> buildings;
+    public Array<Building> buildings = new Array<>();
     public HashMap<Building.Use, Integer> buildingUseCounts = new HashMap<>();
 
     /**
@@ -32,8 +32,13 @@ public class World {
         this.width = worldWidth;
         this.height = worldHeight;
 
-        assetManager = new AssetManager();
+        gridRenderer = new ShapeRenderer();
 
+        for (Building.Use use : Building.Use.values()) {
+            buildingUseCounts.put(use, 0);
+        }
+
+        assetManager = new AssetManager();
         assetManager.load("gym.png", Texture.class);
         assetManager.load("halls.png", Texture.class);
         assetManager.load("lecturehall.png", Texture.class);
@@ -41,14 +46,6 @@ public class World {
         assetManager.load("piazza.png", Texture.class);
         assetManager.load("construction.png", Texture.class);
         assetManager.load("missing_texture.png", Texture.class);
-
-        gridRenderer = new ShapeRenderer();
-
-        for (Building.Use use : Building.Use.values()) {
-            buildingUseCounts.put(use, 0);
-        }
-
-        buildings = new Array<>();
         assetManager.finishLoading();
     }
     
@@ -73,17 +70,10 @@ public class World {
     }
 
     /**
-     * Run the tick() method on each building in the world building store
-     * and update the counts for buildings of each use.
+     * Run the {@link Building#tick()} method on each building in the world.
      */
     public void tickbuildings() {
-        // Resets building counts
-        for (Building.Use use : Building.Use.values()) {
-            buildingUseCounts.put(use, 0);
-        }
-        // Counts every single placed building again.
         for (Building building : buildings) {
-            buildingUseCounts.put(building.getBuildingUse(), buildingUseCounts.get(building.getBuildingUse()) + 1);
             building.tick();
         }
     }
@@ -92,7 +82,9 @@ public class World {
      * Draw all the buildings into the world.
      */
     public void drawbuildings(SpriteBatch batch) {
+        batch.begin();
         for (Building building : buildings) building.draw(batch);
+        batch.end();
     }
 
     /**
@@ -125,7 +117,7 @@ public class World {
     public boolean doesBuildingOverlap(Building overlapBuilding) {
         GridCoordTuple gridCoords = overlapBuilding.getGridCoords();
         for (Building building : buildings) {
-            if (building.id != overlapBuilding.id) {
+            if (building.getID() != overlapBuilding.getID()) {
                 if (building.getGridX() == gridCoords.x && building.getGridY() == gridCoords.y) {
                     return true;
                 }

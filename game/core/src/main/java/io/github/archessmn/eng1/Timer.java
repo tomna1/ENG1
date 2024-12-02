@@ -20,9 +20,11 @@ public class Timer {
 
     /**
      * Returns the amount of time passed in seconds.
-     * @return Seconds. e.g. 16.27 = 16.27 seconds.
+     * @return Seconds passed. e.g. 16.27 = 16.27 seconds.
      */
-    public float getElapsedTime() { return elapsedTime; }
+    public float getElapsedTime() {
+        return elapsedTime;
+    }
 
     /**
      * Returns what year it would be based on the elapsed time and the

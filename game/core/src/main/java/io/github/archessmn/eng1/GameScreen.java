@@ -28,8 +28,6 @@ import io.github.archessmn.eng1.buildings.OfficeBuilding;
 import io.github.archessmn.eng1.buildings.PiazzaBuilding;
 
 public class GameScreen implements Screen {
-    public static final Integer VIEWPORT_WIDTH = 960;
-    public static final Integer VIEWPORT_HEIGHT = 540;
     private World world;
     private FitViewport viewport;
 
@@ -43,7 +41,7 @@ public class GameScreen implements Screen {
     private Vector2 touchPos = new Vector2();
     private Vector2 unprojectedTouchPos = new Vector2();
 
-    private Array<Building> draggablebuildings;
+    private Array<Building> draggablebuildings = new Array<>();
 
     private Timer timer = new Timer(300, 60);
 
@@ -62,14 +60,17 @@ public class GameScreen implements Screen {
 
     public GameScreen(Main main) {
         // 300 here represents the pixel width of the UI on the right hand side
-        world = new World(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, VIEWPORT_WIDTH - 300, VIEWPORT_HEIGHT);
+        world = new World(Main.VIEWPORT_WIDTH, Main.VIEWPORT_HEIGHT, Main.VIEWPORT_WIDTH - 300, Main.VIEWPORT_HEIGHT);
+        viewport = main.getViewport();
 
         atlas = new TextureAtlas(Gdx.files.internal("ui/uiskin.atlas"));
         skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
         skin.addRegions(atlas);
 
-        // buildings = new Array<>();
-        draggablebuildings = new Array<>();
+        shapeRenderer = new ShapeRenderer();
+        blockRenderer = new ShapeRenderer();
+        batch = new SpriteBatch();
+
         // These are the icons for the drawable buildings on the right hand side of the menu.
         draggablebuildings.add(new GymBuilding(world, 660, 40, true));
         draggablebuildings.add(new HallsBuilding(world, 720, 40, true));
@@ -77,21 +78,11 @@ public class GameScreen implements Screen {
         draggablebuildings.add(new OfficeBuilding(world, 840, 40, true));
         draggablebuildings.add(new PiazzaBuilding(world, 900, 40, true));
 
-        viewport = main.getViewport();
         stage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
 
         createLabels();
-
-        shapeRenderer = new ShapeRenderer();
-        blockRenderer = new ShapeRenderer();
-        batch = new SpriteBatch();
-
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("ui/Arial.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = (int) (0.05f * Gdx.graphics.getHeight());
-        font = generator.generateFont(parameter);
-        generator.dispose();
+        font = createFont();
     }
 
     private void createLabels() {
@@ -126,6 +117,15 @@ public class GameScreen implements Screen {
         rightTable.add(new Label("Drag a building from below to place it", labelStyle)).left().top().row();
         rightTable.add(new Label("onto the grid. Don't overlap them!", labelStyle)).left().top().row();
         rightTable.add(new Label("Gym  Halls  Lecture Hall  Office  Piazza", labelStyle)).expandX().expandY().bottom();
+    }
+
+    private BitmapFont createFont() {
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("ui/Arial.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = (int) (0.05f * Gdx.graphics.getHeight());
+        font = generator.generateFont(parameter);
+        generator.dispose();
+        return font;
     }
 
     @Override
@@ -165,7 +165,8 @@ public class GameScreen implements Screen {
 
         touchPos.set(Gdx.input.getX(), Gdx.input.getY());
         unprojectedTouchPos.set(viewport.unproject(touchPos));
-        // If the player clicks on the building icons of the menu, makes a copy and 
+        // If the player clicks on the building icons of the menu, makes a copy and idk
+        // all of this should probably be refactored to use buttons anyway.
         if (Gdx.input.justTouched()) {
             for (int i = draggablebuildings.size - 1; i >= 0; i--) {
                 Building building = draggablebuildings.get(i);
@@ -174,11 +175,20 @@ public class GameScreen implements Screen {
                     break;
                 }
             }
-        } else if (!Gdx.input.isTouched() && buildingClicked != -1) {
+        } 
+        // If the player lets go of click button after they have pressed the
+        // a building button, places the builing at that location.
+        else if (!Gdx.input.isTouched() && buildingClicked != -1) {
             Building building = world.getBuilding(buildingClicked);
             boolean placeSuccess = building.place();
             if (!placeSuccess) {
                 world.buildings.removeIndex(buildingClicked);
+            }
+            else {
+                // Updates the building count labels.
+                world.buildingUseCounts.put(building.getBuildingUse(),
+                                            world.buildingUseCounts.get(building.getBuildingUse()) + 1
+                                            );
             }
             buildingClicked = -1;
         }
@@ -205,8 +215,8 @@ public class GameScreen implements Screen {
         batch.setProjectionMatrix(viewport.getCamera().combined);
         world.drawGrid();
 
-        // Draw red outline on the grid tile where the building is being placed.
         if (buildingClicked != -1) {
+            // Draw red outline on the grid tile where the building is being placed.
             Building building = world.getBuilding(buildingClicked);
             if (world.doesBuildingOverlap(building)) {
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -218,8 +228,42 @@ public class GameScreen implements Screen {
             shapeRenderer.rect(buldingCoords.x - (building.getWidth() / 2), buldingCoords.y - (building.getHeight() / 2),
                                building.getWidth(), building.getHeight());
             shapeRenderer.end();
+
+            batch.begin();
+            if (world.doesBuildingOverlap(buildingClicked)) {
+                font.draw(batch, "buildings overlap", 20, 520);
+            }
+            batch.end();
         }
 
+        this.drawBuildingMenu();
+
+        world.drawbuildings(batch);
+
+        batch.begin();
+        if (paused) {
+            font.draw(batch, "Paused, press [ESC] to resume", 20, 460);
+            font.draw(batch, "Building icons from macrovector on Freepik", 0, 25);
+        }
+        if (gameEnded) {
+            font.draw(batch, "End of the game!", 20, 460);
+            font.draw(batch, "Building icons from macrovector on Freepik", 0, 25);
+        }
+        batch.end();
+
+        timerLabel.setText(String.format("Year: %d, Day: %d", timer.getYearCount(), timer.getDayCount()));
+        // Sets the building count labels to the updated building count values.
+        for (Building.Use use : Building.Use.values()) {
+            buildingUseCountLabels.get(use).setText(world.buildingUseCounts.get(use));
+        }
+
+        stage.draw();
+    }
+
+    /**
+     * Draws the dark grey building menu.
+     */
+    private void drawBuildingMenu() {
         // Give the menu its drak grey background.
         blockRenderer.begin(ShapeRenderer.ShapeType.Filled);
         blockRenderer.setColor(Color.DARK_GRAY);
@@ -230,32 +274,7 @@ public class GameScreen implements Screen {
         for (Building building : draggablebuildings) {
             building.draw(batch);
         }
-        world.drawbuildings(batch);
-
-        timerLabel.setText(String.format("Year: %d, Day: %d", timer.getYearCount(), timer.getDayCount()));
-        if (buildingClicked != -1) {
-            if (world.doesBuildingOverlap(buildingClicked)) {
-                font.draw(batch, "buildings overlap", 20, 520);
-            }
-        }
-
-        if (paused) {
-            font.draw(batch, "Paused, press [ESC] to resume", 20, 460);
-            font.draw(batch, "Building icons from macrovector on Freepik", 0, 25);
-        }
-        if (gameEnded) {
-            font.draw(batch, "End of the game!", 20, 460);
-            font.draw(batch, "Building icons from macrovector on Freepik", 0, 25);
-        }
-
         batch.end();
-
-        // Sets the building count labels to the updated building count values.
-        for (Building.Use use : Building.Use.values()) {
-            buildingUseCountLabels.get(use).setText(world.buildingUseCounts.get(use));
-        }
-
-        stage.draw();
     }
 
     /**

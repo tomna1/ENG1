@@ -19,7 +19,13 @@ public class Main extends Game {
         this.setScreen(gameScreen);
     }
 
-    public FitViewport getViewport() { return viewport; }
+    /**
+     * Returns a reference to the viewport that should be used by all screens.
+     * @return The viewport.
+     */
+    public FitViewport getViewport() {
+        return viewport;
+    }
 
     @Override
     public void render() {

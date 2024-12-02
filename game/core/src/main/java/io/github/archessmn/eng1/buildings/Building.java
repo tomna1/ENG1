@@ -16,23 +16,6 @@ import io.github.archessmn.eng1.World;
  * stores information about the building and provides utility classes for interacting with it.
  */
 public class Building {
-    private float x;
-    private float y;
-
-    private int gridX;
-    private int gridY;
-
-    public final int id;
-
-    private float width;
-    private float height;
-
-    public float initialBuildTime;
-    public float timeUntilBuilt;
-
-    private boolean placed = false;
-    private boolean built;
-
     /**
      * Defines the type and, by inference, the {@link Use}
      * and sprite of a building.
@@ -48,14 +31,29 @@ public class Building {
         SLEEP, LEARN, EAT, RECREATION
     }
 
-    public Type buildingType;
+    private Type buildingType;
+    private final int id;
+    private final World world;
+    
+    private float x;
+    private float y;
 
-    public Rectangle bounds;
+    private int gridX;
+    private int gridY;
 
+    private float width;
+    private float height;
+
+    private float initialBuildTime;
+    private float timeUntilBuilt;
+
+    private boolean placed = false;
+    private boolean built;
+
+    private Rectangle bounds;
     private final Sprite sprite;
     private Sprite unbuiltSprite;
-    private final World world;
-
+   
     /**
      * Initialises a new building.
      * @param world The {@link World} that the building is a part of.
@@ -80,33 +78,71 @@ public class Building {
 
         this.initialBuildTime = timeUntilBuilt;
         this.timeUntilBuilt = timeUntilBuilt;
-
         this.built = built;
-
         if (timeUntilBuilt > 0) {
             this.unbuiltSprite = new Sprite(world.assetManager.get("construction.png", Texture.class));
             this.unbuiltSprite.setSize(width, height);
         }
 
-        String spriteFileName = switch (buildingType) {
-            case GYM -> "gym.png";
-            case HALLS -> "halls.png";
-            case LECTURE_HALL -> "lecturehall.png";
-            case OFFICES -> "offices.png";
-            case PIAZZA -> "piazza.png";
-        };
+        String spriteFileName = Building.getFileOfType(buildingType);
         this.sprite = new Sprite(world.assetManager.get(spriteFileName, Texture.class));
         this.sprite.setSize(width, height);
-
         this.bounds = new Rectangle(this.x, this.y, this.width, this.height);
     }
 
+    public int getID() { return this.id; }
+    
+    /**
+     * Sets the X position of the building
+     * @param x The X position to use
+     */
+    public void setX(float x) {
+        this.x = x;
+    }
     public float getX() { return this.x; }
-    public float getY() { return this.y; }
-    public int getGridX() { return this.gridX; }
-    public int getGridY() { return this.gridY; }
-    public float getWidth() { return this.width; }
-    public float getHeight() { return this.height; }
+   
+    /**
+     * Sets the Y position of the building
+     * @param y The Y position to use
+     */
+    public void setY(float y) {
+        this.y = y;
+    }
+    public float getY() { 
+        return this.y;
+    }
+    
+    public int getGridX() {
+        return this.gridX;
+    }
+    
+    public int getGridY() {
+        return this.gridY;
+    }
+    
+    public float getWidth() {
+        return this.width;
+    }
+    
+    public float getHeight() {
+        return this.height;
+    }
+    
+    /**
+     * Calculates and returns the bounding box of the building.
+     * @return The bounding box {@link Rectangle} of the building.
+     */
+    public Rectangle getBounds() {
+        return this.bounds.set(this.x, this.y, this.width, this.height);
+    }
+
+    /**
+     * Get the use of the building, inferred from its {@link Type}.
+     * @return The {@link Use} of the building.
+     */
+    public Use getBuildingUse() {
+        return Building.getBuildingUse(this.buildingType);
+    }
 
     /**
      * Draws the building into the game using the provided {@link SpriteBatch}.
@@ -119,7 +155,6 @@ public class Building {
             return;
         }
         sprite.setPosition(this.x, this.y);
-
         sprite.draw(batch);
     }
 
@@ -176,31 +211,7 @@ public class Building {
     }
 
     /**
-     * Sets the X position of the building
-     * @param x The X position to use
-     */
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    /**
-     * Sets the Y position of the building
-     * @param y The Y position to use
-     */
-    public void setY(float y) {
-        this.y = y;
-    }
-
-    /**
-     * Calculates and returns the bounding box of the building.
-     * @return The bounding box {@link Rectangle} of the building.
-     */
-    public Rectangle getBounds() {
-        return this.bounds.set(this.x, this.y, this.width, this.height);
-    }
-
-    /**
-     * Makes an un-built copy of the current building type
+     * Makes an un-built deep copy of the current building type
      * @return A copy of the building.
      */
     public Building makeCopy() {
@@ -235,16 +246,22 @@ public class Building {
         this.setCenter(gridCoords.x, gridCoords.y);
     }
 
-    /**
-     * Get the use of the building, inferred from its {@link Type}.
-     * @return The {@link Use} of the building.
-     */
-    public Use getBuildingUse() {
-        return switch (buildingType) {
+    public static Use getBuildingUse(Type buildingType) {
+        return switch(buildingType) {
             case GYM -> Use.RECREATION;
             case HALLS -> Use.SLEEP;
             case LECTURE_HALL, OFFICES -> Use.LEARN;
             case PIAZZA -> Use.EAT;
+        };
+    }
+
+    private static String getFileOfType(Type buildingType) {
+        return switch (buildingType) {
+            case GYM -> "gym.png";
+            case HALLS -> "halls.png";
+            case LECTURE_HALL -> "lecturehall.png";
+            case OFFICES -> "offices.png";
+            case PIAZZA -> "piazza.png";
         };
     }
 }
