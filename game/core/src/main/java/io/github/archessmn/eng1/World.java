@@ -1,14 +1,10 @@
 package io.github.archessmn.eng1;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.github.archessmn.eng1.buildings.Building;
 import io.github.archessmn.eng1.util.GridCoordTuple;
 import io.github.archessmn.eng1.util.GridUtils;
@@ -19,21 +15,10 @@ import java.util.HashMap;
  * Class used to store information about the world and the buildings in it.
  */
 public class World {
-    public FitViewport viewport;
-
     public AssetManager assetManager;
-
-    public ShapeRenderer shapeRenderer;
-    public ShapeRenderer gridRenderer;
-
-    public SpriteBatch batch;
-
-    public BitmapFont font;
-
-    public Integer width, height;
-
-    public Array<Building> buildings;
-
+    private ShapeRenderer gridRenderer;
+    private Integer width, height;
+    public Array<Building> buildings = new Array<>();
     public HashMap<Building.Use, Integer> buildingUseCounts = new HashMap<>();
 
     /**
@@ -44,12 +29,16 @@ public class World {
      * @param worldHeight Height to use for the usable world space
      */
     public World(Integer VIEWPORT_WIDTH, Integer VIEWPORT_HEIGHT, Integer worldWidth, Integer worldHeight) {
-        viewport = new FitViewport(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
         this.width = worldWidth;
         this.height = worldHeight;
 
-        assetManager = new AssetManager();
+        gridRenderer = new ShapeRenderer();
 
+        for (Building.Use use : Building.Use.values()) {
+            buildingUseCounts.put(use, 0);
+        }
+
+        assetManager = new AssetManager();
         assetManager.load("gym.png", Texture.class);
         assetManager.load("halls.png", Texture.class);
         assetManager.load("lecturehall.png", Texture.class);
@@ -57,27 +46,11 @@ public class World {
         assetManager.load("piazza.png", Texture.class);
         assetManager.load("construction.png", Texture.class);
         assetManager.load("missing_texture.png", Texture.class);
-
-        shapeRenderer = new ShapeRenderer();
-        gridRenderer = new ShapeRenderer();
-
-        for (Building.Use use : Building.Use.values()) {
-            buildingUseCounts.put(use, 0);
-        }
-
-        batch = new SpriteBatch();
-
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("ui/Arial.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = (int) (0.05f * Gdx.graphics.getHeight());
-        font = generator.generateFont(parameter);
-        font.getData().setScale(viewport.getWorldHeight() / Gdx.graphics.getHeight());
-        generator.dispose();
-
-        buildings = new Array<>();
-
         assetManager.finishLoading();
     }
+    
+    public int getWidth() { return this.width; }
+    public int getHeight() { return this.height; }
 
     /**
      * Draws the grid using {@link GridUtils}
@@ -97,17 +70,10 @@ public class World {
     }
 
     /**
-     * Run the tick() method on each building in the world building store
-     * and update the counts for buildings of each use.
+     * Run the {@link Building#tick()} method on each building in the world.
      */
     public void tickbuildings() {
-
-        for (Building.Use use : Building.Use.values()) {
-            buildingUseCounts.put(use, 0);
-        }
-
         for (Building building : buildings) {
-            buildingUseCounts.put(building.getBuildingUse(), buildingUseCounts.get(building.getBuildingUse()) + 1);
             building.tick();
         }
     }
@@ -115,8 +81,10 @@ public class World {
     /**
      * Draw all the buildings into the world.
      */
-    public void drawbuildings() {
+    public void drawbuildings(SpriteBatch batch) {
+        batch.begin();
         for (Building building : buildings) building.draw(batch);
+        batch.end();
     }
 
     /**
@@ -148,10 +116,9 @@ public class World {
      */
     public boolean doesBuildingOverlap(Building overlapBuilding) {
         GridCoordTuple gridCoords = overlapBuilding.getGridCoords();
-
         for (Building building : buildings) {
-            if (building.id != overlapBuilding.id) {
-                if (building.gridX == gridCoords.x && building.gridY == gridCoords.y) {
+            if (building.getID() != overlapBuilding.getID()) {
+                if (building.getGridX() == gridCoords.x && building.getGridY() == gridCoords.y) {
                     return true;
                 }
             }
@@ -160,13 +127,10 @@ public class World {
     }
 
     /**
-     * Dispose of various renderers used by the world
+     * Dispose of anything that needs disposing of. Duh.
      */
     public void dispose() {
-        shapeRenderer.dispose();
         gridRenderer.dispose();
-        batch.dispose();
-        font.dispose();
         assetManager.dispose();
     }
 }
