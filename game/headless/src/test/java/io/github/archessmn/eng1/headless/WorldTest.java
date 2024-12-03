@@ -10,10 +10,12 @@ public class WorldTest extends AbstractHeadlessGdxTest {
 
     @Test
     public void worldDimensionsTest() {
+        System.out.println("something");
         world = new World(1, 1, 13, 23);
-        assertEquals(23, world.height,
+        System.out.println("something2");
+        assertEquals(23, world.getHeight(),
             "The world height should be the same as the number in its constructor.");
-        assertEquals(13, world.width,
+        assertEquals(13, world.getWidth(),
             "The world width should be the same as the number in its constructor.");
     }
 }

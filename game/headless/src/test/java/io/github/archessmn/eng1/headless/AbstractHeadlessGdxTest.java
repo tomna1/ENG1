@@ -14,6 +14,8 @@ import static org.mockito.Mockito.mock;
 public abstract class AbstractHeadlessGdxTest {
     @BeforeEach
     public void setup() {
+        // THE NEXT LINE CAUSES THE TESTS TO RUN INFINITELY BUT CANNOT BE REMOVED
+        // OTHERWISE CAUSES EXCEPTIONS.
         Gdx.gl = Gdx.gl20 = mock(GL20.class);
         HeadlessLauncher.main(new String[0]);
     }

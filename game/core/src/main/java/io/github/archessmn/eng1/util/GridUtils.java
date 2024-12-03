@@ -17,23 +17,20 @@ public class GridUtils {
      * @param gridRenderer The {@link ShapeRenderer} used to draw the grid.
      */
     public static void drawGrid(ShapeRenderer gridRenderer) {
-        gridRenderer.begin(ShapeRenderer.ShapeType.Line);
-
-        gridRenderer.setColor(new Color(0x5b7e13ff));
-
         float gridWidth = (VIEWPORT_WIDTH / 16f);
         float gridHeight = (VIEWPORT_HEIGHT / 9f);
+        
+        gridRenderer.begin(ShapeRenderer.ShapeType.Line);
+        gridRenderer.setColor(new Color(0x5b7e13ff));
 
         for (int v = 1; v < 9; v++) {
             gridRenderer.line(0, gridHeight * v, VIEWPORT_WIDTH - 300, gridHeight * v);
         }
-
         for (int h = 1; h < 11; h++) {
             gridRenderer.line(gridWidth * h, 0, gridWidth * h, VIEWPORT_HEIGHT);
         }
 
         gridRenderer.end();
-
     }
 
     /**
