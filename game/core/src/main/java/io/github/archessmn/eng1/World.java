@@ -48,7 +48,7 @@ public class World {
         assetManager.load("missing_texture.png", Texture.class);
         assetManager.finishLoading();
     }
-    
+
     public int getWidth() { return this.width; }
     public int getHeight() { return this.height; }
 
@@ -94,6 +94,13 @@ public class World {
      */
     public Building getBuilding(Integer id) {
         return buildings.get(id);
+    }
+    /**
+     * Gets the array of all buildings in the world.
+     * @return The array buildings containing each building object.
+     */
+    public Array<Building> getBuildings(){
+        return buildings;
     }
 
     /**

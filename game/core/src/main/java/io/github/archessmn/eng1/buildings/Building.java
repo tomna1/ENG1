@@ -15,7 +15,7 @@ import io.github.archessmn.eng1.World;
  * Base class for each building type ({@link io.github.archessmn.eng1.buildings.Building.Type}),
  * stores information about the building and provides utility classes for interacting with it.
  */
-public class Building {
+public abstract class Building {
     /**
      * Defines the type and, by inference, the {@link Use}
      * and sprite of a building.
@@ -214,9 +214,7 @@ public class Building {
      * Makes an un-built deep copy of the current building type
      * @return A copy of the building.
      */
-    public Building makeCopy() {
-        return new Building(this.world, this.buildingType, this.x, this.y + 60, this.width, this.height, this.initialBuildTime, false);
-    }
+    public abstract Building makeCopy();
 
     /**
      * Get the raw coordinates of the grid square the building would
@@ -246,6 +244,10 @@ public class Building {
         this.setCenter(gridCoords.x, gridCoords.y);
     }
 
+    public Type getBuildingType(){
+        return buildingType;
+    }
+
     public static Use getBuildingUse(Type buildingType) {
         return switch(buildingType) {
             case GYM -> Use.RECREATION;
@@ -263,5 +265,9 @@ public class Building {
             case OFFICES -> "offices.png";
             case PIAZZA -> "piazza.png";
         };
+    }
+
+    public World getWorld(){
+        return world;
     }
 }
