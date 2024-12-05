@@ -14,6 +14,8 @@ public class Timer {
      * @param secondsPerYear The amount of seconds per year.
      */
     public Timer(int maxTime, int secondsPerYear) {
+        if (maxTime <= 0) throw new IllegalArgumentException("maxTime should be positive.");
+        if (secondsPerYear <=  0) throw new IllegalArgumentException("secondsPeryear should be positive");
         this.maxTime = maxTime;
         this.secondsPerYear = secondsPerYear;
     }
@@ -24,6 +26,22 @@ public class Timer {
      */
     public float getElapsedTime() {
         return elapsedTime;
+    }
+
+    /**
+     * Returns the maximum time the timer can go up to defined in the constructor.
+     * @return maxTime.
+     */
+    public int getMaxTime() {
+        return maxTime;
+    }
+
+    /**
+     * Returns the secondsPerYear as defined in the constructor.
+     * @return secondsPerYear.
+     */
+    public int getSecondsPerYear() {
+        return secondsPerYear;
     }
 
     /**
