@@ -72,11 +72,11 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
 
         // These are the icons for the drawable buildings on the right hand side of the menu.
-        draggablebuildings.add(new GymBuilding(world, 660, 40, true));
-        draggablebuildings.add(new HallsBuilding(world, 720, 40, true));
-        draggablebuildings.add(new LectureHallBuilding(world, 780, 40, true));
-        draggablebuildings.add(new OfficeBuilding(world, 840, 40, true));
-        draggablebuildings.add(new PiazzaBuilding(world, 900, 40, true));
+        draggablebuildings.add(new GymBuilding(world));
+        draggablebuildings.add(new HallsBuilding(world));
+        draggablebuildings.add(new LectureHallBuilding(world));
+        draggablebuildings.add(new OfficeBuilding(world));
+        draggablebuildings.add(new PiazzaBuilding(world));
 
         stage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
