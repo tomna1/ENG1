@@ -113,6 +113,13 @@ public class World {
     public Building getBuilding(Integer id) {
         return buildings.get(id);
     }
+    /**
+     * Gets the array of all buildings in the world.
+     * @return The array buildings containing each building object.
+     */
+    public Array<Building> getBuildings(){
+        return buildings;
+    }
 
     /**
      * Utility method to check if a building overlaps with any others in the world

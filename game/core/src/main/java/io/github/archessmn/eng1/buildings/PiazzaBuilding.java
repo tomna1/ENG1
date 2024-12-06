@@ -6,7 +6,12 @@ import io.github.archessmn.eng1.World;
  * Wrapper of {@link Building} that creates a building with the PIAZZA type.
  */
 public class PiazzaBuilding extends Building {
-    public PiazzaBuilding(World world, float x, float y, boolean built) {
-        super(world, Type.PIAZZA, x, y, 60, 60, 10f, built);
+    public PiazzaBuilding(World world) {
+        super(world, Type.PIAZZA, 900, 40, 60, 60, 10f, true);
+    }
+
+    @Override
+    public Building makeCopy(){
+        return new PiazzaBuilding(getWorld());
     }
 }
