@@ -22,17 +22,17 @@ public class World {
     public HashMap<Building.Use, Integer> buildingUseCounts = new HashMap<>();
 
     /**
-     * Initialises an empty world and loads assets.
-     * @param VIEWPORT_WIDTH Width to create the viewport
-     * @param VIEWPORT_HEIGHT Height to create the viewport
-     * @param worldWidth Width to use for the usable world space
-     * @param worldHeight Height to use for the usable world space
+     * Creates a new world which can be used to store buildings.
+     * 
+     * @param worldWidth Width of the world. Must be greater than 0.
+     * @param worldHeight Height of the world. Must be greater than 0.
+     * 
      */
-    public World(Integer VIEWPORT_WIDTH, Integer VIEWPORT_HEIGHT, Integer worldWidth, Integer worldHeight) {
+    public World(Integer worldWidth, Integer worldHeight) {
+        if (worldWidth <= 0) throw new IllegalArgumentException("World Width should be greater than 0.");
+        if (worldHeight <= 0) throw new IllegalArgumentException("World Height should be greater than 0.");
         this.width = worldWidth;
         this.height = worldHeight;
-
-        gridRenderer = new ShapeRenderer();
 
         for (Building.Use use : Building.Use.values()) {
             buildingUseCounts.put(use, 0);
@@ -49,14 +49,32 @@ public class World {
         assetManager.finishLoading();
     }
     
-    public int getWidth() { return this.width; }
-    public int getHeight() { return this.height; }
+    /**
+     * Returns the width of the world as defined in the constructor..
+     * @return World width, always greater than 0.
+     */
+    public int getWidth() {
+        return this.width;
+    }
+    
+    /**
+     * Returns the height of the world as defined in the constructor.
+     * @return World height, always greater than 0.
+     */
+    public int getHeight() {
+        return this.height;
+    }
 
     /**
      * Draws the grid using {@link GridUtils}
      */
     public void drawGrid() {
-        // GridUtils.drawGrid(gridRenderer);
+        // This is here instead of constructor because it breaks some of the
+        // tests and this method is not called in the tests.
+        if (gridRenderer == null) {
+            gridRenderer = new ShapeRenderer();
+        }
+        GridUtils.drawGrid(gridRenderer);
     }
 
     /**

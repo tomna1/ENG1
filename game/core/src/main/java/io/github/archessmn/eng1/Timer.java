@@ -8,20 +8,22 @@ public class Timer {
     /**
      * Creates a new timer with the specified parameters. This timer will track the
      * amount of seconds passed and will also be able to get a count for the day and
-     * year based on the {@link #secondsPerYear} passed into the constructor. Minimum
-     * year is 1 and minimum day is 0.
-     * @param maxTime The maximum amount of time a timer can go for in seconds.
-     * @param secondsPerYear The amount of seconds per year.
+     * year based on the {@link #secondsPerYear} passed into the constructor.
+     * 
+     * @param maxTime The maximum amount of time a timer can go for in seconds. Must be
+     * greater than 0.
+     * @param secondsPerYear The amount of seconds per year. Must be greater than 0.
      */
     public Timer(int maxTime, int secondsPerYear) {
         if (maxTime <= 0) throw new IllegalArgumentException("maxTime should be positive.");
-        if (secondsPerYear <=  0) throw new IllegalArgumentException("secondsPeryear should be positive");
+        if (secondsPerYear <=  0) throw new IllegalArgumentException("secondsPeryear should be positive.");
         this.maxTime = maxTime;
         this.secondsPerYear = secondsPerYear;
     }
 
     /**
-     * Returns the amount of time passed in seconds.
+     * Returns the amount of time passed in seconds. This value will never be
+     * bigger than {@link #maxTime}.
      * @return Seconds passed. e.g. 16.27 = 16.27 seconds.
      */
     public float getElapsedTime() {
@@ -54,12 +56,12 @@ public class Timer {
     }
 
     /**
-     * Returns what day it would be based on the elapsed time and the
+     * Returns what day of the year it would be based on the elapsed time and the
      * {@link #secondsPerYear}.
-     * @return Minimum 0.
+     * @return Day of year, min 1, max 365.
      */
     public int getDayCount() {
-        return (int)(((elapsedTime % secondsPerYear) / secondsPerYear) * 365);
+        return (int)((elapsedTime % secondsPerYear) * (365/secondsPerYear) + 1);
     }
 
     /**
@@ -69,6 +71,7 @@ public class Timer {
     public void update(float delta) {
         if (this.hasEnded()) return;
         elapsedTime += delta;
+        if (elapsedTime > maxTime) elapsedTime = maxTime;
     }
 
     /**

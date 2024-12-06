@@ -6,16 +6,45 @@ import io.github.archessmn.eng1.World;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WorldTest extends AbstractHeadlessGdxTest {
-    private World world;
+    /**
+     * Tests the world constructors and basic setters/getters.
+     */
+    @Test
+    public void worldInit() {
+        int worldWidth = 13;
+        int worldHeight = 23;
+        World world = new World(worldWidth, worldHeight);
+        assertEquals(worldWidth, world.getWidth(),
+            "The world width should be the same as the number in its constructor.");
+        
+        assertEquals(worldHeight, world.getHeight(),
+            "The world height should be the same as the number in its constructor.");
+        
+        assertEquals(0, world.buildings.size,
+            "There should be no buildings in the world upon creation.");
+    }
 
     @Test
-    public void worldDimensionsTest() {
-        System.out.println("something");
-        world = new World(1, 1, 13, 23);
-        System.out.println("something2");
-        assertEquals(23, world.getHeight(),
-            "The world height should be the same as the number in its constructor.");
-        assertEquals(13, world.getWidth(),
-            "The world width should be the same as the number in its constructor.");
+    public void worldInitIllegalWidth() {
+        final int worldWidth = 0;
+        final int worldHeight = 5;
+        assertThrows(IllegalArgumentException.class, () -> new World(worldWidth, worldHeight),
+            "Should throw IllegalArguementException when worldWidth <= 0 in constructor.");
+
+        final int worldWidth2 = -8;
+        assertThrows(IllegalArgumentException.class, () -> new World(worldWidth2, worldHeight),
+            "Should throw IllegalArguementException when worldWidth <= 0 in constructor.");
+    }
+
+    @Test
+    public void worldInitIllegalHeight() {
+        final int worldWidth = 5;
+        final int worldHeight = 0;
+        assertThrows(IllegalArgumentException.class, () -> new World(worldWidth, worldHeight),
+            "Should throw IllegalArguementException when worldHeight <= 0 in constructor.");
+
+        final int worldHeight2 = -8;
+        assertThrows(IllegalArgumentException.class, () -> new World(worldWidth, worldHeight2),
+            "Should throw IllegalArguementException when worldHeight <= 0 in constructor.");
     }
 }
