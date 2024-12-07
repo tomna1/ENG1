@@ -1,9 +1,10 @@
-name: Build Game
+name: CI Run All Tests
 
 on:
   push:
-    branches:
-      - main
+    branches: [ 'main' ]
+  pull_request:
+    branches: [ 'main' ]
 
 jobs:
   build:
@@ -11,24 +12,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # downloads the github repo
       - name: Checkout repo
         uses: actions/checkout@v4
 
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: "corretto"
+          distribution: "temurin"
           java-version: "17"
+      
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
-      - name: Download Licenses
-        run: ./gradlew build
+      - name: Build with gradle wrapper
         working-directory: ./game
-      - name: Copy License Files
-        run: mv game/lwjgl3/build/libs/ENG1-1.0.0.jar game/lwjgl3/build/libs/ENG1-CH2-GRP3-UniSim-1.0.0.jar
+        run: ./gradlew build
+      #- name: Copy License Files
+      #  run: mv game/lwjgl3/build/libs/ENG1-1.0.0.jar game/lwjgl3/build/libs/ENG1-CH2-GRP3-UniSim-1.0.0.jar
+  
+  #test:
+   # name: Run-Unit-Tests
+    #runs-on: ubuntu-latest
 
-      - name: Upload production-ready build files
-        uses: actions/upload-artifact@v4
-        with:
-          name: game-files
-          path: ./game/lwjgl3/build/libs/*.jar
+    #steps:
+      # downloads the github repo
+    #  - name: Checkout repo
+     #   uses: actions/checkout@v4
+
+      #- name: Setup Java
+       # uses: actions/setup-java@v4
+        #with:
+         # distribution: "temurin"
+          #java-version: "17"
+      
+      #- name: Setup Gradle
+       # uses: gradle/actions/setup-gradle@v4
