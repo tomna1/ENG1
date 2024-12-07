@@ -10,6 +10,8 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    permissions: 
+      contents: read
 
     steps:
       # downloads the github repo
@@ -27,8 +29,6 @@ jobs:
       - name: Build with gradle wrapper
         working-directory: ./game
         run: ./gradlew build
-      #- name: Copy License Files
-      #  run: mv game/lwjgl3/build/libs/ENG1-1.0.0.jar game/lwjgl3/build/libs/ENG1-CH2-GRP3-UniSim-1.0.0.jar
   
   #test:
    # name: Run-Unit-Tests
