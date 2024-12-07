@@ -1,4 +1,4 @@
-name: Build game
+name: Run all Unit Tests
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Build
+    name: Run unit tests
     runs-on: ubuntu-latest
     permissions: 
       contents: read
@@ -26,7 +26,6 @@ jobs:
       
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
-      - name: Build with gradle wrapper
+      - name: Run tests with gradle wrapper
         working-directory: ./game
-        run: ./gradlew build
-  
+        run: ./gradlew test
