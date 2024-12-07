@@ -1,9 +1,9 @@
 package io.github.archessmn.eng1;
 
 public class Timer {
-    float elapsedTime = 0.0f;
-    int maxTime;
-    int secondsPerYear;
+    private float elapsedTime = 0.0f;
+    private int maxTime;
+    private int secondsPerYear;
 
     /**
      * Creates a new timer with the specified parameters. This timer will track the
