@@ -14,4 +14,8 @@ public class GymBuilding extends Building {
     public Building makeCopy(){
         return new GymBuilding(getWorld());
     }
+
+    @Override
+    public void setConnections() {
+    }
 }

@@ -15,11 +15,16 @@ import java.util.HashMap;
  * Class used to store information about the world and the buildings in it.
  */
 public class World {
+
     public AssetManager assetManager;
     private ShapeRenderer gridRenderer;
-    private Integer width, height;
+
     public Array<Building> buildings = new Array<>();
     public HashMap<Building.Use, Integer> buildingUseCounts = new HashMap<>();
+    public HashMap<Building.Type, Integer> buildingTypeCounts = new HashMap<>();
+
+    private Integer width, height;
+    private Integer studentCount, teacherCount;
 
     /**
      * Creates a new world which can be used to store buildings.
@@ -29,15 +34,29 @@ public class World {
      * 
      */
     public World(Integer worldWidth, Integer worldHeight) {
-        if (worldWidth <= 0) throw new IllegalArgumentException("World Width should be greater than 0.");
-        if (worldHeight <= 0) throw new IllegalArgumentException("World Height should be greater than 0.");
+    
+        testWorldDimensions(worldWidth, worldHeight);
         this.width = worldWidth;
         this.height = worldHeight;
+        studentCount = 0;
+        teacherCount = 0;
 
+        initializeBuildingCounts();
+        loadAssests();
+    }
+
+    private void testWorldDimensions(Integer worldWidth, Integer worldHeight){
+        if (worldWidth <= 0) throw new IllegalArgumentException("World Width should be greater than 0.");
+        if (worldHeight <= 0) throw new IllegalArgumentException("World Height should be greater than 0.");
+    }
+
+    private void initializeBuildingCounts(){
         for (Building.Use use : Building.Use.values()) {
             buildingUseCounts.put(use, 0);
         }
+    }
 
+    private void loadAssests(){
         assetManager = new AssetManager();
         assetManager.load("gym.png", Texture.class);
         assetManager.load("halls.png", Texture.class);
@@ -48,34 +67,6 @@ public class World {
         assetManager.load("missing_texture.png", Texture.class);
         assetManager.finishLoading();
     }
-    
-    /**
-     * Returns the width of the world as defined in the constructor..
-     * @return World width, always greater than 0.
-     */
-    public int getWidth() {
-        return this.width;
-    }
-    
-    /**
-     * Returns the height of the world as defined in the constructor.
-     * @return World height, always greater than 0.
-     */
-    public int getHeight() {
-        return this.height;
-    }
-
-    /**
-     * Draws the grid using {@link GridUtils}
-     */
-    public void drawGrid() {
-        // This is here instead of constructor because it breaks some of the
-        // tests and this method is not called in the tests.
-        if (gridRenderer == null) {
-            gridRenderer = new ShapeRenderer();
-        }
-        GridUtils.drawGrid(gridRenderer);
-    }
 
     /**
      * Adds a building to the world building store and returns its location in the store
@@ -84,7 +75,14 @@ public class World {
      */
     public int addBuilding(Building building) {
         buildings.add(building);
+        updateBuildingDistances(building);
         return buildings.size - 1;
+    }
+
+    private void updateBuildingDistances(Building newBuilding){
+        for(Building building : buildings){
+            building.addDistanceFromOtherBuilding(newBuilding);
+        }
     }
 
     /**
@@ -94,31 +92,6 @@ public class World {
         for (Building building : buildings) {
             building.tick();
         }
-    }
-
-    /**
-     * Draw all the buildings into the world.
-     */
-    public void drawbuildings(SpriteBatch batch) {
-        batch.begin();
-        for (Building building : buildings) building.draw(batch);
-        batch.end();
-    }
-
-    /**
-     * Get a building from the world building store
-     * @param id The ID of a building (its index).
-     * @return The building with the given ID / index
-     */
-    public Building getBuilding(Integer id) {
-        return buildings.get(id);
-    }
-    /**
-     * Gets the array of all buildings in the world.
-     * @return The array buildings containing each building object.
-     */
-    public Array<Building> getBuildings(){
-        return buildings;
     }
 
     /**
@@ -152,10 +125,79 @@ public class World {
     }
 
     /**
+     * Draw all the buildings into the world.
+     */
+    public void drawbuildings(SpriteBatch batch) {
+        batch.begin();
+        for (Building building : buildings) building.draw(batch);
+        batch.end();
+    }
+
+    /**
+     * Draws the grid using {@link GridUtils}
+     */
+    public void drawGrid() {
+        // This is here instead of constructor because it breaks some of the
+        // tests and this method is not called in the tests.
+        if (gridRenderer == null) {
+            gridRenderer = new ShapeRenderer();
+        }
+        GridUtils.drawGrid(gridRenderer);
+    }
+
+    /**
      * Dispose of anything that needs disposing of. Duh.
      */
     public void dispose() {
         gridRenderer.dispose();
         assetManager.dispose();
+    }
+
+    /**
+     * Returns the width of the world as defined in the constructor..
+     * @return World width, always greater than 0.
+     */
+    public int getWidth() {
+        return this.width;
+    }
+    
+    /**
+     * Returns the height of the world as defined in the constructor.
+     * @return World height, always greater than 0.
+     */
+    public int getHeight() {
+        return this.height;
+    }
+
+    /**
+     * Get a building from the world building store
+     * @param id The ID of a building (its index).
+     * @return The building with the given ID / index
+     */
+    public Building getBuilding(Integer id) {
+        return buildings.get(id);
+    }
+    /**
+     * Gets the array of all buildings in the world.
+     * @return The array buildings containing each building object.
+     */
+    public Array<Building> getBuildings(){
+        return buildings;
+    }
+
+    public HashMap<Building.Use, Integer> getBuildingUseCounts(){
+        return buildingUseCounts;
+    }
+
+    public HashMap<Building.Type, Integer> getBuildingTypeCount(){
+        return buildingTypeCounts;
+    }
+
+    public Integer getStudentCount(){
+        return studentCount;
+    }
+
+    public Integer getTeacherCount(){
+        return teacherCount;
     }
 }

@@ -14,4 +14,9 @@ public class LectureHallBuilding extends Building {
     public Building makeCopy(){
         return new LectureHallBuilding(getWorld());
     }
+
+    @Override
+    public void setConnections() {
+        connections.put(Type.PIAZZA, 0.0f);
+    }
 }

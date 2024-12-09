@@ -7,8 +7,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
  * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
  */
 public class Main extends Game {
-    public static final int VIEWPORT_WIDTH = 960;
-    public static final int VIEWPORT_HEIGHT = 540;
+    public static final int VIEWPORT_WIDTH = 960, VIEWPORT_HEIGHT = 540;
     private GameScreen gameScreen;
     private FitViewport viewport;
 

@@ -14,4 +14,10 @@ public class OfficeBuilding extends Building {
     public Building makeCopy(){
         return new OfficeBuilding(getWorld());
     }
+
+    @Override
+    public void setConnections() {
+        connections.put(Type.LECTURE_HALL, 0.0f);
+        connections.put(Type.PIAZZA, 0.0f);
+    }
 }

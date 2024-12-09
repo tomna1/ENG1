@@ -14,4 +14,11 @@ public class PiazzaBuilding extends Building {
     public Building makeCopy(){
         return new PiazzaBuilding(getWorld());
     }
+
+    @Override
+    public void setConnections() {
+        connections.put(Type.HALLS, 0.0f);
+        connections.put(Type.LECTURE_HALL, 0.0f);
+        connections.put(Type.OFFICES, 0.0f);
+    }
 }
