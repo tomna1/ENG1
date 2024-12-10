@@ -20,7 +20,7 @@ public class Leaderboard {
      * @param leaderboardFileDir The file containing the leaderboard data.
      */
     public Leaderboard(FileHandle leaderboardFileDir) {
-        this(leaderboardFileDir, 10);
+        // this(leaderboardFileDir, 10);
     }
     
     private Leaderboard(FileHandle leaderboardFileDir, int maxCount) {

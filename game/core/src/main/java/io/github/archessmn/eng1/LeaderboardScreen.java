@@ -1,14 +1,23 @@
 package io.github.archessmn.eng1;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+
+import io.github.archessmn.eng1.leaderboard.Leaderboard;
+import io.github.archessmn.eng1.leaderboard.LeaderboardMenu;
 
 public class LeaderboardScreen implements Screen {
     private FitViewport viewport;
     private Leaderboard leaderboard = new Leaderboard(null);
+    private LeaderboardMenu leaderboardMenu;
 
     public LeaderboardScreen(Main main) {
+        if (main == null) throw new IllegalArgumentException("main cannot be null");
         this.viewport = main.getViewport();
+        leaderboardMenu = new LeaderboardMenu(null, viewport);
+        leaderboardMenu.setInputProcessor();
     }
     
     public void show() {
@@ -28,7 +37,8 @@ public class LeaderboardScreen implements Screen {
     }
 
     public void render(float delta) {
-        
+        ScreenUtils.clear(Color.BLACK);
+        leaderboardMenu.draw(delta);
     }
 
     public void resize(int width, int height) {

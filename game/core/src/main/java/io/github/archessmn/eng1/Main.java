@@ -9,13 +9,15 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 public class Main extends Game {
     public static final int VIEWPORT_WIDTH = 960, VIEWPORT_HEIGHT = 540;
     private GameScreen gameScreen;
+    private LeaderboardScreen leaderboardScreen;
     private FitViewport viewport;
 
     @Override
     public void create() {
         viewport = new FitViewport(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
         gameScreen = new GameScreen(this);
-        this.setScreen(gameScreen);
+        leaderboardScreen = new LeaderboardScreen(this);
+        this.setScreen(leaderboardScreen);
     }
 
     /**

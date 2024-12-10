@@ -1,4 +1,4 @@
-package io.github.archessmn.eng1;
+package io.github.archessmn.eng1.leaderboard;
 
 import com.badlogic.gdx.files.FileHandle;
 
