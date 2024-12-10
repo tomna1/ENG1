@@ -9,14 +9,24 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 public class Main extends Game {
     public static final int VIEWPORT_WIDTH = 960;
     public static final int VIEWPORT_HEIGHT = 540;
+    private MainMenuScreen mainMenu;
     private GameScreen gameScreen;
     private FitViewport viewport;
 
     @Override
     public void create() {
         viewport = new FitViewport(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+        mainMenu = new MainMenuScreen(this);
+        this.setScreen(mainMenu);
+    }
+
+    public void startGame() {
         gameScreen = new GameScreen(this);
         this.setScreen(gameScreen);
+    }
+
+    public void viewLeaderboard() {
+        System.out.println("view leaderboard");
     }
 
     /**
@@ -39,6 +49,6 @@ public class Main extends Game {
 
     @Override
     public void dispose() {
-        gameScreen.dispose();
+        screen.dispose();
     }
 }
