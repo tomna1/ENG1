@@ -23,6 +23,7 @@ public class Main extends Game {
     public void startGame() {
         gameScreen = new GameScreen(this);
         this.setScreen(gameScreen);
+        mainMenu.dispose();
     }
 
     public void viewLeaderboard() {
