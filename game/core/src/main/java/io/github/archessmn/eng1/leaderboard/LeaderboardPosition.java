@@ -13,20 +13,31 @@ public class LeaderboardPosition {
     private float score;
     private ArrayList<CompletedAchievement> completedAchievements;
 
+    /**
+     * Creates a new data storing a record on the leaderboard.
+     * @param position The position of the record on the leaderboard. 0 is 1st,
+     * 5 if 6th.
+     * @param username The username of the player. Cannot be null.
+     * @param score The score the player got.
+     * @param achievements The achievement the player got. If null then no
+     * achievements were achieved.
+     */
     public LeaderboardPosition(int position, String username, float score, ArrayList<CompletedAchievement> achievements) {
+        if (username == null) throw new IllegalArgumentException("username cannot be null");
         this.position = position;
         this.username = username;
         this.score = score;
         this.completedAchievements = achievements;
-        if (this.completedAchievements == null) {
+        if (achievements == null) {
             this.completedAchievements = new ArrayList<>();
         }
     }
 
     public LeaderboardPosition(LeaderboardPosition pos) {
+        this.position = pos.position;
         this.username = pos.username;
         this.score = pos.score;
-        this.completedAchievements = new ArrayList<>(completedAchievements);
+        this.completedAchievements = new ArrayList<>(pos.completedAchievements);
     }
 
     /**

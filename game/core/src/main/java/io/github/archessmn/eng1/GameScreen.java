@@ -78,6 +78,7 @@ public class GameScreen implements Screen {
 
         createLabels();
         font = createFont();
+        stage.setDebugAll(true);
     }
 
     private void initializeBuildingIcons(){

@@ -2,9 +2,11 @@ package io.github.archessmn.eng1.leaderboard;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -17,21 +19,30 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
  */
 public class LeaderboardMenu {
     private Stage stage;
-    private Table table;
+    private Table leaderboardTable;
     private ImageButton menuButton;
-    private final Skin skin;
     private Leaderboard leaderboard;
+    private LeaderboardPositionRecord[] records;
 
     public LeaderboardMenu(Leaderboard leaderboard, FitViewport viewport) {
-        // if (leaderboard == null) throw new IllegalArgumentException("Leaderboard should not be null.");
-        stage = new Stage(viewport);
-        skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
-        table = new Table(skin);
-        table.setFillParent(true);
-        table.setDebug(true);
-        stage.addActor(table);
-        setupMenuButton();
+        if (leaderboard == null) throw new IllegalArgumentException("Leaderboard should not be null.");
+        if (viewport == null) throw new IllegalArgumentException("viewport cannot be null");
         this.leaderboard = leaderboard;
+        records = new LeaderboardPositionRecord[leaderboard.getCount()];
+        
+        stage = new Stage(viewport);
+        leaderboardTable = new Table();
+        leaderboardTable.setFillParent(true);
+        leaderboardTable.top();
+
+        Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+        Label label = new Label("Leaderboard", skin);
+        leaderboardTable.add(label).width(100.0f).row();
+        stage.addActor(leaderboardTable);
+
+        setupMenuButton();
+        setupLeaderboard();
+        stage.setDebugAll(true);
     }
 
     private void setupMenuButton() {
@@ -53,16 +64,31 @@ public class LeaderboardMenu {
         stage.addActor(menuButton);
     }
 
-    private void setupTable() {
-        final float height =  stage.getHeight();
+    private void setupLeaderboard() {
+        Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+        
+        final int leaderboardCount = leaderboard.getCount();
+        
+        // The X value of all records in the leaderboard.
+        final float leaderboardX = (stage.getWidth()/4);
+        // The starting Y value of the records in the leaderboard.
+        final float leaderboardY = stage.getHeight();
+        // The width of each record in the leaderboard
+        final float leaderboardWidth = stage.getWidth()/2;
+        // The height of each record in the leaderboard.
+        final float leaderboardRecordHeight = stage.getHeight()/leaderboardCount;
+        Rectangle recordBounds = new Rectangle(leaderboardX, leaderboardY, leaderboardWidth, leaderboardRecordHeight);
 
-        for (int i = 0; i < leaderboard.getCount(); i++) {
-            
-            // table.add()
+        for (int i = 0; i < leaderboardCount; i++) {
+            records[i] = new LeaderboardPositionRecord(leaderboardTable, leaderboard.getLeaderboardPos(i), recordBounds);
+            leaderboardTable.row();
+            recordBounds.y -= leaderboardRecordHeight;
         }
+
+        skin.dispose();
     }
 
-    public void setInputProcessor() {
+    public void setAsInputProcessor() {
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -73,6 +99,5 @@ public class LeaderboardMenu {
 
     public void dispose() {
         stage.dispose();
-        skin.dispose();
     }
 }

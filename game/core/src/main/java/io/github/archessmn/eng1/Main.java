@@ -17,7 +17,7 @@ public class Main extends Game {
         viewport = new FitViewport(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
         gameScreen = new GameScreen(this);
         leaderboardScreen = new LeaderboardScreen(this);
-        this.setScreen(leaderboardScreen);
+        this.setScreen(gameScreen);
     }
 
     /**

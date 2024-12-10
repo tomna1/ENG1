@@ -10,14 +10,15 @@ import io.github.archessmn.eng1.leaderboard.LeaderboardMenu;
 
 public class LeaderboardScreen implements Screen {
     private FitViewport viewport;
-    private Leaderboard leaderboard = new Leaderboard(null);
+    private Leaderboard leaderboard;
     private LeaderboardMenu leaderboardMenu;
 
     public LeaderboardScreen(Main main) {
         if (main == null) throw new IllegalArgumentException("main cannot be null");
         this.viewport = main.getViewport();
-        leaderboardMenu = new LeaderboardMenu(null, viewport);
-        leaderboardMenu.setInputProcessor();
+        leaderboard = new Leaderboard();
+        leaderboardMenu = new LeaderboardMenu(leaderboard, viewport);
+        leaderboardMenu.setAsInputProcessor();
     }
     
     public void show() {
@@ -25,7 +26,7 @@ public class LeaderboardScreen implements Screen {
     }
 
     public void hide() {
-
+        leaderboardMenu.setAsInputProcessor();
     }
 
     public void pause() {
@@ -37,7 +38,7 @@ public class LeaderboardScreen implements Screen {
     }
 
     public void render(float delta) {
-        ScreenUtils.clear(Color.BLACK);
+        ScreenUtils.clear(Color.WHITE);
         leaderboardMenu.draw(delta);
     }
 

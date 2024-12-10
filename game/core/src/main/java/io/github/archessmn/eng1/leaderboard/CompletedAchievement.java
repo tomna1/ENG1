@@ -1,11 +1,13 @@
 package io.github.archessmn.eng1.leaderboard;
 
+import java.io.FileNotFoundException;
+
 import com.badlogic.gdx.files.FileHandle;
 
 /**
  * This class is used to store Achievements that were completed during the
- * game and can be stored into the leaderboard file. This file is only for logica
- * purposes. The UI of this class is {@link CompletedAchievementIcon}.
+ * game and can be stored into the leaderboard file. This file is only for logical
+ * purposes.
  */
 public class CompletedAchievement {
     // The file path to the icon used to represents the achievement in
@@ -21,8 +23,9 @@ public class CompletedAchievement {
      * @param iconPath Filehandle for the icon. Cannot be null.
      * @param description How the achievement is completed. Can be null.
      */
-    public CompletedAchievement(FileHandle iconPath, String description) {
+    public CompletedAchievement(FileHandle iconPath, String description){
         if (iconPath == null) throw new IllegalArgumentException("iconPath cannot be null.");
+        // TODO: THIS SHOULD BE CHANGED TO FILENOTFOUNDEXCEPTION.
         if (iconPath.exists() == false) throw new IllegalArgumentException("iconPath for Achievement must exist.");
         this.iconPath = iconPath;
         if (description == null) description = "";

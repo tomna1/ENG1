@@ -1,5 +1,8 @@
 package io.github.archessmn.eng1.leaderboard;
 
+import java.util.ArrayList;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
 /**
@@ -8,8 +11,9 @@ import com.badlogic.gdx.files.FileHandle;
  * playthrough.
  */
 public class Leaderboard {
-    // How many leaderboard positions there will be.
+    // The maximum amount of leaderboard positions the leaderboard can store.
     private int maxCount;
+    // The actual amount of leaderboard positions there are.
     private int count;
     private LeaderboardPosition[] leaderboard;
     private FileHandle leaderboardFileDir;
@@ -19,9 +23,9 @@ public class Leaderboard {
      * passed in fileDir.
      * @param leaderboardFileDir The file containing the leaderboard data.
      */
-    public Leaderboard(FileHandle leaderboardFileDir) {
+    //public Leaderboard(FileHandle leaderboardFileDir) {
         // this(leaderboardFileDir, 10);
-    }
+    //}
     
     private Leaderboard(FileHandle leaderboardFileDir, int maxCount) {
         if (leaderboardFileDir == null) {
@@ -33,6 +37,29 @@ public class Leaderboard {
         this.maxCount = maxCount;
         leaderboard = new LeaderboardPosition[count];
         this.leaderboardFileDir = leaderboardFileDir;
+        setCount();
+    }
+
+    /**
+     * Creates a leaderboard with random positions.
+     */
+    public Leaderboard() {
+        ArrayList<CompletedAchievement> achievements1 = new ArrayList<>();
+        achievements1.add(new CompletedAchievement(Gdx.files.internal("achievement_icons/icon_1.png"), "achievement 1"));
+        achievements1.add(new CompletedAchievement(Gdx.files.internal("achievement_icons/icon_2.png"), "achievement 2"));
+        
+        this.maxCount = 10;
+        leaderboard = new LeaderboardPosition[this.maxCount];
+        
+        float score = 1111.8f;
+        float scoreDelta = 7.0f;
+        for (int i = 0; i < 5; i++) {
+            leaderboard[i] = new LeaderboardPosition(i, "random username", score, null);
+            if (i == 2) {
+                leaderboard[i] = new LeaderboardPosition(i, "random username", score, achievements1);
+            }
+            score -= scoreDelta;
+        }
         setCount();
     }
 
