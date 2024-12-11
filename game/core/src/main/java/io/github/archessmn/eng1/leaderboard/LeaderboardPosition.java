@@ -23,6 +23,7 @@ public class LeaderboardPosition {
      * achievements were achieved.
      */
     public LeaderboardPosition(int position, String username, float score, ArrayList<CompletedAchievement> achievements) {
+        if (position < 0) throw new IllegalArgumentException("position cannot be less than 0.");
         if (username == null) throw new IllegalArgumentException("username cannot be null");
         this.position = position;
         this.username = username;
@@ -34,6 +35,7 @@ public class LeaderboardPosition {
     }
 
     public LeaderboardPosition(LeaderboardPosition pos) {
+        if (pos == null) throw new IllegalArgumentException("argument cannot be null");
         this.position = pos.position;
         this.username = pos.username;
         this.score = pos.score;

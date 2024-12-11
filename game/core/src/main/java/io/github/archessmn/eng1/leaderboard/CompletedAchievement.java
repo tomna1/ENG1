@@ -48,7 +48,7 @@ public class CompletedAchievement {
      */
     @Override
     public String toString() {
-        return iconPath.path() + "#" + description;
+        return (iconPath.path() + "#" + description).strip();
     }
 
     public static CompletedAchievement fromString(String s) {
@@ -60,12 +60,20 @@ public class CompletedAchievement {
         FileHandle fileHandle = Gdx.files.internal(split[0].strip());
 
         String description;
-        if (s.length() == 1) {
+        if (split.length == 1) {
             description = "";
         } else {
-            description = split[1];  
+            description = split[1].strip();  
         }
         CompletedAchievement output = new CompletedAchievement(fileHandle, description);
         return output;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof CompletedAchievement == false) return false;
+        CompletedAchievement rhs = (CompletedAchievement)o;
+        if ((this.iconPath.equals(rhs.iconPath)) && (this.description.equals(rhs.description))) return true;
+        return false;
     }
 }
