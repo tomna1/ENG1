@@ -26,6 +26,8 @@ public class World {
     private Integer width, height;
     private Integer studentCount, teacherCount;
 
+    private SatisfactionManager satisfactionManager;
+
     /**
      * Creates a new world which can be used to store buildings.
      * 
@@ -40,6 +42,7 @@ public class World {
         this.height = worldHeight;
         studentCount = 0;
         teacherCount = 0;
+        satisfactionManager = new SatisfactionManager(this);
 
         initializeBuildingCounts();
         loadAssests();
@@ -75,13 +78,32 @@ public class World {
      */
     public int addBuilding(Building building) {
         buildings.add(building);
-        updateBuildingDistances(building);
+        updateWorld(building);
         return buildings.size - 1;
     }
 
-    private void updateBuildingDistances(Building newBuilding){
+    private void updateWorld(Building newBuilding){
+        updateCounts(newBuilding);
+        updateBuildingConnections();
+        satisfactionManager.updateSatisfaction();
+    }
+
+    private void updateCounts(Building building){
+        switch (building.getBuildingType()) {
+            case HALLS:
+                studentCount ++;
+                break;
+            case OFFICES:
+                teacherCount ++;
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void updateBuildingConnections(){
         for(Building building : buildings){
-            building.addDistanceFromOtherBuilding(newBuilding);
+            building.updateConnectedBuildings();
         }
     }
 
