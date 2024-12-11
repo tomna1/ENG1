@@ -2,6 +2,7 @@ package io.github.archessmn.eng1.leaderboard;
 
 import java.io.FileNotFoundException;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
 /**
@@ -38,5 +39,33 @@ public class CompletedAchievement {
 
     public String getDescription() {
         return description;
+    }
+
+    /**
+     * @return Returns the path to the icon and then the description separted
+     * by a hashtag. If "icons/icon1" was the icon path and "example1" was the
+     * description then this would return "icons/icon1#example1"
+     */
+    @Override
+    public String toString() {
+        return iconPath.path() + "#" + description;
+    }
+
+    public static CompletedAchievement fromString(String s) {
+        String[] split = s.split("#");
+        if (split.length > 2 || split.length == 0) {
+            return null;
+        }
+        
+        FileHandle fileHandle = Gdx.files.internal(split[0].strip());
+
+        String description;
+        if (s.length() == 1) {
+            description = "";
+        } else {
+            description = split[1];  
+        }
+        CompletedAchievement output = new CompletedAchievement(fileHandle, description);
+        return output;
     }
 }

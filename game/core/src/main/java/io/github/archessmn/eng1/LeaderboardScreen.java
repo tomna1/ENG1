@@ -16,7 +16,8 @@ public class LeaderboardScreen implements Screen {
     public LeaderboardScreen(Main main) {
         if (main == null) throw new IllegalArgumentException("main cannot be null");
         this.viewport = main.getViewport();
-        leaderboard = new Leaderboard();
+        String leaderboardFileDir = "ENG1/leaderboard";
+        leaderboard = new Leaderboard(leaderboardFileDir);
         leaderboardMenu = new LeaderboardMenu(leaderboard, viewport);
         leaderboardMenu.setAsInputProcessor();
     }

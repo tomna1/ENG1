@@ -78,4 +78,78 @@ public class LeaderboardPosition {
     public int getAchievementCount() {
         return completedAchievements.size();
     }
+
+    /**
+     * @return Returns the position, username, score and achievements of the
+     * record each separated by a colon. If position = 5, username = "example"
+     * , score = 235.7 and 2 achievements then output is 
+     * "5:example:235.7:achievement1.toString(),achievement2.toString()".
+     * If no achievements then the achievement section marked as "null".
+     */
+    @Override
+    public String toString() {
+        String output = Integer.toString(position) + ":" + username + ":" + Float.toString(score) + ":";
+        if (completedAchievements.size() == 0) {
+            output = output + "null";
+            return output;
+        }
+        for (int i = 0; i < completedAchievements.size(); i++) {
+            if (output.endsWith(":") == false) {
+                output = output + "~";
+            }
+            output = output + completedAchievements.get(i).toString();
+        }
+        return output;
+    }
+
+    /**
+     * Will return a LeaderboardPosition object if a valid string is passed into
+     * it. A valid string is one that was created using the {@link #toString()}
+     * method.
+     * @param string A string created using the {@link #toString()} method.
+     * Cannot be null
+     * @return The LeaderboardPosition object created from parsing through
+     * the string.
+     */
+    static LeaderboardPosition fromString(String string) {
+        if (string == null) throw new IllegalArgumentException("string cannot be null");
+        
+        String[] split = string.split(":");
+        if (split.length != 4) {
+            return null;
+        }
+
+        // Calculates the position
+        int position;
+        try {
+            position = Integer.parseInt(split[0]);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+
+        String username = split[1];
+
+        // Calculates the score
+        float score;
+        try {
+            score = Float.parseFloat(split[2]);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+
+        // Calculate the achievements
+        ArrayList<CompletedAchievement> achievements = new ArrayList<>();
+        if (split[3].strip().equals("null")) {
+            return new LeaderboardPosition(position, username, score, achievements);
+        } else {
+            String[] split2 = split[3].split("~");
+            for (int i = 0; i < split2.length; i++) {
+                CompletedAchievement achievement = CompletedAchievement.fromString(split2[i]);  
+                if (achievement == null) continue;
+                else achievements.add(achievement);  
+            }
+        }
+
+        return new LeaderboardPosition(position, username, score, achievements);
+    }
 }

@@ -1,12 +1,10 @@
 package io.github.archessmn.eng1.leaderboard;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.Preferences;
 
 /**
- * This class stores the top scores that have been achieved, the usernames of
+ * This class stores the top 5 scores that have been achieved, the usernames of
  * the player who achieved it and any achievements earned in the same 
  * playthrough.
  */
@@ -16,52 +14,52 @@ public class Leaderboard {
     // The actual amount of leaderboard positions there are.
     private int count;
     private LeaderboardPosition[] leaderboard;
-    private FileHandle leaderboardFileDir;
+    private String leaderboardPrefsDir;
 
     /**
-     * Creates a new leaderboard with 10 spaces and retreives the data from the
-     * passed in fileDir.
-     * @param leaderboardFileDir The file containing the leaderboard data.
+     * Creates a leaderboard based on the Prefs stored in 
+     * "%UserProfile%/.prefs/leaderboardPrefsDir"
+     * @param leaderboardPrefsDir The directory of the leaderboard file to read
+     * and write from.
      */
-    //public Leaderboard(FileHandle leaderboardFileDir) {
-        // this(leaderboardFileDir, 10);
-    //}
-    
-    private Leaderboard(FileHandle leaderboardFileDir, int maxCount) {
-        if (leaderboardFileDir == null) {
-            throw new IllegalArgumentException("Leaderboard string file directory cannot be null.");
-        }
-        if (count <= 0) {
-            throw new IllegalArgumentException("Leaderboard has to have at least 1 position.");
-        }
-        this.maxCount = maxCount;
-        leaderboard = new LeaderboardPosition[count];
-        this.leaderboardFileDir = leaderboardFileDir;
-        setCount();
+    public Leaderboard(String leaderboardPrefsDir) {
+        this.maxCount = 5;
+        this.leaderboard = new LeaderboardPosition[maxCount];
+        this.leaderboardPrefsDir = leaderboardPrefsDir;
+        readFromFile();
     }
 
     /**
-     * Creates a leaderboard with random positions.
+     * Writes the current leaderboard to the file specified in constructor.
      */
-    public Leaderboard() {
-        ArrayList<CompletedAchievement> achievements1 = new ArrayList<>();
-        achievements1.add(new CompletedAchievement(Gdx.files.internal("achievement_icons/icon_1.png"), "achievement 1"));
-        achievements1.add(new CompletedAchievement(Gdx.files.internal("achievement_icons/icon_2.png"), "achievement 2"));
-        
-        this.maxCount = 10;
-        leaderboard = new LeaderboardPosition[this.maxCount];
-        
-        float score = 1111.8f;
-        float scoreDelta = 7.0f;
-        for (int i = 0; i < 5; i++) {
-            leaderboard[i] = new LeaderboardPosition(i, "random username", score, null);
-            if (i == 2) {
-                leaderboard[i] = new LeaderboardPosition(i, "random username", score, achievements1);
-            }
-            score -= scoreDelta;
+    public void writeToFile() {
+        Preferences prefs = Gdx.app.getPreferences(leaderboardPrefsDir);
+        setCount();
+        for (int i = 0; i < count; i++) {
+            prefs.putString("pos"+Integer.toString(leaderboard[i].getPosition()), leaderboard[i].toString());
+        }
+        prefs.flush();
+    }
+
+    /**
+     * Reads from the leaderboardFile and setups up the leaderboard accordingly.
+     */
+    private void readFromFile() {
+        Preferences prefs = Gdx.app.getPreferences(leaderboardPrefsDir);
+        String s;
+        LeaderboardPosition record;
+        for (int i = 0; i < maxCount; i++) {
+            // Gets the string stored in the file, converts it to a
+            // LeaderboardPosition object then stores it in the leaderboard.
+            s = prefs.getString("pos"+Integer.toString(i), "default");
+            if (s.equals("default")) continue;
+            record = LeaderboardPosition.fromString(s);
+            if (record == null) continue;
+            leaderboard[i] = record;
         }
         setCount();
     }
+
 
     /**
      * Sets the count attribute to the correct amount by checking how many
