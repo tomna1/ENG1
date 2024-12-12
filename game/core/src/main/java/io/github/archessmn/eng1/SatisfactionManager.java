@@ -21,6 +21,10 @@ public class SatisfactionManager {
             satisfaction += satisfactionContributor.getSatisfactionContribution();
             optimumSatisfaction += satisfactionContributor.getOptimumSatisfactionContribution();
         }
+        System.out.println("Satisfaction");
+        System.out.println(satisfaction);
+        System.out.println("Optimum");
+        System.out.println(optimumSatisfaction);
     }
 
     public Float getSatisfaction(){

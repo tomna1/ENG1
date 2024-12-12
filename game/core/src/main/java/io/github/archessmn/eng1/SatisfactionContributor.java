@@ -53,11 +53,8 @@ public class SatisfactionContributor {
 
     private Float calculateOccupancyContribution(boolean isOptimum) {
 
-        Float studentOccupancy = calculateOccupancy(studentCapacity, isOptimum);
-        Float teacherOccupancy = calculateOccupancy(teacherCapacity, isOptimum);
-
-        Float studentContribution = studentOccupancy * studentOccupancyWeighting;
-        Float teacherContribution = teacherOccupancy * teacherOccupancyWeighting;
+        Float studentContribution = calculateOccupancy(Building.Type.HALLS, isOptimum) * studentOccupancyWeighting;
+        Float teacherContribution = calculateOccupancy(Building.Type.OFFICES, isOptimum) * teacherOccupancyWeighting;
 
         Float contribution = studentContribution + teacherContribution;
 
@@ -70,11 +67,18 @@ public class SatisfactionContributor {
         }
     }
 
-    private Float calculateOccupancy(Float capacity, boolean isOptimum) {
-        if (capacity == 0) {
-            return 0f;
-        }
-        return isOptimum ? 1.0f : (float) building.getWorld().getStudentCount() / capacity;
+    private Float calculateOccupancy(Building.Type type, boolean isOptimum) {
+        
+        return isOptimum ? 1.0f : (float) building.ratioToType(type) / getCapacityFromType(type);
+    }
+
+    public Float getCapacityFromType(Building.Type type){
+
+        return switch(type){
+            case HALLS -> studentCapacity;
+            case OFFICES -> teacherCapacity;
+            default -> null;
+        };
     }
 
     public Float getSatisfactionContribution() {
