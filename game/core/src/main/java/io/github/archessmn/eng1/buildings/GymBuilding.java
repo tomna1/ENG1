@@ -22,16 +22,16 @@ public class GymBuilding extends Building {
     @Override
     public void setConnections() {
         connections = new HashMap<>();
-        connections.put(Type.HALLS, 0.0f);
+        connections.put(Type.HALLS, 0.3f);
     }
 
     @Override
     protected void setSatisfactionContributor() {
 
         satisfactionContributor = new SatisfactionContributor(this, 
-        2.5f, 
-        0.0f, 
-        0.2f, 
+        1f, 
+        0f, 
+        0.5f, 
         0.0f
         );
     }

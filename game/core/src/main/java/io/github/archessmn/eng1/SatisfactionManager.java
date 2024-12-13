@@ -14,6 +14,7 @@ public class SatisfactionManager {
 
     public void updateSatisfaction(){
         satisfaction = 0f;
+        optimumSatisfaction = 0f;
         for(Building building : world.getBuildings()){
             SatisfactionContributor satisfactionContributor = building.getSatisfactionContributor();
             satisfactionContributor.updateSatisfactionContribution();
@@ -21,10 +22,7 @@ public class SatisfactionManager {
             satisfaction += satisfactionContributor.getSatisfactionContribution();
             optimumSatisfaction += satisfactionContributor.getOptimumSatisfactionContribution();
         }
-        System.out.println("Satisfaction");
-        System.out.println(satisfaction);
-        System.out.println("Optimum");
-        System.out.println(optimumSatisfaction);
+        System.out.println(String.format("Satisfaction: %-10.3f Optimum: %-10.3f Percentage: %.3f\n\n", satisfaction, optimumSatisfaction, getPercentageSatisfaction()));
     }
 
     public Float getSatisfaction(){

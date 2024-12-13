@@ -22,17 +22,17 @@ public class OfficeBuilding extends Building {
     @Override
     public void setConnections() {
         connections = new HashMap<>();
-        connections.put(Type.LECTURE_HALL, 0.0f);
-        connections.put(Type.PIAZZA, 0.0f);
+        connections.put(Type.LECTURE_HALL, 0.3f);
+        connections.put(Type.PIAZZA, 0.3f);
     }
 
     @Override
     protected void setSatisfactionContributor() {
         
         satisfactionContributor = new SatisfactionContributor(this, 
-        2.5f, 
         0.0f, 
-        0.3f, 
+        0.0f, 
+        0.0f, 
         0.0f
         );
     }

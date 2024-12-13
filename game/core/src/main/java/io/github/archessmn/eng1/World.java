@@ -57,6 +57,9 @@ public class World {
         for (Building.Use use : Building.Use.values()) {
             buildingUseCounts.put(use, 0);
         }
+        for(Building.Type type : Building.Type.values()){
+            buildingTypeCounts.put(type, 0);
+        }
     }
 
     private void loadAssests(){
@@ -78,28 +81,35 @@ public class World {
      */
     public int addBuilding(Building building) {
         buildings.add(building);
-        updateWorld(building);
         return buildings.size - 1;
     }
 
-    private void updateWorld(Building newBuilding){
-        updateCounts(newBuilding);
+    public void updateWorld(Building newBuilding){
         updateBuildingConnections();
         satisfactionManager.updateSatisfaction();
     }
 
-    private void updateCounts(Building building){
-        switch (building.getBuildingType()) {
-            case HALLS:
-                studentCount ++;
-                break;
-            case OFFICES:
-                teacherCount ++;
-                break;
-            default:
-                break;
+    private void printCounts(){
+        for(Building.Type type : buildingTypeCounts.keySet()){
+            System.out.println(String.format("Type: %-15s Count: %d", type.name(),  buildingTypeCounts.get(type)));
         }
     }
+
+    public Integer getTypeCount(Building.Type type){
+        return buildingTypeCounts.get(type);
+    }
+
+    public Float ratioToType(Building.Type typeOne, Building.Type typeTwo){
+        Integer typeCount = getTypeCount(typeTwo);
+        if(typeCount == 0){
+            return null;
+        }
+        else{
+            return (float) getTypeCount(typeOne) / typeCount;
+        }
+    }
+
+
 
     private void updateBuildingConnections(){
         for(Building building : buildings){

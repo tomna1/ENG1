@@ -2,6 +2,7 @@ package io.github.archessmn.eng1.buildings;
 
 import java.util.HashMap;
 
+import io.github.archessmn.eng1.SatisfactionContributor;
 import io.github.archessmn.eng1.World;
 
 /**
@@ -21,12 +22,17 @@ public class LectureHallBuilding extends Building {
     @Override
     public void setConnections() {
         connections = new HashMap<>();
-        connections.put(Type.PIAZZA, 0.0f);
+        connections.put(Type.PIAZZA, 0.3f);
     }
 
     @Override
     protected void setSatisfactionContributor() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setSatisfactionContributor'");
+        
+        satisfactionContributor = new SatisfactionContributor(this, 
+        1f, 
+        1f, 
+        0.5f, 
+        0.5f
+        );
     }
 }

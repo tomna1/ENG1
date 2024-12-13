@@ -22,10 +22,10 @@ public class HallsBuilding extends Building {
     @Override
     public void setConnections() {
         connections = new HashMap<>();
-        connections.put(Type.GYM, 0.0f);
-        connections.put(Type.LECTURE_HALL, 0.0f);
-        connections.put(Type.OFFICES, 0.0f);
-        connections.put(Type.PIAZZA, 0.0f);
+        connections.put(Type.GYM, 0.2f);
+        connections.put(Type.LECTURE_HALL, 0.5f);
+        connections.put(Type.OFFICES, 0.4f);
+        connections.put(Type.PIAZZA, 0.4f);
     }
 
     @Override

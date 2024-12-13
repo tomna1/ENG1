@@ -1,7 +1,7 @@
 package io.github.archessmn.eng1.buildings;
 
 import java.util.HashMap;
-import java.util.stream.Gatherer.Integrator;
+//import java.util.stream.Gatherer.Integrator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -95,8 +95,11 @@ public abstract class Building {
         this.sprite.setSize(width, height);
         this.bounds = new Rectangle(this.x, this.y, this.width, this.height);
 
-        setConnections();
+        connections = new HashMap<>();
         connectedBuildings = new Array<>();
+
+        setConnections();
+        setSatisfactionContributor();
     }
 
     /**
@@ -162,9 +165,9 @@ public abstract class Building {
     public void updateConnectedBuildings(){
 
         connectedBuildings = new Array<>();
-        for(Building otherBuilding : world.getBuildings()){
+        for(Building otherBuilding : new Array<Building>(world.getBuildings())){
 
-            if(!equals(otherBuilding) && isConnectedBuilding(otherBuilding)){
+            if(isConnectedBuilding(otherBuilding)){
 
                 connectedBuildings.add(otherBuilding);
             }
@@ -172,7 +175,7 @@ public abstract class Building {
     }
 
     public boolean isConnectedBuilding(Building building){
-        return getConnections().containsKey(building.getBuildingType());
+        return connections.containsKey(building.getBuildingType());
     }
 
     /**
@@ -208,9 +211,6 @@ public abstract class Building {
         return connections;
     }
 
-    public Float ratioToType(Type type){
-        return (float) (world.getBuildingTypeCount().get(buildingType) / world.getBuildingTypeCount().get(type));
-    }
 
     public int getID() { return this.id; }
     

@@ -22,19 +22,19 @@ public class PiazzaBuilding extends Building {
     @Override
     public void setConnections() {
         connections = new HashMap<>();
-        connections.put(Type.HALLS, 0.0f);
-        connections.put(Type.LECTURE_HALL, 0.0f);
-        connections.put(Type.OFFICES, 0.0f);
+        connections.put(Type.HALLS, 0.2f);
+        connections.put(Type.LECTURE_HALL, 0.2f);
+        connections.put(Type.OFFICES, 0.2f);
     }
 
     @Override
     protected void setSatisfactionContributor() {
         
         satisfactionContributor = new SatisfactionContributor(this, 
-        3.5f, 
-        2.5f, 
-        null, 
-        null
+        1f, 
+        1f, 
+        0.5f, 
+        0.5f
         );
     }
 }
