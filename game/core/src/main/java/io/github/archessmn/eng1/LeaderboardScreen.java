@@ -39,7 +39,7 @@ public class LeaderboardScreen implements Screen {
     }
 
     public void render(float delta) {
-        ScreenUtils.clear(Color.WHITE);
+        ScreenUtils.clear(Color.BLACK);
         leaderboardMenu.draw(delta);
     }
 

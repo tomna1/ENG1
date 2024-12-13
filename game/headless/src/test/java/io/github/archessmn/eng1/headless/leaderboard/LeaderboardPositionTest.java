@@ -2,15 +2,13 @@ package io.github.archessmn.eng1.headless.leaderboard;
 
 import org.junit.jupiter.api.Test;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-
 import io.github.archessmn.eng1.headless.AbstractHeadlessGdxTest;
 import io.github.archessmn.eng1.leaderboard.CompletedAchievement;
 import io.github.archessmn.eng1.leaderboard.LeaderboardPosition;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
 
@@ -18,10 +16,7 @@ public class LeaderboardPositionTest extends AbstractHeadlessGdxTest {
     
     @Test
     public void defaultInit() {
-        final FileHandle validPath = Gdx.files.internal("tests/achievement_icons/icon_1.png");
-        if (validPath.exists() == false) throw new IllegalArgumentException("file must exist");
-        final String validDescription = "description1";
-        CompletedAchievement achievement = new CompletedAchievement(validPath, validDescription);
+        CompletedAchievement achievement = mock(CompletedAchievement.class);
         
         final String validUsername = "example";
         final float validScore = 100.0f;
@@ -61,28 +56,17 @@ public class LeaderboardPositionTest extends AbstractHeadlessGdxTest {
 
     @Test
     public void multipleAchievementsInit() {
-        final FileHandle validPath = Gdx.files.internal("tests/achievement_icons/icon_1.png");
-        if (validPath.exists() == false) throw new IllegalArgumentException("file must exist");
-        final String validDescription = "description1";
-        CompletedAchievement achievement = new CompletedAchievement(validPath, validDescription);
-
-        final FileHandle validPath2 = Gdx.files.internal("tests/achievement_icons/icon_2.png");
-        if (validPath2.exists() == false) throw new IllegalArgumentException("file must exist");
-        final String validDescription2 = "description1";
-        CompletedAchievement achievement2 = new CompletedAchievement(validPath2, validDescription2);
-
-        final FileHandle validPath3 = Gdx.files.internal("tests/achievement_icons/icon_3.png");
-        if (validPath3.exists() == false) throw new IllegalArgumentException("file must exist");
-        final String validDescription3 = "description1";
-        CompletedAchievement achievement3 = new CompletedAchievement(validPath3, validDescription3);
-        
-        final String validUsername = "example";
-        final float validScore = 100.0f;
+        CompletedAchievement achievement = mock(CompletedAchievement.class);
+        CompletedAchievement achievement2 = mock(CompletedAchievement.class);
+        CompletedAchievement achievement3 = mock(CompletedAchievement.class);
         final ArrayList<CompletedAchievement> validAchievements = new ArrayList<>();
         validAchievements.add(achievement);
         validAchievements.add(achievement2);
         validAchievements.add(achievement3);
-
+        
+        final String validUsername = "example";
+        final float validScore = 100.0f;
+    
         LeaderboardPosition position = new LeaderboardPosition(validUsername, validScore, validAchievements);
         
         assertEquals(validAchievements, position.getAchievements(), 

@@ -1,6 +1,7 @@
 package io.github.archessmn.eng1.leaderboard;
 
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -14,7 +15,7 @@ public class CompletedAchievement {
     // The file path to the icon used to represents the achievement in
     // the assets folder;
     private FileHandle iconPath;
-    // A description of the requirements needed to earn this achievement.
+    private String title;
     private String description;
 
     /**
@@ -24,11 +25,14 @@ public class CompletedAchievement {
      * @param iconPath Filehandle for the icon. Cannot be null.
      * @param description How the achievement is completed. Can be null.
      */
-    public CompletedAchievement(FileHandle iconPath, String description){
+    public CompletedAchievement(FileHandle iconPath, String title, String description){
         if (iconPath == null) throw new IllegalArgumentException("iconPath cannot be null.");
         // TODO: THIS SHOULD BE CHANGED TO FILENOTFOUNDEXCEPTION.
         if (iconPath.exists() == false) throw new IllegalArgumentException("iconPath for Achievement must exist.");
+        if (title == null) throw new IllegalArgumentException("title cannot be null");
+        if (title.equals("")) throw new IllegalArgumentException("title cannot be empty");
         this.iconPath = iconPath;
+        this.title = title;
         if (description == null) description = "";
         this.description = description;
     }
@@ -37,34 +41,41 @@ public class CompletedAchievement {
         return iconPath;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
     public String getDescription() {
         return description;
     }
 
     /**
-     * @return Returns the path to the icon and then the description separted
-     * by a hashtag. If "icons/icon1" was the icon path and "example1" was the
-     * description then this would return "icons/icon1#example1"
+     * @return Returns the path to the icon then the title then the description separted
+     * by a hashtag. If "icons/icon1" was the icon path and "title1" was the
+     * title and "description1" was the description then this would return 
+     * "icons/icon1#title1#description1"
      */
     public String toLeaderboardString() {
-        return (iconPath.path() + "#" + description).strip();
+        return (iconPath.path() + "#" + title + "#" + description).strip();
     }
 
     public static CompletedAchievement fromLeaderboardString(String s) {
         String[] split = s.split("#");
-        if (split.length > 2 || split.length == 0) {
+        if (split.length > 3 || split.length == 0) {
             return null;
         }
         
         FileHandle fileHandle = Gdx.files.internal(split[0].strip());
 
+        String title = split[1].strip();
+
         String description;
-        if (split.length == 1) {
+        if (split.length == 2) {
             description = "";
         } else {
-            description = split[1].strip();  
+            description = split[2].strip();  
         }
-        CompletedAchievement output = new CompletedAchievement(fileHandle, description);
+        CompletedAchievement output = new CompletedAchievement(fileHandle, title, description);
         return output;
     }
 

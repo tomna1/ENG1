@@ -3,6 +3,7 @@ package io.github.archessmn.eng1.leaderboard;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -31,7 +32,7 @@ public class LeaderboardPositionRecord {
      * @param bounds The record will always be within these bounds. Cannot be
      * null.
      */
-    public LeaderboardPositionRecord(Table table, LeaderboardPosition data, Rectangle bounds) {
+    public LeaderboardPositionRecord(Table table, LeaderboardPosition data, Rectangle bounds, Label hoverLabel) {
         if (table == null) throw new IllegalArgumentException("table cannot be null");
         if (data == null) throw new IllegalArgumentException("data cannot be null");
         if (bounds == null) throw new IllegalArgumentException("Bounds cannot be null");
@@ -44,7 +45,7 @@ public class LeaderboardPositionRecord {
         Rectangle achievementBounds = new Rectangle(bounds);
         achievementBounds.width = achievementBounds.width/2;
         achievementBounds.x = achievementBounds.x + achievementBounds.width;
-        createAchievementsButtons(table, bounds);
+        createAchievementsButtons(table, bounds, hoverLabel);
     }
 
     /**
@@ -73,14 +74,14 @@ public class LeaderboardPositionRecord {
      * @param table The table to add the buttons to when created.
      * @param bounds The buttons will all always be within these bounds.
      */
-    private void createAchievementsButtons(Table table, Rectangle bounds) {
+    private void createAchievementsButtons(Table table, Rectangle bounds, Label hoverLabel) {
         ImageButton button;
         Rectangle achievementBounds = new Rectangle(bounds);
         final float widthPerAchievement = achievementBounds.width / data.getAchievementCount();
         achievementBounds.width = widthPerAchievement;
 
         for (int i = 0; i < data.getAchievementCount(); i++) {
-            button = createAchievementButton(data.getAchievement(i), bounds);
+            button = createAchievementButton(data.getAchievement(i), bounds, hoverLabel);
             table.add(button).left();
             achievementBounds.x += widthPerAchievement;
         }
@@ -93,15 +94,19 @@ public class LeaderboardPositionRecord {
      * @param bounds The bounds that the achievement should be in.
      * @return The ImageButton that is the achievement.
      */
-    private ImageButton createAchievementButton(CompletedAchievement achievement, Rectangle bounds) {
+    private ImageButton createAchievementButton(CompletedAchievement achievement, Rectangle bounds, Label hoverLabel) {
         if (achievement == null) throw new IllegalArgumentException("achievement cannot be null");
-
         Texture buttonUpTexture = new Texture(achievement.getIconPath());
         Drawable buttonUp = new TextureRegionDrawable(buttonUpTexture);
         ImageButton button = new ImageButton(buttonUp);
         button.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                System.out.println(achievement.getDescription());
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                hoverLabel.setText(achievement.getTitle()+": "+achievement.getDescription());
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
             }
         });
         button.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);

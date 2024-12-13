@@ -24,6 +24,8 @@ public class LeaderboardMenu {
     private ImageButton menuButton;
     private Leaderboard leaderboard;
     private LeaderboardPositionRecord[] records;
+    // The label should be changed to fit the description of whatever it is hovering over.
+    private Label hoveringLabel;
 
     public LeaderboardMenu(Main main, Leaderboard leaderboard) {
         if (leaderboard == null) throw new IllegalArgumentException("Leaderboard should not be null.");
@@ -39,10 +41,15 @@ public class LeaderboardMenu {
         Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
         Label label = new Label("Leaderboard", skin);
         leaderboardTable.add(label).width(100.0f).row();
-        stage.addActor(leaderboardTable);
-
-        setupMenuButton(main);
+        
+        Skin skin2 = new Skin(Gdx.files.internal("ui/uiskin.json"));
+        hoveringLabel = new Label("Hover over achievement icons to get the title and description", skin2);
         setupLeaderboard();
+        hoveringLabel.setWrap(true);
+        leaderboardTable.add(hoveringLabel).width(300.0f).pad(10.0f).bottom().row();
+        setupMenuButton(main);
+        
+        stage.addActor(leaderboardTable);
         stage.setDebugAll(true);
     }
 
@@ -53,15 +60,13 @@ public class LeaderboardMenu {
         Drawable menuButtonUp = new TextureRegionDrawable(buttonUp);
         Drawable menuButtonDown = new TextureRegionDrawable(buttonDown);
         menuButton = new ImageButton(menuButtonUp, menuButtonDown, menuButtonDown);
-        menuButton.setSize(200, 200);
-        menuButton.setPosition(0, 0);
         menuButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 main.viewMainMenu();
             }
         });
-        stage.addActor(menuButton);
+        leaderboardTable.add(menuButton).pad(10.0f);
     }
 
     private void setupLeaderboard() {
@@ -80,7 +85,7 @@ public class LeaderboardMenu {
         Rectangle recordBounds = new Rectangle(leaderboardX, leaderboardY, leaderboardWidth, leaderboardRecordHeight);
 
         for (int i = 0; i < leaderboardCount; i++) {
-            records[i] = new LeaderboardPositionRecord(leaderboardTable, leaderboard.getLeaderboardPos(i), recordBounds);
+            records[i] = new LeaderboardPositionRecord(leaderboardTable, leaderboard.getLeaderboardPos(i), recordBounds, hoveringLabel);
             leaderboardTable.row();
             recordBounds.y -= leaderboardRecordHeight;
         }
