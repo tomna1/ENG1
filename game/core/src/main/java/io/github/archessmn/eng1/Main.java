@@ -7,7 +7,13 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
  * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
  */
 public class Main extends Game {
+<<<<<<< HEAD
     public static final int VIEWPORT_WIDTH = 960, VIEWPORT_HEIGHT = 540;
+=======
+    public static final int VIEWPORT_WIDTH = 960;
+    public static final int VIEWPORT_HEIGHT = 540;
+    private MainMenuScreen mainMenu;
+>>>>>>> main
     private GameScreen gameScreen;
     private LeaderboardScreen leaderboardScreen;
     private FitViewport viewport;
@@ -15,9 +21,19 @@ public class Main extends Game {
     @Override
     public void create() {
         viewport = new FitViewport(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+        mainMenu = new MainMenuScreen(this);
+        this.setScreen(mainMenu);
+    }
+
+    public void startGame() {
         gameScreen = new GameScreen(this);
         leaderboardScreen = new LeaderboardScreen(this);
         this.setScreen(gameScreen);
+        mainMenu.dispose();
+    }
+
+    public void viewLeaderboard() {
+        System.out.println("view leaderboard");
     }
 
     /**
@@ -40,6 +56,6 @@ public class Main extends Game {
 
     @Override
     public void dispose() {
-        gameScreen.dispose();
+        screen.dispose();
     }
 }
