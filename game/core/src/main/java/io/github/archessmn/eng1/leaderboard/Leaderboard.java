@@ -11,7 +11,7 @@ import com.badlogic.gdx.Preferences;
 public class Leaderboard {
     // The maximum amount of leaderboard positions the leaderboard can store.
     private int maxCount;
-    // The actual amount of leaderboard positions there are.
+    // The actual amount of leaderboard positions that are occupied.
     private int count;
     private LeaderboardPosition[] leaderboard;
     private String leaderboardPrefsDir;
@@ -28,19 +28,7 @@ public class Leaderboard {
         this.leaderboardPrefsDir = leaderboardPrefsDir;
         readFromFile();
     }
-
-    /**
-     * Writes the current leaderboard to the file specified in constructor.
-     */
-    public void writeToFile() {
-        Preferences prefs = Gdx.app.getPreferences(leaderboardPrefsDir);
-        setCount();
-        for (int i = 0; i < count; i++) {
-            prefs.putString("pos"+Integer.toString(leaderboard[i].getPosition()), leaderboard[i].toLeaderboardString());
-        }
-        prefs.flush();
-    }
-
+    
     /**
      * Reads from the leaderboardFile and setups up the leaderboard accordingly.
      */
@@ -60,7 +48,6 @@ public class Leaderboard {
         setCount();
     }
 
-
     /**
      * Sets the count attribute to the correct amount by checking how many
      * records in the leaderboard are not null.
@@ -71,6 +58,42 @@ public class Leaderboard {
             if (leaderboard[i] == null) return;
             count++;
         }
+    }
+
+    /**
+     * Writes the current leaderboard to the file specified in constructor.
+     */
+    public void writeToFile() {
+        Preferences prefs = Gdx.app.getPreferences(leaderboardPrefsDir);
+        setCount();
+        for (int i = 0; i < count; i++) {
+            prefs.putString("pos"+Integer.toString(i), leaderboard[i].toLeaderboardString());
+        }
+        prefs.flush();
+    }
+
+    /**
+     * Adds a position to its valid position in the leaderboard based on its 
+     * score and adjusts the other positions in the leaderboard accordingly.
+     * To save these changes, call the {@link #writeToFile()} method. Will
+     * not add the position to the leaderboard if its score is less than all
+     * currently held positions.
+     * @param position The position to add. 
+     * @return true if the positions was added to the leaderboard and false
+     * if it was not.
+     */
+    public boolean addPosition(LeaderboardPosition position) {
+        for (int i = 0; i < maxCount; i++) {
+            if (leaderboard[i] == null || position.compareTo(leaderboard[i]) > 0) {
+                // Moves the previous placements one back and adds the new position.
+                for (int j = maxCount-1; j > i; j--) {
+                    leaderboard[j] = leaderboard[j-1];
+                }
+                leaderboard[i] = position;
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

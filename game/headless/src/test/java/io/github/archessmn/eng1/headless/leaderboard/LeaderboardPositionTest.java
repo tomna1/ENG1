@@ -23,15 +23,12 @@ public class LeaderboardPositionTest extends AbstractHeadlessGdxTest {
         final String validDescription = "description1";
         CompletedAchievement achievement = new CompletedAchievement(validPath, validDescription);
         
-        final int validPosition = 0;
         final String validUsername = "example";
         final float validScore = 100.0f;
         final ArrayList<CompletedAchievement> validAchievements = new ArrayList<>();
         validAchievements.add(achievement);
 
-        LeaderboardPosition position = new LeaderboardPosition(validPosition, validUsername, validScore, validAchievements);
-        assertEquals(validPosition, position.getPosition(), 
-            "position should be the same as defined in the constructor.");
+        LeaderboardPosition position = new LeaderboardPosition(validUsername, validScore, validAchievements);
         assertEquals(validUsername, position.getUsername(), 
             "position should be the same as defined in the constructor.");
         assertEquals(validScore, position.getScore(), 
@@ -42,35 +39,23 @@ public class LeaderboardPositionTest extends AbstractHeadlessGdxTest {
 
     @Test
     public void nullAchievementsInit() {
-        final int validPosition = 5;
         final String validUsername = "example2";
         final float validScore = 120.0f;
         final ArrayList<CompletedAchievement> nullAchievements = null;
 
-        LeaderboardPosition position = new LeaderboardPosition(validPosition, validUsername, validScore, nullAchievements);
+        LeaderboardPosition position = new LeaderboardPosition(validUsername, validScore, nullAchievements);
         assertEquals(new ArrayList<CompletedAchievement>() , position.getAchievements(), 
             "If achievements are defined as null in constructor, should return an empty arraylist.");
     }
 
-    @Test
-    public void throwsOnInvalidPositionInit() {
-        final int invalidPosition = -1;
-        final String validUsername = "example2";
-        final float validScore = 120.0f;
-        final ArrayList<CompletedAchievement> validAchievements = null;
-
-        assertThrows(IllegalArgumentException.class, () -> new LeaderboardPosition(invalidPosition, validUsername, validScore, validAchievements), 
-            "Should throws IllegalArguementException if position is < 0.");
-    }
 
     @Test
     public void throwsOnNullUsernameInit() {
-        final int validPosition = 7;
         final String nullUsername = null;
         final float validScore = 120.0f;
         final ArrayList<CompletedAchievement> validAchievements = null;
 
-        assertThrows(IllegalArgumentException.class, () -> new LeaderboardPosition(validPosition, nullUsername, validScore, validAchievements), 
+        assertThrows(IllegalArgumentException.class, () -> new LeaderboardPosition(nullUsername, validScore, validAchievements), 
             "Should throws IllegalArguementException if username is null.");
     }
 
@@ -91,7 +76,6 @@ public class LeaderboardPositionTest extends AbstractHeadlessGdxTest {
         final String validDescription3 = "description1";
         CompletedAchievement achievement3 = new CompletedAchievement(validPath3, validDescription3);
         
-        final int validPosition = 0;
         final String validUsername = "example";
         final float validScore = 100.0f;
         final ArrayList<CompletedAchievement> validAchievements = new ArrayList<>();
@@ -99,7 +83,7 @@ public class LeaderboardPositionTest extends AbstractHeadlessGdxTest {
         validAchievements.add(achievement2);
         validAchievements.add(achievement3);
 
-        LeaderboardPosition position = new LeaderboardPosition(validPosition, validUsername, validScore, validAchievements);
+        LeaderboardPosition position = new LeaderboardPosition(validUsername, validScore, validAchievements);
         
         assertEquals(validAchievements, position.getAchievements(), 
             "position should be the same as defined in the constructor.");
@@ -113,16 +97,13 @@ public class LeaderboardPositionTest extends AbstractHeadlessGdxTest {
 
     @Test
     public void copyConstructorInit() {
-        final int validPosition = 5;
         final String validUsername = "example2";
         final float validScore = 120.0f;
         final ArrayList<CompletedAchievement> nullAchievements = null;
 
-        LeaderboardPosition position = new LeaderboardPosition(validPosition, validUsername, validScore, nullAchievements);
+        LeaderboardPosition position = new LeaderboardPosition(validUsername, validScore, nullAchievements);
         LeaderboardPosition position2 = new LeaderboardPosition(position);
 
-        assertEquals(position.getPosition(), position2.getPosition(), 
-            "position should be the same as defined in the constructor.");
         assertEquals(position.getUsername(), position2.getUsername(), 
             "position should be the same as defined in the constructor.");
         assertEquals(position.getScore(), position2.getScore(), 
