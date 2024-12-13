@@ -36,7 +36,7 @@ public class Leaderboard {
         Preferences prefs = Gdx.app.getPreferences(leaderboardPrefsDir);
         setCount();
         for (int i = 0; i < count; i++) {
-            prefs.putString("pos"+Integer.toString(leaderboard[i].getPosition()), leaderboard[i].toString());
+            prefs.putString("pos"+Integer.toString(leaderboard[i].getPosition()), leaderboard[i].toLeaderboardString());
         }
         prefs.flush();
     }
@@ -53,7 +53,7 @@ public class Leaderboard {
             // LeaderboardPosition object then stores it in the leaderboard.
             s = prefs.getString("pos"+Integer.toString(i), "default");
             if (s.equals("default")) continue;
-            record = LeaderboardPosition.fromString(s);
+            record = LeaderboardPosition.fromLeaderboardString(s);
             if (record == null) continue;
             leaderboard[i] = record;
         }
@@ -80,6 +80,7 @@ public class Leaderboard {
      * @return Amount of valid leaderboard positions.
      */
     public int getCount() {
+        setCount();
         return count;
     }
 

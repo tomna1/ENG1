@@ -88,8 +88,7 @@ public class LeaderboardPosition {
      * "5:example:235.7:achievement1.toString(),achievement2.toString()".
      * If no achievements then the achievement section marked as "null".
      */
-    @Override
-    public String toString() {
+    public String toLeaderboardString() {
         String output = Integer.toString(position) + ":" + username + ":" + Float.toString(score) + ":";
         if (completedAchievements.size() == 0) {
             output = output + "null";
@@ -99,7 +98,7 @@ public class LeaderboardPosition {
             if (output.endsWith(":") == false) {
                 output = output + "~";
             }
-            output = output + completedAchievements.get(i).toString();
+            output = output + completedAchievements.get(i).toLeaderboardString();
         }
         return output;
     }
@@ -113,7 +112,7 @@ public class LeaderboardPosition {
      * @return The LeaderboardPosition object created from parsing through
      * the string.
      */
-    static LeaderboardPosition fromString(String string) {
+    static LeaderboardPosition fromLeaderboardString(String string) {
         if (string == null) throw new IllegalArgumentException("string cannot be null");
         
         String[] split = string.split(":");
@@ -146,7 +145,7 @@ public class LeaderboardPosition {
         } else {
             String[] split2 = split[3].split("~");
             for (int i = 0; i < split2.length; i++) {
-                CompletedAchievement achievement = CompletedAchievement.fromString(split2[i]);  
+                CompletedAchievement achievement = CompletedAchievement.fromLeaderboardString(split2[i]);  
                 if (achievement == null) continue;
                 else achievements.add(achievement);  
             }

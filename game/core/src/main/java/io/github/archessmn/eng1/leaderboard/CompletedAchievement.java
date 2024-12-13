@@ -46,12 +46,11 @@ public class CompletedAchievement {
      * by a hashtag. If "icons/icon1" was the icon path and "example1" was the
      * description then this would return "icons/icon1#example1"
      */
-    @Override
-    public String toString() {
+    public String toLeaderboardString() {
         return (iconPath.path() + "#" + description).strip();
     }
 
-    public static CompletedAchievement fromString(String s) {
+    public static CompletedAchievement fromLeaderboardString(String s) {
         String[] split = s.split("#");
         if (split.length > 2 || split.length == 0) {
             return null;

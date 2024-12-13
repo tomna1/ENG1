@@ -54,25 +54,25 @@ public class CompletedAchievementTest extends AbstractHeadlessGdxTest {
     }
 
     @Test
-    public void toStringValid() {
+    public void toLeaderboardStringValid() {
         final FileHandle validPath = Gdx.files.internal("tests/achievement_icons/icon_1.png");
         if (validPath.exists() == false) throw new IllegalArgumentException("file must exist");
         final String validDescription = "description1";
         final String expected = validPath.path() + "#" + validDescription;
 
         CompletedAchievement achievement = new CompletedAchievement(validPath, validDescription);
-        assertEquals(expected, achievement.toString(), 
+        assertEquals(expected, achievement.toLeaderboardString(), 
         "Expected string should ne \"path#description\"");
     }
 
-    public void toStringEmptyDescription() {
+    public void toLeaderboardStringEmptyDescription() {
         final FileHandle validPath = Gdx.files.internal("tests/achievement_icons/icon_1.png");
         if (validPath.exists() == false) throw new IllegalArgumentException("file must exist");
         final String emptyDescription = "";
         final String expected = validPath.path() + "#";
 
         CompletedAchievement achievement = new CompletedAchievement(validPath, emptyDescription);
-        assertEquals(expected, achievement.toString(), 
+        assertEquals(expected, achievement.toLeaderboardString(), 
         "Expected string should be \"path#\"");
     }
 
@@ -83,8 +83,8 @@ public class CompletedAchievementTest extends AbstractHeadlessGdxTest {
         final String validDescription = "description1";
         
         CompletedAchievement achievement = new CompletedAchievement(validPath, validDescription);
-        final String str = achievement.toString();
-        assertEquals(achievement, CompletedAchievement.fromString(str), 
+        final String str = achievement.toLeaderboardString();
+        assertEquals(achievement, CompletedAchievement.fromLeaderboardString(str), 
             "The string should be successfully converted to a CompletedAchievementObject");
     }
 
@@ -95,8 +95,8 @@ public class CompletedAchievementTest extends AbstractHeadlessGdxTest {
         final String emptyDescription = "";
         
         CompletedAchievement achievement = new CompletedAchievement(validPath, emptyDescription);
-        final String str = achievement.toString();
-        assertEquals(achievement, CompletedAchievement.fromString(str), 
+        final String str = achievement.toLeaderboardString();
+        assertEquals(achievement, CompletedAchievement.fromLeaderboardString(str), 
             "The string should be successfully converted to a CompletedAchievementObject");
     }
 }
