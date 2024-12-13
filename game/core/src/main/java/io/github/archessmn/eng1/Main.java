@@ -1,19 +1,16 @@
 package io.github.archessmn.eng1;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 /**
  * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
  */
 public class Main extends Game {
-<<<<<<< HEAD
-    public static final int VIEWPORT_WIDTH = 960, VIEWPORT_HEIGHT = 540;
-=======
     public static final int VIEWPORT_WIDTH = 960;
     public static final int VIEWPORT_HEIGHT = 540;
     private MainMenuScreen mainMenu;
->>>>>>> main
     private GameScreen gameScreen;
     private LeaderboardScreen leaderboardScreen;
     private FitViewport viewport;
@@ -25,15 +22,34 @@ public class Main extends Game {
         this.setScreen(mainMenu);
     }
 
+    /**
+     * Sets the current screen to the game screen.
+     */
     public void startGame() {
+        Screen prevScreen = screen;
         gameScreen = new GameScreen(this);
-        leaderboardScreen = new LeaderboardScreen(this);
         this.setScreen(gameScreen);
-        mainMenu.dispose();
+        if (prevScreen != null) prevScreen.dispose();
     }
 
+    /**
+     * Sets the current screen to the main menu screen.
+     */
+    public void viewMainMenu() {
+        Screen prevScreen = screen;
+        mainMenu = new MainMenuScreen(this);
+        this.setScreen(mainMenu);
+        if (prevScreen != null) prevScreen.dispose();
+    }
+
+    /**
+     * Sets the current screen to the leaderboard screen.
+     */
     public void viewLeaderboard() {
-        System.out.println("view leaderboard");
+        Screen prevScreen = screen;
+        leaderboardScreen = new LeaderboardScreen(this);
+        this.setScreen(leaderboardScreen);
+        if (prevScreen != null) prevScreen.dispose();
     }
 
     /**

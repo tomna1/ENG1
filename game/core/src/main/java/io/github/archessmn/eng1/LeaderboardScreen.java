@@ -18,7 +18,7 @@ public class LeaderboardScreen implements Screen {
         this.viewport = main.getViewport();
         String leaderboardFileDir = "ENG1/leaderboard";
         leaderboard = new Leaderboard(leaderboardFileDir);
-        leaderboardMenu = new LeaderboardMenu(leaderboard, viewport);
+        leaderboardMenu = new LeaderboardMenu(main, leaderboard);
         leaderboardMenu.setAsInputProcessor();
     }
     

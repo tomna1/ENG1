@@ -12,7 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+
+import io.github.archessmn.eng1.Main;
 
 /**
  * This class is the UI of the {@link Leaderboard}.
@@ -24,13 +25,13 @@ public class LeaderboardMenu {
     private Leaderboard leaderboard;
     private LeaderboardPositionRecord[] records;
 
-    public LeaderboardMenu(Leaderboard leaderboard, FitViewport viewport) {
+    public LeaderboardMenu(Main main, Leaderboard leaderboard) {
         if (leaderboard == null) throw new IllegalArgumentException("Leaderboard should not be null.");
-        if (viewport == null) throw new IllegalArgumentException("viewport cannot be null");
+        if (main == null) throw new IllegalArgumentException("main cannot be null");
         this.leaderboard = leaderboard;
         records = new LeaderboardPositionRecord[leaderboard.getCount()];
         
-        stage = new Stage(viewport);
+        stage = new Stage(main.getViewport());
         leaderboardTable = new Table();
         leaderboardTable.setFillParent(true);
         leaderboardTable.top();
@@ -40,12 +41,12 @@ public class LeaderboardMenu {
         leaderboardTable.add(label).width(100.0f).row();
         stage.addActor(leaderboardTable);
 
-        setupMenuButton();
+        setupMenuButton(main);
         setupLeaderboard();
         stage.setDebugAll(true);
     }
 
-    private void setupMenuButton() {
+    private void setupMenuButton(Main main) {
         Texture buttonUp = new Texture(Gdx.files.internal("ui/buttons/menu_button_up.png"));
         Texture buttonDown = new Texture(Gdx.files.internal("ui/buttons/menu_button_down.png"));
         
@@ -57,8 +58,7 @@ public class LeaderboardMenu {
         menuButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("go to main menu");
-                // TODO: go to main menu.
+                main.viewMainMenu();
             }
         });
         stage.addActor(menuButton);
