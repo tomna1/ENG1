@@ -26,6 +26,7 @@ import io.github.archessmn.eng1.buildings.HallsBuilding;
 import io.github.archessmn.eng1.buildings.LectureHallBuilding;
 import io.github.archessmn.eng1.buildings.OfficeBuilding;
 import io.github.archessmn.eng1.buildings.PiazzaBuilding;
+import io.github.archessmn.eng1.events.EventManager;
 
 public class GameScreen implements Screen {
     private World world;
@@ -207,6 +208,8 @@ public class GameScreen implements Screen {
             gameEnded = true;
         }
         stage.act(delta);
+
+        EventManager.checkEvents((int) timer.getElapsedTime());
     }
 
     private void draw() {
