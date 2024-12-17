@@ -1,5 +1,6 @@
 package io.github.archessmn.eng1.buildings;
 
+import java.util.Comparator;
 import java.util.HashMap;
 //import java.util.stream.Gatherer.Integrator;
 
@@ -55,7 +56,7 @@ public abstract class Building {
     private Sprite unbuiltSprite;
 
     protected HashMap<Type, Float> connections;
-    private Array<Building> connectedBuildings;
+    private HashMap<Building, Integer> connectedBuildings;
 
     protected SatisfactionContributor satisfactionContributor;
    
@@ -96,7 +97,7 @@ public abstract class Building {
         this.bounds = new Rectangle(this.x, this.y, this.width, this.height);
 
         connections = new HashMap<>();
-        connectedBuildings = new Array<>();
+        connectedBuildings = new HashMap<>();
 
         setConnections();
         setSatisfactionContributor();
@@ -164,12 +165,12 @@ public abstract class Building {
 
     public void updateConnectedBuildings(){
 
-        connectedBuildings = new Array<>();
+        connectedBuildings = new HashMap<>();
         for(Building otherBuilding : new Array<Building>(world.getBuildings())){
 
             if(isConnectedBuilding(otherBuilding)){
 
-                connectedBuildings.add(otherBuilding);
+                connectedBuildings.put(otherBuilding, getManhattenDistanceFrom(otherBuilding));
             }
         }
     }
@@ -211,6 +212,34 @@ public abstract class Building {
         return connections;
     }
 
+    public HashMap<Building, Integer> getConnectedBuildingsOfType(Type type){
+
+        HashMap<Building, Integer> connectionBuildingsOfType = new HashMap<>(); 
+        for(Building building : connectedBuildings.keySet()){
+            if(building.getBuildingType() == type){
+                connectionBuildingsOfType.put(building, connectedBuildings.get(building));
+            }
+        }
+        return connectionBuildingsOfType;
+    }
+
+    public Integer getClosestConnectedBuildingDistanceOfType(Type type){
+
+        HashMap<Building, Integer> connectedBuildingsOfType = getConnectedBuildingsOfType(type);
+
+        Integer closestConnectedDistance = Integer.MAX_VALUE;
+
+        for(Building connectedBuilding : connectedBuildingsOfType.keySet()){
+
+            Integer distanceToConnection = connectedBuildingsOfType.get(connectedBuilding);
+            if(distanceToConnection < closestConnectedDistance){
+                closestConnectedDistance = distanceToConnection;
+            }
+        }
+
+        return closestConnectedDistance;
+    }
+
 
     public int getID() { return this.id; }
     
@@ -242,12 +271,12 @@ public abstract class Building {
         return Math.abs(gridX - otherBuilding.getGridX()) + Math.abs(gridY - otherBuilding.getGridY());
     }
 
-    public Array<Building> getConnectedBuildings(){
+    public HashMap<Building, Integer> getConnectedBuildings(){
         return connectedBuildings;
     }
 
-    public Float getConnectionWeight(Building connectedBuilding){
-        return getConnections().get(connectedBuilding.getBuildingType());
+    public Float getConnectionWeight(Type type){
+        return getConnections().get(type);
     }
     
     public int getGridX() {

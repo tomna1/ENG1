@@ -22,7 +22,7 @@ public class GymBuilding extends Building {
     @Override
     public void setConnections() {
         connections = new HashMap<>();
-        connections.put(Type.HALLS, 0.3f);
+        connections.put(Type.HALLS, 5f);
     }
 
     @Override

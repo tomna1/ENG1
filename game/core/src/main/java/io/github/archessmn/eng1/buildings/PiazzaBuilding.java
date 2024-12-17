@@ -22,9 +22,9 @@ public class PiazzaBuilding extends Building {
     @Override
     public void setConnections() {
         connections = new HashMap<>();
-        connections.put(Type.HALLS, 0.2f);
-        connections.put(Type.LECTURE_HALL, 0.2f);
-        connections.put(Type.OFFICES, 0.2f);
+        connections.put(Type.HALLS, 7f);
+        connections.put(Type.LECTURE_HALL, 6f);
+        connections.put(Type.OFFICES, 9f);
     }
 
     @Override

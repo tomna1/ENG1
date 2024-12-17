@@ -22,8 +22,8 @@ public class OfficeBuilding extends Building {
     @Override
     public void setConnections() {
         connections = new HashMap<>();
-        connections.put(Type.LECTURE_HALL, 0.3f);
-        connections.put(Type.PIAZZA, 0.3f);
+        connections.put(Type.LECTURE_HALL, 8f);
+        connections.put(Type.PIAZZA, 7f);
     }
 
     @Override
