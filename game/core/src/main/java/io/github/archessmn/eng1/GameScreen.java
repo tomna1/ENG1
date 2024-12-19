@@ -30,6 +30,7 @@ import io.github.archessmn.eng1.events.EventManager;
 
 public class GameScreen implements Screen {
     private World world;
+    private EventManager eventManager;
     private FitViewport viewport;
 
     private TextureAtlas atlas;
@@ -62,6 +63,7 @@ public class GameScreen implements Screen {
     public GameScreen(Main main) {
         // 300 here represents the pixel width of the UI on the right hand side
         world = new World(Main.VIEWPORT_WIDTH - 300, Main.VIEWPORT_HEIGHT);
+        eventManager = new EventManager();
         viewport = main.getViewport();
 
         atlas = new TextureAtlas(Gdx.files.internal("ui/uiskin.atlas"));
@@ -209,7 +211,7 @@ public class GameScreen implements Screen {
         }
         stage.act(delta);
 
-        EventManager.checkEvents((int) timer.getElapsedTime());
+        eventManager.checkEvents(world, stage, (int) timer.getElapsedTime());
     }
 
     private void draw() {
@@ -242,6 +244,7 @@ public class GameScreen implements Screen {
         this.drawBuildingMenu();
 
         world.drawbuildings(batch);
+        eventManager.drawEvent(batch);
 
         batch.begin();
         if (paused) {
@@ -295,4 +298,6 @@ public class GameScreen implements Screen {
         batch.dispose();
         world.dispose();
     }
+
+
 }

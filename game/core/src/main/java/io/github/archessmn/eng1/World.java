@@ -1,15 +1,16 @@
 package io.github.archessmn.eng1;
 
+import java.util.HashMap;
+
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
+
 import io.github.archessmn.eng1.buildings.Building;
 import io.github.archessmn.eng1.util.GridCoordTuple;
 import io.github.archessmn.eng1.util.GridUtils;
-
-import java.util.HashMap;
 
 /**
  * Class used to store information about the world and the buildings in it.
