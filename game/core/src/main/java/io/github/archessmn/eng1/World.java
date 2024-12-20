@@ -156,7 +156,9 @@ public class World {
      * Dispose of anything that needs disposing of. Duh.
      */
     public void dispose() {
-        gridRenderer.dispose();
+        if (gridRenderer != null) {
+            gridRenderer.dispose();    
+        }
         assetManager.dispose();
     }
 }
