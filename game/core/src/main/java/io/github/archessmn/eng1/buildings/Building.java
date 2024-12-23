@@ -68,7 +68,7 @@ public abstract class Building {
     public Building(World world, Type buildingType, float x, float y, float width, float height, float timeUntilBuilt, boolean built) {
         this.world = world;
         this.buildingType = buildingType;
-        this.id = world.buildings.size - 1;
+        this.id = world.getBuildingCount() - 1;
         
         this.x = x;
         this.y = y;
@@ -265,6 +265,35 @@ public abstract class Building {
             case OFFICES -> "offices.png";
             case PIAZZA -> "piazza.png";
         };
+    }
+
+    public static String[] getButtonFileOfType(Type buildingType) {
+        final String dir = "game_menu/";
+        final String end = "_button.png";
+        String[] output = new String[2];
+        switch (buildingType) {
+            case GYM:
+                output[0] = dir+"gym_up"+end;
+                output[1] = dir+"gym_down"+end;
+                break;
+            case HALLS:
+                output[0] = dir+"halls_up"+end;
+                output[1] = dir+"halls_down"+end;
+                break;
+            case LECTURE_HALL:
+                output[0] = dir+"lecture_hall_up"+end;
+                output[1] = dir+"lecture_hall_down"+end;
+                break;
+            case OFFICES:
+                output[0] = dir+"office_up"+end;
+                output[1] = dir+"office_down"+end;
+                break;
+            case PIAZZA:
+                output[0] = dir+"food_up"+end;
+                output[1] = dir+"food_down"+end;
+                break;
+        }
+        return output;
     }
 
     public World getWorld(){

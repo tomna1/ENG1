@@ -18,8 +18,9 @@ public class World {
     public AssetManager assetManager;
     private ShapeRenderer gridRenderer;
     private Integer width, height;
-    public Array<Building> buildings = new Array<>();
-    public HashMap<Building.Use, Integer> buildingUseCounts = new HashMap<>();
+    private Array<Building> buildings = new Array<>();
+    private HashMap<Building.Use, Integer> buildingUseCounts = new HashMap<>();
+    private HashMap<Building.Type, Integer> buildingTypeCounts = new HashMap<>();
 
     /**
      * Creates a new world which can be used to store buildings.
@@ -36,6 +37,9 @@ public class World {
 
         for (Building.Use use : Building.Use.values()) {
             buildingUseCounts.put(use, 0);
+        }
+        for (Building.Type type : Building.Type.values()) {
+            buildingTypeCounts.put(type, 0);
         }
 
         assetManager = new AssetManager();
@@ -65,6 +69,18 @@ public class World {
         return this.height;
     }
 
+    public int getBuildingCount() {
+        return buildings.size;
+    }
+
+    public int getBuildingCount(Building.Use use) {
+        return buildingUseCounts.get(use);
+    }
+
+    public int getBuildingCount(Building.Type type) {
+        return buildingTypeCounts.get(type);
+    }
+
     /**
      * Draws the grid using {@link GridUtils}
      */
@@ -84,6 +100,12 @@ public class World {
      */
     public int addBuilding(Building building) {
         buildings.add(building);
+        int oldUseCount = buildingUseCounts.get(building.getBuildingUse());
+        buildingUseCounts.put(building.getBuildingUse(), oldUseCount+1);
+
+        int oldTypeCount = buildingTypeCounts.get(building.getBuildingType());
+        buildingTypeCounts.put(building.getBuildingType(), oldTypeCount+1);
+
         return buildings.size - 1;
     }
 
@@ -129,7 +151,6 @@ public class World {
      */
     public boolean doesBuildingOverlap(Integer id) {
         Building overlapBuilding = getBuilding(id);
-
         return doesBuildingOverlap(overlapBuilding);
     }
 
@@ -142,10 +163,18 @@ public class World {
     public boolean doesBuildingOverlap(Building overlapBuilding) {
         GridCoordTuple gridCoords = overlapBuilding.getGridCoords();
         for (Building building : buildings) {
-            if (building.getID() != overlapBuilding.getID()) {
-                if (building.getGridX() == gridCoords.x && building.getGridY() == gridCoords.y) {
-                    return true;
-                }
+            if (building.getGridX() == gridCoords.x && building.getGridY() == gridCoords.y) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean doesBuildingOverlap(int x, int y) {
+        for (Building building : buildings) {
+            if ((x >= building.getX() && x <= building.getX()+building.getWidth()) && 
+                (y >= building.getY() && y <= building.getY()+building.getHeight())) {
+                return true;
             }
         }
         return false;

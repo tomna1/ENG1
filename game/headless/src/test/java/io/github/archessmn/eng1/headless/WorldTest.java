@@ -20,7 +20,7 @@ public class WorldTest extends AbstractHeadlessGdxTest {
         assertEquals(worldHeight, world.getHeight(),
             "The world height should be the same as the number in its constructor.");
         
-        assertEquals(0, world.buildings.size,
+        assertEquals(0, world.getBuildingCount(),
             "There should be no buildings in the world upon creation.");
     }
 
