@@ -47,7 +47,6 @@ public class AlienInvasion implements Event {
         buildButton();
     }
 
-
     public int eventStart(int elapsedTime) {
         Array<Building> buildings = world.getBuildings();
         if (buildings.size == 0) {
@@ -55,9 +54,9 @@ public class AlienInvasion implements Event {
         }
 
         nextBuildingPos = getNextBuildingPos();
-        
+
         stage.addActor(UFO);
-        
+
         startTime = elapsedTime;
         pageX = 0;
         pageY = 0;
@@ -65,40 +64,55 @@ public class AlienInvasion implements Event {
     };
 
     public int eventMain(int elapsedTime) {
-        if(tractorActive){
-            if(elapsedTime == (tractorStart+5)){
-                //-5 student satisfaction
+        if (tractorActive) {
+            if (elapsedTime == (tractorStart + 5)) {
+                System.out.println("-5 satisfaction");
+                // -5 student satisfaction
             }
-        }else{
-            System.out.println((UFOx));
-            System.out.println(UFOy);
-
+        } else {
             UFOx += nextBuildingPos[1][0];
             UFOy += nextBuildingPos[1][1];
             UFO.setPosition(UFOx, UFOy);
 
-            if(Math.abs(UFOx - nextBuildingPos[0][0]) < 0.02 
-                && Math.abs(UFOy - nextBuildingPos[0][1]) < 0.02){
+            if (Math.abs(UFOx - nextBuildingPos[0][0]) < 0.02
+                    && Math.abs(UFOy - nextBuildingPos[0][1]) < 0.02) {
                 tractorActive = true;
                 tractorStart = elapsedTime;
             }
         }
-        
-        if(elapsedTime == (startTime + 15)){
+
+        if (elapsedTime == (startTime + 15)) {
+            tractorActive = false;
+            
+            float nextX = 500;
+            float nextY = 545;
+
+            float xSpeed = (nextX - UFOx) / 180;
+            float ySpeed = (nextY - UFOy) / 180;
+
+            nextBuildingPos = new float[][] { { nextX, nextY }, { xSpeed, ySpeed } };
             return 2;
         }
         return 1;
     };
 
     public int eventEnd() {
-        return -1;
+        UFOx += nextBuildingPos[1][0];
+        UFOy += nextBuildingPos[1][1];
+        UFO.setPosition(UFOx, UFOy);
+
+        if (Math.abs(UFOx - nextBuildingPos[0][0]) < 0.02
+                && Math.abs(UFOy - nextBuildingPos[0][1]) < 0.02) {
+            return 0;
+
+        }
+        return 2;
     };
 
     public void draw(SpriteBatch batch) {
     };
 
-
-    public float[][] getNextBuildingPos(){
+    public float[][] getNextBuildingPos() {
         Array<Building> buildings = world.getBuildings();
         Building nextBuilding = buildings.get(rand.nextInt(buildings.size));
         float nextBuildingX = nextBuilding.getX();
@@ -107,15 +121,11 @@ public class AlienInvasion implements Event {
         float xSpeed = (nextBuildingX - UFOx) / 180;
         float ySpeed = (nextBuildingY - UFOy) / 180;
 
-        System.out.println(xSpeed);
-        System.out.println(ySpeed);
-
-        float[][] nextBuildingPos = {{nextBuildingX, nextBuildingY}, {xSpeed, ySpeed}};
+        float[][] nextBuildingPos = { { nextBuildingX, nextBuildingY }, { xSpeed, ySpeed } };
 
         return nextBuildingPos;
 
     }
-
 
     /**
      * set the textures, events and positions of the ImageButtons.
@@ -134,9 +144,9 @@ public class AlienInvasion implements Event {
         UFO.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent onlineEvent, float x, float y) {
+                UFO.setChecked(tractorActive);
                 if (tractorActive) {
                     clickCount += 1;
-                    UFO.setChecked(true);
                     if (clickCount == 5) {
                         UFO.setChecked(false);
                         tractorActive = false;
@@ -151,6 +161,6 @@ public class AlienInvasion implements Event {
 
         UFO.setPosition(UFOx, UFOy);
         UFO.setSize(40, 40);
-        
+
     }
 }
