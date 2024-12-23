@@ -22,9 +22,9 @@ public class AlienInvasion implements Event {
     private Stage stage;
     private Texture pageTexture;
     private Sprite pageSprite;
-    private Drawable UFOdrawable, UFOidle, UFOactive, UFOactive2, UFOhit;
-    private int pageX, pageY, clickCount, tractorCount, startTime;
-    private float nextBuildingX, nextBuildingY;
+    private int pageX, pageY, clickCount, startTime, tractorStart;
+    private float UFOx, UFOy;
+    private float[][] nextBuildingPos = new float[2][2];
     private boolean tractorActive;
     private ImageButton UFO;
     private Random rand;
@@ -38,24 +38,55 @@ public class AlienInvasion implements Event {
         this.pageSprite.setSize(400, 225);
         this.pageX = -1000;
         this.pageY = -1000;
+        this.tractorActive = false;
+        this.rand = new Random();
+
+        this.UFOx = -45f;
+        this.UFOy = -45f;
 
         buildButton();
     }
 
 
     public int eventStart(int elapsedTime) {
-            if (world.getBuildings().size == 0) {
-                return -1;
-            }
-            stage.addActor(UFO);
-            startTime = elapsedTime;
-            pageX = 0;
-            pageY = 0;
+        Array<Building> buildings = world.getBuildings();
+        if (buildings.size == 0) {
+            return -1;
+        }
+
+        nextBuildingPos = getNextBuildingPos();
+        
+        stage.addActor(UFO);
+        
+        startTime = elapsedTime;
+        pageX = 0;
+        pageY = 0;
         return 1;
     };
 
     public int eventMain(int elapsedTime) {
+        if(tractorActive){
+            if(elapsedTime == (tractorStart+5)){
+                //-5 student satisfaction
+            }
+        }else{
+            System.out.println((UFOx));
+            System.out.println(UFOy);
 
+            UFOx += nextBuildingPos[1][0];
+            UFOy += nextBuildingPos[1][1];
+            UFO.setPosition(UFOx, UFOy);
+
+            if(Math.abs(UFOx - nextBuildingPos[0][0]) < 0.02 
+                && Math.abs(UFOy - nextBuildingPos[0][1]) < 0.02){
+                tractorActive = true;
+                tractorStart = elapsedTime;
+            }
+        }
+        
+        if(elapsedTime == (startTime + 15)){
+            return 2;
+        }
         return 1;
     };
 
@@ -66,42 +97,59 @@ public class AlienInvasion implements Event {
     public void draw(SpriteBatch batch) {
     };
 
+
+    public float[][] getNextBuildingPos(){
+        Array<Building> buildings = world.getBuildings();
+        Building nextBuilding = buildings.get(rand.nextInt(buildings.size));
+        float nextBuildingX = nextBuilding.getX();
+        float nextBuildingY = nextBuilding.getY();
+
+        float xSpeed = (nextBuildingX - UFOx) / 180;
+        float ySpeed = (nextBuildingY - UFOy) / 180;
+
+        System.out.println(xSpeed);
+        System.out.println(ySpeed);
+
+        float[][] nextBuildingPos = {{nextBuildingX, nextBuildingY}, {xSpeed, ySpeed}};
+
+        return nextBuildingPos;
+
+    }
+
+
     /**
      * set the textures, events and positions of the ImageButtons.
      */
     private void buildButton() {
         Texture UFOidleTexture = new Texture(Gdx.files.internal("UFOidle.png"));
-        Texture UFOactive1Texture = new Texture(Gdx.files.internal("UFOactive1.png"));
-        Texture UFOactive2Texture = new Texture(Gdx.files.internal("UFOactive2.png"));
+        Texture UFOactiveTexture = new Texture(Gdx.files.internal("UFOactive.png"));
         Texture UFOhitTexture = new Texture(Gdx.files.internal("UFOhit.png"));
 
-        UFOidle = new TextureRegionDrawable(UFOidleTexture);
-        UFOactive = new TextureRegionDrawable(UFOactive1Texture);
-        UFOactive2 = new TextureRegionDrawable(UFOactive2Texture);
-        UFOhit = new TextureRegionDrawable(UFOhitTexture);
+        Drawable UFOidle = new TextureRegionDrawable(UFOidleTexture);
+        Drawable UFOactive = new TextureRegionDrawable(UFOactiveTexture);
+        Drawable UFOhit = new TextureRegionDrawable(UFOhitTexture);
 
-        UFOdrawable = UFOidle;
-
-        UFO = new ImageButton(UFOdrawable, UFOhit, UFOactive);
+        UFO = new ImageButton(UFOidle, UFOhit, UFOactive);
 
         UFO.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent onlineEvent, float x, float y) {
                 if (tractorActive) {
                     clickCount += 1;
+                    UFO.setChecked(true);
                     if (clickCount == 5) {
+                        UFO.setChecked(false);
                         tractorActive = false;
-                        Array<Building> buildings = world.getBuildings();
-                        Building nextBuilding = buildings.get(rand.nextInt(buildings.size));
-                        nextBuildingX = nextBuilding.getX();
-                        nextBuildingY = nextBuilding.getY();
+                        clickCount = 0;
+
+                        nextBuildingPos = getNextBuildingPos();
 
                     }
                 }
             }
         });
 
-        UFO.setPosition(50, 190);
+        UFO.setPosition(UFOx, UFOy);
         UFO.setSize(40, 40);
         
     }

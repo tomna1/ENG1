@@ -58,7 +58,8 @@ public class EventManager {
             }
             if (!eventActive) {
                 eventStartTime = elapsedTime + rand.nextInt(5, 6);// for testing
-                nextEvent = rand.nextInt(1, 4);
+                //nextEvent = rand.nextInt(1, 4);
+                nextEvent = 2;
                 eventPhase = 0;
             }
             return true;
