@@ -24,7 +24,7 @@ public class EventManager {
         // private static int eventStartTime = randInt.nextInt(1,85);
         this.eventStartTime = 2;// for testing
 
-        this.nextEvent = 1;
+        this.nextEvent = 2;
         this.eventActive = false;
 
         this.eventPhase = 0;
@@ -67,7 +67,7 @@ public class EventManager {
             if (eventActive) {
                 switch (nextEvent) {
                     case 1 -> currentEvent = new LectureHallMaintenance(world, stage);
-                    case 2 -> currentEvent = new AlienInvasion();
+                    case 2 -> currentEvent = new AlienInvasion(world, stage);
                     case 3 -> currentEvent = new GoodBadLecture(world, rand.nextBoolean());
                     default -> throw new AssertionError();
                 }
