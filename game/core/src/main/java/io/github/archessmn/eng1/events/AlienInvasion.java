@@ -4,7 +4,6 @@ import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -24,7 +23,7 @@ public class AlienInvasion implements Event {
     private int clickCount, startTime, tractorStart;
     private float UFOx, UFOy;
     private float[][] nextBuildingPos = new float[2][2];
-    private boolean starting, tractorActive, pageVisible, hit;
+    private boolean starting, tractorActive, hit;
     private Drawable UFOidle, UFOactive, UFOhit;
     private Image UFO;
     private Random rand;
@@ -38,23 +37,19 @@ public class AlienInvasion implements Event {
         this.pageSprite = new Image(this.pageTexture);
         this.pageSprite.setSize(400, 272);
         this.tractorActive = false;
-        this.pageVisible = true;
         this.rand = new Random();
 
         this.UFOx = -45f;
         this.UFOy = -45f;
-        
+
         this.starting = false;
 
-
         buildUFO();
-
-
 
     }
 
     public int eventStart(int elapsedTime) {
-        if(!starting){
+        if (!starting) {
             Array<Building> buildings = world.getBuildings();
             if (buildings.size < 2) {
                 return -1;
@@ -67,7 +62,7 @@ public class AlienInvasion implements Event {
 
         if (elapsedTime == startTime + 6) {
             startTime = elapsedTime;
-            pageSprite.setPosition(-1000, -1000);
+            pageSprite.remove();
 
             stage.addActor(UFO);
             nextBuildingPos = getNextBuildingPos();
@@ -143,15 +138,9 @@ public class AlienInvasion implements Event {
         if (Math.abs(UFOx - nextBuildingPos[0][0]) < 0.02
                 && Math.abs(UFOy - nextBuildingPos[0][1]) < 0.02) {
             UFO.remove();
-            pageSprite.remove();
             return 0;
         } else {
             return 2;
-        }
-    };
-
-    public void draw(SpriteBatch batch) {
-        if (pageVisible) {
         }
     };
 

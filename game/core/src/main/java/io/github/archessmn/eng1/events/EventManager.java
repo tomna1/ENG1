@@ -1,10 +1,7 @@
 package io.github.archessmn.eng1.events;
 
 import java.util.Random;
-
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-
 import io.github.archessmn.eng1.World;
 
 /**
@@ -24,7 +21,7 @@ public class EventManager {
         // private static int eventStartTime = randInt.nextInt(1,85);
         this.eventStartTime = 2;// for testing
 
-        this.nextEvent = 2;
+        this.nextEvent = rand.nextInt(1,4);
         this.eventActive = false;
 
         this.eventPhase = 0;
@@ -58,8 +55,7 @@ public class EventManager {
             }
             if (!eventActive) {
                 eventStartTime = elapsedTime + rand.nextInt(5, 6);// for testing
-                //nextEvent = rand.nextInt(1, 4);
-                nextEvent = 2;
+                nextEvent = rand.nextInt(1, 4);
                 eventPhase = 0;
             }
             return true;
@@ -69,22 +65,11 @@ public class EventManager {
                 switch (nextEvent) {
                     case 1 -> currentEvent = new LectureHallMaintenance(world, stage);
                     case 2 -> currentEvent = new AlienInvasion(world, stage);
-                    case 3 -> currentEvent = new GoodBadLecture(world, rand.nextBoolean());
+                    case 3 -> currentEvent = new GoodBadLecture(world, stage, rand.nextBoolean());
                     default -> throw new AssertionError();
                 }
             }
             return eventActive;
-        }
-    }
-
-    /**
-     * runs the events draw method if it is currently running.
-     * 
-     * @param batch gameScreen's batch used to draw sprites.
-     */
-    public void drawEvent(SpriteBatch batch) {
-        if (eventActive) {
-            currentEvent.draw(batch);
         }
     }
 

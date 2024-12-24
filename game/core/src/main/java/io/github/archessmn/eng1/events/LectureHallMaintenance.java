@@ -2,10 +2,9 @@ package io.github.archessmn.eng1.events;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -28,12 +27,12 @@ import io.github.archessmn.eng1.buildings.Building.Use;
  * and they get -25 satisfaction
  */
 class LectureHallMaintenance implements Event {
-    private final World world;
-    private final Stage stage;
-    private final Sprite pageSprite;
-    private final Texture pageTexture;
+    private World world;
+    private Stage stage;
+    private Image newsPage;
+    private Texture pageTexture;
     private ImageButton onlineButton, otherHallsButton;
-    private int startTime, pageX, pageY;
+    private int startTime;
     private boolean choseOnline, choiceMade;
 
     /**
@@ -47,11 +46,10 @@ class LectureHallMaintenance implements Event {
         System.out.println("hall");
         this.world = world;
         this.stage = stage;
-        this.pageTexture = new Texture(Gdx.files.internal("newsMaintenance.png"));
-        this.pageSprite = new Sprite(this.pageTexture);
-        this.pageSprite.setSize(400, 205);
-        this.pageX = -1000;
-        this.pageY = -1000;
+
+        pageTexture = new Texture(Gdx.files.internal("newsMaintenance.png"));
+        newsPage = new Image(this.pageTexture);
+        newsPage.setSize(400, 205);
 
         buildButtons();
     }
@@ -76,10 +74,11 @@ class LectureHallMaintenance implements Event {
             return -1;
         }
 
+        stage.addActor(newsPage);
         stage.addActor(onlineButton);
         stage.addActor(otherHallsButton);
         startTime = elapsedTime;
-        pageSprite.setPosition(0, 0);
+        newsPage.setPosition(0, 0);
 
         return 1;
     }
@@ -126,21 +125,11 @@ class LectureHallMaintenance implements Event {
      * @return 0 to tell eventManager the event has finished.
      */
     public int eventEnd() {
-        pageSprite.setPosition(-1000, -1000);
-        onlineButton.setVisible(false);
-        otherHallsButton.setVisible(false);
-        return 0;
-    }
+        newsPage.remove();
+        onlineButton.remove();
+        otherHallsButton.remove();
 
-    /**
-     * draws the page used to notify the player.
-     * 
-     * @param batch adds sprite to gameScreen's batch to draw.
-     */
-    public void draw(SpriteBatch batch) {
-        batch.begin();
-        pageSprite.draw(batch);
-        batch.end();
+        return 0;
     }
 
     /**

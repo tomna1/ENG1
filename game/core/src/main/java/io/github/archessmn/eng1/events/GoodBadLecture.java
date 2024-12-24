@@ -2,8 +2,8 @@ package io.github.archessmn.eng1.events;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import io.github.archessmn.eng1.World;
 import io.github.archessmn.eng1.buildings.Building;
@@ -14,11 +14,12 @@ import io.github.archessmn.eng1.buildings.Building.Use;
  * and displays a pop up on the screen to inform the player.
  */
 public class GoodBadLecture implements Event {
-    private final World world;
-    private final Sprite pageSprite;
-    private final Texture pageTexture;
-    private int startTime, pageX, pageY;
-    private final boolean positive;
+    private World world;
+    private Stage stage;
+    private Image newsPage;
+    private Texture pageTexture;
+    private int startTime;
+    private boolean positive;
 
     /**
      * creates an instance of the event and sets up sprites and buttons ready
@@ -28,18 +29,17 @@ public class GoodBadLecture implements Event {
      * @param randomBool random true or false to determine if student satisfaction
      *                   should increase or decrease.
      */
-    public GoodBadLecture(World world, boolean randomBool) {
+    public GoodBadLecture(World world, Stage stage, boolean randomBool) {
         this.world = world;
+        this.stage = stage;
         this.positive = randomBool;
         if (this.positive) {
             this.pageTexture = new Texture(Gdx.files.internal("newsGreatLecture.png"));
         } else {
             this.pageTexture = new Texture(Gdx.files.internal("newsAwfulLecture.png"));
         }
-        this.pageSprite = new Sprite(this.pageTexture);
-        this.pageSprite.setSize(400, 205);
-        this.pageX = -1000;
-        this.pageY = -1000;
+        this.newsPage = new Image(this.pageTexture);
+        this.newsPage.setSize(400, 205);
     }
 
     /**
@@ -62,7 +62,8 @@ public class GoodBadLecture implements Event {
             return -1;
         }
         startTime = elapsedTime;
-        pageSprite.setPosition(0, 0);
+        stage.addActor(newsPage);
+        newsPage.setPosition(0, 0);
 
         // decrease or increase student satisfaction by 5
 
@@ -89,19 +90,8 @@ public class GoodBadLecture implements Event {
      * @return 0 to tell eventManager that the event is finished.
      */
     public int eventEnd() {
-        pageSprite.setPosition(-1000, -1000);
+        newsPage.remove();
         return 0;
-    }
-
-    /**
-     * draws the page used to notify the player.
-     * 
-     * @param batch adds sprite to gameScreen's batch to draw.
-     */
-    public void draw(SpriteBatch batch) {
-        batch.begin();
-        pageSprite.draw(batch);
-        batch.end();
     }
 
 }

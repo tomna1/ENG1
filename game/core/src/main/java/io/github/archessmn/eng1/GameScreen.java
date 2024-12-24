@@ -248,7 +248,6 @@ public class GameScreen implements Screen {
         this.drawBuildingMenu();
 
         world.drawbuildings(batch);
-        eventManager.drawEvent(batch);
 
         batch.begin();
         if (paused) {
