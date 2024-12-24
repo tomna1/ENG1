@@ -1,7 +1,5 @@
 package io.github.archessmn.eng1;
 
-import java.util.HashMap;
-
 import io.github.archessmn.eng1.buildings.Building;
 
 public class SatisfactionContributor {
@@ -15,6 +13,7 @@ public class SatisfactionContributor {
     private Float satisfactionContribution = 0f, optimumSatisfactionContribution = 0f;
 
     public SatisfactionContributor(
+
         Building building, 
         Float studentCapacity, 
         Float teacherCapacity,
@@ -30,32 +29,32 @@ public class SatisfactionContributor {
 
     public void updateSatisfactionContribution() {
 
-        satisfactionContribution = calculateConnectionContribution(false) + calculateOccupancyContribution(false);
-        optimumSatisfactionContribution = calculateConnectionContribution(true) + calculateOccupancyContribution(true);
+        satisfactionContribution = calculateConnectionsContribution(false) + calculateOccupancyContribution(false);
+        optimumSatisfactionContribution = calculateConnectionsContribution(true) + calculateOccupancyContribution(true);
     }
 
     private Float connectionContributionEquation(Float weight, Integer distance){
-        Float distanceFactor = 1.5f;
-        if(weight == 0){
-            return 0f;
-        }
-        return weight / (distance * distanceFactor);
+        return 1 / ((weight * distance) + 1);
     }
 
-    private Float calculateConnectionContribution(boolean isOptimum){
+    private Float calculateConnectionContribution(Building.Type type, boolean isOptimum){
+
+        Integer closestConnectionDistance = building.getClosestConnectedBuildingDistanceOfType(type);
+        Float weight = building.getConnections().get(type);
+
+        if(closestConnectionDistance != Integer.MAX_VALUE){
+            closestConnectionDistance = isOptimum ? 1 : closestConnectionDistance;
+            return connectionContributionEquation(weight, closestConnectionDistance);
+        } else{
+            return 0.0f;
+        }
+    }
+
+    private Float calculateConnectionsContribution(boolean isOptimum){
 
         Float contribution = 0f;
         for(Building.Type type : building.getConnections().keySet()){
-
-            Integer closestConnectionDistance = isOptimum ? 1 : building.getClosestConnectedBuildingDistanceOfType(type);
-            Float weight = building.getConnections().get(type);
-
-            if(closestConnectionDistance != Integer.MAX_VALUE){
-                contribution += -closestConnectionDistance / weight  + 1;
-            } else{
-                closestConnectionDistance = null;
-            }
-            System.out.println(String.format("Type: %-10s Connetion Type: %-10s Closest Distsance: %-10d Weight: %-10f Contribution: %f", building.getBuildingType(), type.name(), closestConnectionDistance, weight, contribution));
+            contribution += calculateConnectionContribution(type, isOptimum);
         }
 
         if (isOptimum) {
@@ -67,40 +66,13 @@ public class SatisfactionContributor {
             return connectionsContribution;
         }
     }
-
-    private Float calculateConnectionContribution2(boolean isOptimum) {
-
-        Float contribution = 0f;
-        HashMap<Building, Integer> connectedBuildings = building.getConnectedBuildings();
-        for(Building connectedBuilding : connectedBuildings.keySet()){
-            Float weight = building.getConnectionWeight(connectedBuilding.getBuildingType());
-            Integer distance = isOptimum ? 1 : connectedBuildings.get(connectedBuilding);
-            contribution += connectionContributionEquation(weight, distance);
-            // System.out.println(String.format("Building: %-10s Connected: %-10s Distance: %-10d Weight: %-10f Contribution: %f", building.getBuildingType().name(), connectedBuilding.getBuildingType().name(), distance, weight, contribution));
-        }
-
-
-        if (isOptimum) {
-            optimumConnectionsContribution = contribution;
-            return optimumConnectionsContribution;
-        } else {
-            
-            connectionsContribution = contribution;
-            return connectionsContribution;
-        }
-
-    }
-
 
     private Float calculateOccupancyContribution(boolean isOptimum) {
 
         Float studentContribution = getOccupancyContribution(Building.Type.HALLS, isOptimum);
         Float teacherContribution = getOccupancyContribution(Building.Type.OFFICES, isOptimum);
-        //System.out.println("type: " + building.getBuildingType().name() + " studentOccupacy: " + studentOccupacy + " teacherOccupancy: " + teacherOccupancy + " optimum: " + isOptimum);
-        //System.out.println("studentContribution: " + studentContribution + " teacherContribution: " + teacherContribution + "\n");
 
         Float contribution = studentContribution + teacherContribution;
-        contribution = 0f;
 
         if (isOptimum) {
             optimumOccupancyContribution = contribution;
@@ -109,6 +81,11 @@ public class SatisfactionContributor {
             occupancyContribution = contribution;
             return occupancyContribution;
         }
+    }
+
+    private float occupancyEquation(float wight, float occupancy){
+        double e = Math.E;
+        return (float) Math.pow(e, -wight * Math.pow(occupancy - 1, 2));
     }
 
     private Float getOccupancyContribution(Building.Type type, boolean isOptimum) {
@@ -124,7 +101,7 @@ public class SatisfactionContributor {
         }
         else{
             occupancy = isOptimum ? 1.0f : getOccupancy(capacity, ratio);
-            contribution = 1 - occupancyWeighting * Math.abs(occupancy - 1);
+            contribution = occupancyEquation(occupancyWeighting, occupancy);
             return contribution;
 
         }
