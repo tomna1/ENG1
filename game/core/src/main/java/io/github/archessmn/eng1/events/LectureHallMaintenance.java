@@ -47,9 +47,9 @@ class LectureHallMaintenance implements Event {
         System.out.println("hall");
         this.world = world;
         this.stage = stage;
-        this.pageTexture = new Texture(Gdx.files.internal("maintenance.png"));
+        this.pageTexture = new Texture(Gdx.files.internal("newsMaintenance.png"));
         this.pageSprite = new Sprite(this.pageTexture);
-        this.pageSprite.setSize(400, 225);
+        this.pageSprite.setSize(400, 205);
         this.pageX = -1000;
         this.pageY = -1000;
 
@@ -79,8 +79,7 @@ class LectureHallMaintenance implements Event {
         stage.addActor(onlineButton);
         stage.addActor(otherHallsButton);
         startTime = elapsedTime;
-        pageX = 0;
-        pageY = 0;
+        pageSprite.setPosition(0, 0);
 
         return 1;
     }
@@ -127,8 +126,7 @@ class LectureHallMaintenance implements Event {
      * @return 0 to tell eventManager the event has finished.
      */
     public int eventEnd() {
-        pageX = -1000;
-        pageY = -1000;
+        pageSprite.setPosition(-1000, -1000);
         onlineButton.setVisible(false);
         otherHallsButton.setVisible(false);
         return 0;
@@ -140,8 +138,6 @@ class LectureHallMaintenance implements Event {
      * @param batch adds sprite to gameScreen's batch to draw.
      */
     public void draw(SpriteBatch batch) {
-        pageSprite.setPosition(pageX, pageY);
-
         batch.begin();
         pageSprite.draw(batch);
         batch.end();

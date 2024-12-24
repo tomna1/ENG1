@@ -212,6 +212,10 @@ public class GameScreen implements Screen {
         stage.act(delta);
 
         eventManager.checkEvents(world, stage, (int) timer.getElapsedTime());
+
+        if(((int) timer.getElapsedTime())%2 == 0){
+            System.out.println(stage.getActors());
+        }
     }
 
     private void draw() {

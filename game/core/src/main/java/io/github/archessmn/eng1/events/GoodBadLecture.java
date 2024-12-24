@@ -32,12 +32,12 @@ public class GoodBadLecture implements Event {
         this.world = world;
         this.positive = randomBool;
         if (this.positive) {
-            this.pageTexture = new Texture(Gdx.files.internal("greatlecture.png"));
+            this.pageTexture = new Texture(Gdx.files.internal("newsGreatLecture.png"));
         } else {
-            this.pageTexture = new Texture(Gdx.files.internal("awfullecture.png"));
+            this.pageTexture = new Texture(Gdx.files.internal("newsAwfulLecture.png"));
         }
         this.pageSprite = new Sprite(this.pageTexture);
-        this.pageSprite.setSize(400, 225);
+        this.pageSprite.setSize(400, 205);
         this.pageX = -1000;
         this.pageY = -1000;
     }
@@ -62,8 +62,7 @@ public class GoodBadLecture implements Event {
             return -1;
         }
         startTime = elapsedTime;
-        pageX = 0;
-        pageY = 0;
+        pageSprite.setPosition(0, 0);
 
         // decrease or increase student satisfaction by 5
 
@@ -90,8 +89,7 @@ public class GoodBadLecture implements Event {
      * @return 0 to tell eventManager that the event is finished.
      */
     public int eventEnd() {
-        pageX = -1000;
-        pageY = -1000;
+        pageSprite.setPosition(-1000, -1000);
         return 0;
     }
 
@@ -101,8 +99,6 @@ public class GoodBadLecture implements Event {
      * @param batch adds sprite to gameScreen's batch to draw.
      */
     public void draw(SpriteBatch batch) {
-        pageSprite.setPosition(pageX, pageY);
-
         batch.begin();
         pageSprite.draw(batch);
         batch.end();
