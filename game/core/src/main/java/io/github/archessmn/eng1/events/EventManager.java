@@ -18,13 +18,29 @@ public class EventManager {
      * create an EventManager instance to manage when events are run.
      */
     public EventManager(int minBound, int maxBound) {
+        if (minBound < 0) {
+            throw new IllegalArgumentException("minBound should be positive.");
+        }
+        if (maxBound <= minBound) {
+            throw new IllegalArgumentException("maxBound should be greater than minBound.");
+        }
+
         this.minStartBound = minBound;
         this.maxStartBound = maxBound;
 
-        eventStartTime = rand.nextInt(minStartBound,maxStartBound);
+        eventStartTime = rand.nextInt(minStartBound, maxStartBound);
         nextEvent = rand.nextInt(1, 4);
         eventActive = false;
         eventPhase = 0;
+    }
+
+    public EventManager(int minBound, int maxBound, int firstEvent) {
+        this(minBound, maxBound);
+
+        if (firstEvent < 1 || firstEvent > 3) {
+            throw new IllegalArgumentException("Invalid firstEvent chosen.");
+        }
+        this.nextEvent = firstEvent;
     }
 
     /**
@@ -72,10 +88,38 @@ public class EventManager {
                     case 3 -> currentEvent = new GoodBadLecture(world, stage, rand.nextBoolean());
                     default -> throw new AssertionError();
                 }
-                
+
             }
             return eventActive;
         }
+    }
+
+    public int getMinStartBound() {
+        return minStartBound;
+    }
+
+    public int getMaxStartBound() {
+        return maxStartBound;
+    }
+
+    public int getEventStartTime() {
+        return eventStartTime;
+    }
+
+    public int getNextEvent() {
+        return nextEvent;
+    }
+
+    public int getEventPhase() {
+        return eventPhase;
+    }
+
+    public boolean getEventActive() {
+        return eventActive;
+    }
+
+    public Event getCurrentEvent() {
+        return currentEvent;
     }
 
 }

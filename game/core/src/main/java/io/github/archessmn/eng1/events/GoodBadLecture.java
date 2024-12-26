@@ -19,20 +19,18 @@ public class GoodBadLecture implements Event {
     private Image newsPage;
     private Texture pageTexture;
     private int startTime;
-    private boolean positive;
 
     /**
      * creates an instance of the event and sets up Image.
      * 
-     * @param world      World used to check number of lecture halls.
-     * @param stage      Stage to place images on.
-     * @param randomBool random true or false to determine if student satisfaction
-     *                   should increase or decrease.
+     * @param world    World used to check number of lecture halls.
+     * @param stage    Stage to place images on.
+     * @param positive random true or false to determine if student satisfaction
+     *                 should increase or decrease.
      */
-    public GoodBadLecture(World world, Stage stage, boolean randomBool) {
+    public GoodBadLecture(World world, Stage stage, boolean positive) {
         this.world = world;
         this.stage = stage;
-        this.positive = randomBool;
 
         if (positive) {
             pageTexture = new Texture(Gdx.files.internal("newsGreatLecture.png"));

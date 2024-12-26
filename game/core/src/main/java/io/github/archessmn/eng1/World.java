@@ -25,13 +25,15 @@ public class World {
     /**
      * Creates a new world which can be used to store buildings.
      * 
-     * @param worldWidth Width of the world. Must be greater than 0.
+     * @param worldWidth  Width of the world. Must be greater than 0.
      * @param worldHeight Height of the world. Must be greater than 0.
      * 
      */
     public World(Integer worldWidth, Integer worldHeight) {
-        if (worldWidth <= 0) throw new IllegalArgumentException("World Width should be greater than 0.");
-        if (worldHeight <= 0) throw new IllegalArgumentException("World Height should be greater than 0.");
+        if (worldWidth <= 0)
+            throw new IllegalArgumentException("World Width should be greater than 0.");
+        if (worldHeight <= 0)
+            throw new IllegalArgumentException("World Height should be greater than 0.");
         this.width = worldWidth;
         this.height = worldHeight;
 
@@ -49,17 +51,19 @@ public class World {
         assetManager.load("missing_texture.png", Texture.class);
         assetManager.finishLoading();
     }
-    
+
     /**
      * Returns the width of the world as defined in the constructor..
+     * 
      * @return World width, always greater than 0.
      */
     public int getWidth() {
         return this.width;
     }
-    
+
     /**
      * Returns the height of the world as defined in the constructor.
+     * 
      * @return World height, always greater than 0.
      */
     public int getHeight() {
@@ -79,7 +83,9 @@ public class World {
     }
 
     /**
-     * Adds a building to the world building store and returns its location in the store
+     * Adds a building to the world building store and returns its location in the
+     * store
+     * 
      * @param building Building to add to the world
      * @return The index of the building in the world store
      */
@@ -102,29 +108,34 @@ public class World {
      */
     public void drawbuildings(SpriteBatch batch) {
         batch.begin();
-        for (Building building : buildings) building.draw(batch);
+        for (Building building : buildings)
+            building.draw(batch);
         batch.end();
     }
 
     /**
      * Get a building from the world building store
+     * 
      * @param id The ID of a building (its index).
      * @return The building with the given ID / index
      */
     public Building getBuilding(Integer id) {
         return buildings.get(id);
     }
+
     /**
      * Gets the array of all buildings in the world.
+     * 
      * @return The array buildings containing each building object.
      */
-    public Array<Building> getBuildings(){
+    public Array<Building> getBuildings() {
         return buildings;
     }
 
     /**
      * Utility method to check if a building overlaps with any others in the world
      * after being snapped to the grid based on its current location
+     * 
      * @param id ID / index of the building in the world building store
      * @return true if the building overlaps with another, else false
      */
@@ -137,6 +148,7 @@ public class World {
     /**
      * Utility method to check if a building overlaps with any others in the world
      * after being snapped to the grid based on its current location
+     * 
      * @param overlapBuilding The building to check for overlaps with others
      * @return true if the building overlaps with another, else false
      */
@@ -157,7 +169,7 @@ public class World {
      */
     public void dispose() {
         if (gridRenderer != null) {
-            gridRenderer.dispose();    
+            gridRenderer.dispose();
         }
         assetManager.dispose();
     }

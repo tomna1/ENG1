@@ -26,7 +26,7 @@ import io.github.archessmn.eng1.buildings.Building.Use;
  * If the player hasn't made a decision in 10 seconds the event ends
  * and they get -20 satisfaction
  */
-class LectureHallMaintenance implements Event {
+public class LectureHallMaintenance implements Event {
     private World world;
     private Stage stage;
     private Image newsPage;

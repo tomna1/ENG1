@@ -17,13 +17,13 @@ public class TimerTest {
 
         Timer timer = new Timer(maxTime, secondsPerYear);
         assertEquals(maxTime, timer.getMaxTime(),
-            "The maxTime should be 35 as defined in constructor.");
+                "The maxTime should be 35 as defined in constructor.");
         assertEquals(secondsPerYear, timer.getSecondsPerYear(),
-            "The secondsPerYear should be 7 as defined in constructor.");
+                "The secondsPerYear should be 7 as defined in constructor.");
         assertEquals(0.0f, timer.getElapsedTime(),
-            "The timer should have no elapsed time if it has not been updated.");
+                "The timer should have no elapsed time if it has not been updated.");
         assertEquals(false, timer.hasEnded(),
-            "Should be false as timer has not ended.");
+                "Should be false as timer has not ended.");
     }
 
     /**
@@ -35,11 +35,11 @@ public class TimerTest {
         final int maxTime = 0;
         final int secondsPerYear = 5;
         assertThrows(IllegalArgumentException.class, () -> new Timer(maxTime, secondsPerYear),
-        "Should throw IllegalArgumentException if maxTime <= 0.");
+                "Should throw IllegalArgumentException if maxTime <= 0.");
 
         final int maxTime2 = -5;
         assertThrows(IllegalArgumentException.class, () -> new Timer(maxTime2, secondsPerYear),
-        "Should throw IllegalArgumentException if maxTime <= 0.");
+                "Should throw IllegalArgumentException if maxTime <= 0.");
     }
 
     /**
@@ -51,11 +51,11 @@ public class TimerTest {
         final int maxTime = 7;
         final int secondsPerYear = 0;
         assertThrows(IllegalArgumentException.class, () -> new Timer(maxTime, secondsPerYear),
-        "Should throw IllegalArgumentException if secondsPerYear <= 0.");
+                "Should throw IllegalArgumentException if secondsPerYear <= 0.");
 
         final int secondsPerYear2 = -8;
         assertThrows(IllegalArgumentException.class, () -> new Timer(maxTime, secondsPerYear2),
-        "Should throw IllegalArgumentException if secondsPerYear <= 0.");
+                "Should throw IllegalArgumentException if secondsPerYear <= 0.");
     }
 
     /**
@@ -66,17 +66,17 @@ public class TimerTest {
     public void timerUpdate() {
         Timer timer = new Timer(10, 1);
         assertEquals(0.0f, timer.getElapsedTime(),
-            "The timer should have no elapsed time if it has not been updated.");
-        
+                "The timer should have no elapsed time if it has not been updated.");
+
         float delta = 2.0f;
         timer.update(delta);
         assertEquals(delta, timer.getElapsedTime(),
-            "The timer elapsed time should have updated to 2.0f.");
-        
+                "The timer elapsed time should have updated to 2.0f.");
+
         float delta2 = 2.5f;
         timer.update(delta2);
         assertEquals(delta + delta2, timer.getElapsedTime(),
-            "The timer elapsed time should have updated to 4.5f.");
+                "The timer elapsed time should have updated to 4.5f.");
     }
 
     /**
@@ -94,23 +94,23 @@ public class TimerTest {
 
         Timer timer = new Timer(maxTime, secondsPerYear);
         assertEquals(false, timer.hasEnded(),
-            "Timer should not have ended as it has not reached maxTime.");
-        
+                "Timer should not have ended as it has not reached maxTime.");
+
         timer.update(beforeMaxTime);
         assertEquals(false, timer.hasEnded(),
-            "Timer should not have ended as it has not reached maxTime.");
-        
+                "Timer should not have ended as it has not reached maxTime.");
+
         timer = new Timer(maxTime, secondsPerYear);
         timer.update(onMaxTime);
         assertEquals(true, timer.hasEnded(),
-            "Timer should have ended after it reaches maxTime");
-        
+                "Timer should have ended after it reaches maxTime");
+
         timer = new Timer(maxTime, secondsPerYear);
         timer.update(afterMaxTime);
         assertEquals(true, timer.hasEnded(),
-            "Timer should have ended after it goes over maxTime.");
+                "Timer should have ended after it goes over maxTime.");
         assertEquals(maxTime, timer.getElapsedTime(),
-            "The elapsed time of the timer should have of max value of maxTime.");
+                "The elapsed time of the timer should have of max value of maxTime.");
     }
 
     @Test
@@ -122,11 +122,11 @@ public class TimerTest {
         Timer timer = new Timer(maxTime, secondsPerYear);
         timer.update(maxTime);
         assertEquals(true, timer.hasEnded(),
-            "Timer should have ended after it reaches its maxTime.");
+                "Timer should have ended after it reaches its maxTime.");
 
         timer.update(biggerThanMaxTime);
         assertEquals(maxTime, timer.getElapsedTime(),
-            "Timer should not have an elapsed time greater than maxTime.");
+                "Timer should not have an elapsed time greater than maxTime.");
     }
 
     /**
@@ -141,16 +141,16 @@ public class TimerTest {
 
         Timer timer = new Timer(maxTime, secondsPerYear);
         assertEquals(1, timer.getDayCount(),
-            "Day count should be 1 as timer has not updated.");
-        
+                "Day count should be 1 as timer has not updated.");
+
         timer.update(day);
-        assertEquals( (int)day+1.0f, timer.getDayCount(),
-            "Day count should be 2 as a day has passed.");
-        
+        assertEquals((int) day + 1.0f, timer.getDayCount(),
+                "Day count should be 2 as a day has passed.");
+
         timer = new Timer(maxTime, secondsPerYear);
         timer.update(week);
-        assertEquals(week+1.0f, timer.getDayCount(),
-            "Day count should be 8 as 1 week has passed.");
+        assertEquals(week + 1.0f, timer.getDayCount(),
+                "Day count should be 8 as 1 week has passed.");
     }
 
     /**
@@ -166,11 +166,11 @@ public class TimerTest {
         Timer timer = new Timer(maxTime, secondsPerYear);
         timer.update(year);
         assertEquals(1.0f, timer.getDayCount(),
-            "Day count should be 1 after 1 year has passed as it resets.");
+                "Day count should be 1 after 1 year has passed as it resets.");
 
         timer.update(decade);
         assertEquals(1.0f, timer.getDayCount(),
-            "Day count should be 1 after 1 decade has passed as it resets.");
+                "Day count should be 1 after 1 decade has passed as it resets.");
     }
 
     /**
@@ -186,15 +186,15 @@ public class TimerTest {
 
         Timer timer = new Timer(maxTime, secondsPerYear);
         assertEquals(1, timer.getYearCount(),
-            "Year count should start as 1.");
+                "Year count should start as 1.");
 
         timer.update(year);
         assertEquals(2, timer.getYearCount(),
-            "Year count should be 2 after a year has passed.");
+                "Year count should be 2 after a year has passed.");
 
         timer = new Timer(maxTime, secondsPerYear);
         timer.update(decade);
         assertEquals(11, timer.getYearCount(),
-            "Year count should be 11 after a decade has passed.");
+                "Year count should be 11 after a decade has passed.");
     }
 }
