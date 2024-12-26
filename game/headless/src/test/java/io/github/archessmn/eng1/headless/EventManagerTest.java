@@ -156,26 +156,36 @@ public class EventManagerTest extends AbstractHeadlessGdxTest {
 
                 EventManager eventManager = new EventManager(0, 1, 3);
 
+                // Should set event active and make an instance of event 3
                 eventManager.checkEvents(world, stage, 0);
                 assertTrue(eventManager.getEventActive(),
                                 "Event should be active.");
                 assertEquals(0, eventManager.getEventPhase(),
                                 "Event phase should be 0.");
 
+                // Should run eventStart, which will set eventPhase to 1.
                 eventManager.checkEvents(world, stage, 0);
-
                 assertEquals(1, eventManager.getEventPhase(),
                                 "Event phase should be 1.");
 
+                /*
+                 * Should run eventMain and tell it to end the event as 6 seconds
+                 * have passed. This should set eventPhase to 2.
+                 */
                 eventManager.checkEvents(world, stage, 6);
                 assertEquals(2, eventManager.getEventPhase(),
                                 "Event phase should be 2.");
 
+                /*
+                 * Should run eventEnd which will set eventPhase back to 0.
+                 * eventManager will then set a new eventStartTime which should be 6,
+                 * and set eventActive to false.
+                 */
                 eventManager.checkEvents(world, stage, 6);
                 assertEquals(0, eventManager.getEventPhase(),
                                 "Event phase should be reset to 0.");
                 assertEquals(6, eventManager.getEventStartTime(),
-                                "Event start time should now be 7.");
+                                "Event start time should now be 6.");
                 assertFalse(eventManager.getEventActive(),
                                 "Event active should be false;");
 

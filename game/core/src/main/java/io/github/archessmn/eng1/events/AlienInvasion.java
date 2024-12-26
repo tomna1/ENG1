@@ -184,6 +184,7 @@ public class AlienInvasion implements Event {
 
     /**
      * Gets the coordinates and the speeds the UFO needs to travel to and at.
+     * 
      * @return a 2d array with the coordinates and the speed
      */
     public float[][] getNextBuildingPos() {
@@ -198,8 +199,8 @@ public class AlienInvasion implements Event {
         float nextBuildingX = nextBuilding.getX() + 10;
         float nextBuildingY = nextBuilding.getY() + 25;
 
-        float xSpeed = (nextBuildingX - UFOx) / 180;
-        float ySpeed = (nextBuildingY - UFOy) / 180;
+        float xSpeed = (nextBuildingX - UFOx) / 120;
+        float ySpeed = (nextBuildingY - UFOy) / 120;
 
         float[][] nextBuildingPos = { { nextBuildingX, nextBuildingY }, { xSpeed, ySpeed } };
 
@@ -208,7 +209,7 @@ public class AlienInvasion implements Event {
     }
 
     /**
-     * set the textures and events of the UFO.
+     * set the textures and click-event of the UFO.
      */
     private void buildUFO() {
         Texture UFOidleTexture = new Texture(Gdx.files.internal("UFOidle.png"));

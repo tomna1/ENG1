@@ -63,7 +63,7 @@ public class GameScreen implements Screen {
     public GameScreen(Main main) {
         // 300 here represents the pixel width of the UI on the right hand side
         world = new World(Main.VIEWPORT_WIDTH - 300, Main.VIEWPORT_HEIGHT);
-        eventManager = new EventManager(5,6);
+        eventManager = new EventManager(5,10); //LOWER VALUES FOR TESTING
         viewport = main.getViewport();
 
         atlas = new TextureAtlas(Gdx.files.internal("ui/uiskin.atlas"));

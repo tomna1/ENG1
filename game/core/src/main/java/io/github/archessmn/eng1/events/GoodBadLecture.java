@@ -18,15 +18,15 @@ public class GoodBadLecture implements Event {
     private Stage stage;
     private Image newsPage;
     private Texture pageTexture;
-    private int startTime;
+    private int startTime, satisfactionChange;
 
     /**
      * creates an instance of the event and sets up Image.
      * 
-     * @param world    World used to check number of lecture halls.
-     * @param stage    Stage to place images on.
-     * @param positive random true or false to determine if student satisfaction
-     *                 should increase or decrease.
+     * @param world      World used to check number of lecture halls.
+     * @param stage      Stage to place images on.
+     * @param randomBool random true or false to determine if student satisfaction
+     *                   should increase or decrease.
      */
     public GoodBadLecture(World world, Stage stage, boolean positive) {
         this.world = world;
@@ -34,16 +34,18 @@ public class GoodBadLecture implements Event {
 
         if (positive) {
             pageTexture = new Texture(Gdx.files.internal("newsGreatLecture.png"));
+            satisfactionChange = 5;
         } else {
             pageTexture = new Texture(Gdx.files.internal("newsAwfulLecture.png"));
+            satisfactionChange = -5;
         }
         newsPage = new Image(pageTexture);
         newsPage.setSize(400, 205);
     }
 
     /**
-     * Checks if lecture halls are present before placing page on the screen
-     * and recording the start time.
+     * Checks if lecture halls are present before placing page on the screen,
+     * recording the start time, and modifying satisfaction.
      * 
      * @param elapsedTime The number of seconds spent unpaused.
      * @return 1 if event started successfully.
@@ -64,7 +66,7 @@ public class GoodBadLecture implements Event {
         stage.addActor(newsPage);
         newsPage.setPosition(0, 0);
 
-        // decrease or increase student satisfaction by 5
+        // change satisfaction by satisfactionChange.
 
         return 1;
     }

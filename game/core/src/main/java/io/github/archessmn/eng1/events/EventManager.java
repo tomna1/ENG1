@@ -7,6 +7,8 @@ import io.github.archessmn.eng1.World;
 /**
  * determines a random time for the event to start and checks each frame if
  * an event is active or should be active.
+ * If the event is active run the start, main, or end of that event, determined
+ * using eventPhase.
  */
 public class EventManager {
     private final Random rand = new Random();
@@ -34,6 +36,11 @@ public class EventManager {
         eventPhase = 0;
     }
 
+    /**
+     * Allows you to specify what the first event ran should be.
+     * Mainly for testing.
+     * @param firstEvent int 1, 2, or 3, to decide which event to run.
+     */
     public EventManager(int minBound, int maxBound, int firstEvent) {
         this(minBound, maxBound);
 
