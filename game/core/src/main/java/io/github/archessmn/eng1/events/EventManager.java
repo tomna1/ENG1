@@ -11,20 +11,20 @@ import io.github.archessmn.eng1.World;
 public class EventManager {
     private final Random rand = new Random();
     private Event currentEvent;
-    private int eventStartTime, nextEvent, eventPhase;
+    private int eventStartTime, nextEvent, eventPhase, minStartBound, maxStartBound;
     private boolean eventActive;
 
     /**
      * create an EventManager instance to manage when events are run.
      */
-    public EventManager() {
-        // private static int eventStartTime = randInt.nextInt(1,85);
-        this.eventStartTime = 2;// for testing
+    public EventManager(int minBound, int maxBound) {
+        this.minStartBound = minBound;
+        this.maxStartBound = maxBound;
 
-        this.nextEvent = rand.nextInt(1,4);
-        this.eventActive = false;
-
-        this.eventPhase = 0;
+        eventStartTime = rand.nextInt(minStartBound,maxStartBound);
+        nextEvent = rand.nextInt(1, 4);
+        eventActive = false;
+        eventPhase = 0;
     }
 
     /**
@@ -40,7 +40,12 @@ public class EventManager {
     public boolean checkEvents(World world, Stage stage, int elapsedTime) {
         if (eventActive) {
             switch (eventPhase) {
-                case 0 -> eventPhase = currentEvent.eventStart(elapsedTime);
+                case 0 -> {
+                    eventPhase = currentEvent.eventStart(elapsedTime);
+                    if (eventPhase == -1) {
+                        eventActive = false;
+                    }
+                }
                 case 1 -> eventPhase = currentEvent.eventMain(elapsedTime);
                 case 2 -> {
                     eventPhase = currentEvent.eventEnd();
@@ -50,15 +55,14 @@ public class EventManager {
                 }
                 default -> throw new AssertionError();
             }
-            if (eventPhase == -1) {
-                eventActive = false;
-            }
+
             if (!eventActive) {
-                eventStartTime = elapsedTime + rand.nextInt(5, 6);// for testing
-                nextEvent = rand.nextInt(1, 4);
+                eventStartTime = elapsedTime + rand.nextInt(minStartBound, maxStartBound);
                 eventPhase = 0;
+                nextEvent = rand.nextInt(1, 4);
             }
-            return true;
+
+            return eventActive;
         } else {
             eventActive = (eventStartTime == elapsedTime);
             if (eventActive) {
@@ -68,6 +72,7 @@ public class EventManager {
                     case 3 -> currentEvent = new GoodBadLecture(world, stage, rand.nextBoolean());
                     default -> throw new AssertionError();
                 }
+                
             }
             return eventActive;
         }

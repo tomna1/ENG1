@@ -24,7 +24,7 @@ import io.github.archessmn.eng1.buildings.Building.Use;
  * been placed, to a maximum of -2.
  * 
  * If the player hasn't made a decision in 10 seconds the event ends
- * and they get -25 satisfaction
+ * and they get -20 satisfaction
  */
 class LectureHallMaintenance implements Event {
     private World world;
@@ -36,14 +36,13 @@ class LectureHallMaintenance implements Event {
     private boolean choseOnline, choiceMade;
 
     /**
-     * creates an instance of the event and sets up sprites and buttons ready
+     * creates an instance of the event and sets up Images and ImageButtons ready
      * to start.
      * 
      * @param world World used to check number of lecture halls.
      * @param stage Stage used to place ImageButtons on the screen.
      */
     public LectureHallMaintenance(World world, Stage stage) {
-        System.out.println("hall");
         this.world = world;
         this.stage = stage;
 
@@ -55,7 +54,7 @@ class LectureHallMaintenance implements Event {
     }
 
     /**
-     * Checks if lecture halls are present before placing page and ImageButtons
+     * Checks if lecture halls are present before placing newsPage and ImageButtons
      * on the screen and recording the start time.
      * 
      * @param elapsedTime The number of seconds spent unpaused.
@@ -84,7 +83,7 @@ class LectureHallMaintenance implements Event {
     }
 
     /**
-     * run the specified action of the players decision, or the time out option
+     * Run the action specified by the players decision, or the time out option
      * if they take too long to decide.
      * 
      * @param elapsedTime seconds spent unpaused.
@@ -112,7 +111,7 @@ class LectureHallMaintenance implements Event {
             return 2;
         }
         if (elapsedTime == startTime + 10) {
-            // student satisfaction -25
+            // student satisfaction -20
             System.out.println("did nothing");
             return 2;
         }
@@ -120,7 +119,7 @@ class LectureHallMaintenance implements Event {
     }
 
     /**
-     * removes the page and buttons from the screen.
+     * removes the page and buttons from stage.
      * 
      * @return 0 to tell eventManager the event has finished.
      */
