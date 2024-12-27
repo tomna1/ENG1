@@ -136,6 +136,9 @@ public class EventManagerTest extends AbstractHeadlessGdxTest {
                                 "eventStartTime should be 1.");
                 assertFalse(eventManager.getEventActive(),
                                 "eventActive should be false");
+
+                stage.dispose();
+                world.dispose();
         }
 
         /**
@@ -188,6 +191,9 @@ public class EventManagerTest extends AbstractHeadlessGdxTest {
                                 "Event start time should now be 6.");
                 assertFalse(eventManager.getEventActive(),
                                 "Event active should be false;");
+
+                stage.dispose();
+                world.dispose();
 
         }
 }

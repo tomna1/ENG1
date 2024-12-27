@@ -26,10 +26,10 @@ public class AlienInvasion implements Event {
     private Stage stage;
     private Texture pageTexture;
     private Image newsPage;
-    private int clickCount, startTime, tractorStart;
-    private float UFOx, UFOy;
+    private int clickCount, startTime, tractorStart, eventDuration;
+    private float[] UFOcoords = new float[2];
     private float[][] nextBuildingPos = new float[2][2];
-    private boolean starting, tractorActive, hit;
+    private boolean started, tractorActive, hit, abduction;
     private Drawable UFOidle, UFOactive, UFOhit;
     private Image UFO;
     private Random rand;
@@ -48,13 +48,15 @@ public class AlienInvasion implements Event {
         pageTexture = new Texture(Gdx.files.internal("newsUFO.png"));
         newsPage = new Image(pageTexture);
         newsPage.setSize(400, 272);
-        tractorActive = false;
+
         rand = new Random();
 
-        UFOx = -45f;
-        UFOy = -45f;
-
-        starting = false;
+        eventDuration = 20;
+        abduction = false;
+        tractorActive = false;
+        started = false;
+        UFOcoords[0] = -45f;
+        UFOcoords[1] = -45f;
 
         buildUFO();
 
@@ -73,12 +75,12 @@ public class AlienInvasion implements Event {
      *         of the event.
      */
     public int eventStart(int elapsedTime) {
-        if (!starting) {
+        if (!started) {
             Array<Building> buildings = world.getBuildings();
             if (buildings.size < 2) {
                 return -1;
             }
-            starting = true;
+            started = true;
             startTime = elapsedTime;
             stage.addActor(newsPage);
             newsPage.setPosition(0, 0);
@@ -89,7 +91,7 @@ public class AlienInvasion implements Event {
             newsPage.remove();
 
             stage.addActor(UFO);
-            nextBuildingPos = getNextBuildingPos();
+            nextBuildingPos = findNextBuildingPos();
 
             return 1;
         }
@@ -108,7 +110,9 @@ public class AlienInvasion implements Event {
      */
     public int eventMain(int elapsedTime) {
         if (tractorActive) {
+            abduction = false;
             if (elapsedTime == (tractorStart + 5)) {
+                abduction = true;
                 System.out.println("-5 satisfaction");
                 // -5 student satisfaction
             }
@@ -118,7 +122,7 @@ public class AlienInvasion implements Event {
 
                 UFO.setDrawable(UFOidle);
 
-                nextBuildingPos = getNextBuildingPos();
+                nextBuildingPos = findNextBuildingPos();
             }
 
             if (!hit) {
@@ -131,25 +135,25 @@ public class AlienInvasion implements Event {
             hit = false;
 
         } else {
-            UFOx += nextBuildingPos[1][0];
-            UFOy += nextBuildingPos[1][1];
-            UFO.setPosition(UFOx, UFOy);
+            UFOcoords[0] += nextBuildingPos[1][0];
+            UFOcoords[1] += nextBuildingPos[1][1];
+            UFO.setPosition(UFOcoords[0], UFOcoords[1]);
 
-            if (Math.abs(UFOx - nextBuildingPos[0][0]) < 0.02
-                    && Math.abs(UFOy - nextBuildingPos[0][1]) < 0.02) {
+            if (Math.abs(UFOcoords[0] - nextBuildingPos[0][0]) < 0.02
+                    && Math.abs(UFOcoords[1] - nextBuildingPos[0][1]) < 0.02) {
                 tractorActive = true;
                 tractorStart = elapsedTime;
             }
         }
 
-        if (elapsedTime == (startTime + 20)) {
+        if (elapsedTime == (startTime + eventDuration)) {
             tractorActive = false;
 
             float nextX = 500;
             float nextY = 545;
 
-            float xSpeed = (nextX - UFOx) / 120;
-            float ySpeed = (nextY - UFOy) / 120;
+            float xSpeed = (nextX - UFOcoords[0]) / 120;
+            float ySpeed = (nextY - UFOcoords[1]) / 120;
 
             nextBuildingPos[0][0] = nextX;
             nextBuildingPos[0][1] = nextY;
@@ -169,12 +173,12 @@ public class AlienInvasion implements Event {
      * @return 2 if the UFO is still moving off screen.
      */
     public int eventEnd() {
-        UFOx += nextBuildingPos[1][0];
-        UFOy += nextBuildingPos[1][1];
-        UFO.setPosition(UFOx, UFOy);
+        UFOcoords[0] += nextBuildingPos[1][0];
+        UFOcoords[1] += nextBuildingPos[1][1];
+        UFO.setPosition(UFOcoords[0], UFOcoords[1]);
 
-        if (Math.abs(UFOx - nextBuildingPos[0][0]) < 0.02
-                && Math.abs(UFOy - nextBuildingPos[0][1]) < 0.02) {
+        if (Math.abs(UFOcoords[0] - nextBuildingPos[0][0]) < 0.02
+                && Math.abs(UFOcoords[1] - nextBuildingPos[0][1]) < 0.02) {
             UFO.remove();
             return 0;
         } else {
@@ -187,7 +191,7 @@ public class AlienInvasion implements Event {
      * 
      * @return a 2d array with the coordinates and the speed
      */
-    public float[][] getNextBuildingPos() {
+    public float[][] findNextBuildingPos() {
         Array<Building> buildings = world.getBuildings();
         int index;
         Building nextBuilding = currentBuilding;
@@ -199,8 +203,8 @@ public class AlienInvasion implements Event {
         float nextBuildingX = nextBuilding.getX() + 10;
         float nextBuildingY = nextBuilding.getY() + 25;
 
-        float xSpeed = (nextBuildingX - UFOx) / 120;
-        float ySpeed = (nextBuildingY - UFOy) / 120;
+        float xSpeed = (nextBuildingX - UFOcoords[0]) / 120;
+        float ySpeed = (nextBuildingY - UFOcoords[1]) / 120;
 
         float[][] nextBuildingPos = { { nextBuildingX, nextBuildingY }, { xSpeed, ySpeed } };
 
@@ -233,8 +237,58 @@ public class AlienInvasion implements Event {
             }
         });
 
-        UFO.setPosition(UFOx, UFOy);
+        UFO.setPosition(UFOcoords[0], UFOcoords[1]);
         UFO.setSize(40, 28);
 
+    }
+
+    public int getStartTime() {
+        return startTime;
+    }
+
+    public int getEventDuration() {
+        return eventDuration;
+    }
+
+    public int getClickCount() {
+        return clickCount;
+    }
+
+    public boolean getAbduction() {
+        return abduction;
+    }
+
+    public boolean isTractorActive() {
+        return tractorActive;
+    }
+
+    public boolean hasStarted() {
+        return started;
+    }
+
+    public boolean isHit() {
+        return hit;
+    }
+
+    public float[] getUFOcoords() {
+        return UFOcoords;
+    }
+
+    public float[][] getNextBuildingPos() {
+        return nextBuildingPos;
+    }
+
+    public void setClickCount(int clickCount) {
+        this.clickCount = clickCount;
+    }
+
+    public void setTractorActive(boolean tractorActive, int elapsedTime) {
+        this.tractorActive = tractorActive;
+        this.tractorStart = elapsedTime;
+    }
+
+    public void setUFOcoords(float x, float y) {
+        UFOcoords[0] = x;
+        UFOcoords[1] = y;
     }
 }

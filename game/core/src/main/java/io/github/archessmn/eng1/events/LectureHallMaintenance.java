@@ -32,7 +32,7 @@ public class LectureHallMaintenance implements Event {
     private Image newsPage;
     private Texture pageTexture;
     private ImageButton onlineButton, otherHallsButton;
-    private int startTime;
+    private int startTime, eventDuration, satisfactionChange;
     private boolean choseOnline, choiceMade;
 
     /**
@@ -45,6 +45,9 @@ public class LectureHallMaintenance implements Event {
     public LectureHallMaintenance(World world, Stage stage) {
         this.world = world;
         this.stage = stage;
+        eventDuration = 10;
+        satisfactionChange = -20;
+        choiceMade = false;
 
         pageTexture = new Texture(Gdx.files.internal("newsMaintenance.png"));
         newsPage = new Image(this.pageTexture);
@@ -93,10 +96,9 @@ public class LectureHallMaintenance implements Event {
     public int eventMain(int elapsedTime) {
         if (choiceMade) {
             if (choseOnline) {
-                // student satisfaction -10
+                satisfactionChange = -10;
                 System.out.println("online");
             } else {
-                int satisfactionChange = -20;
                 for (Building building : world.getBuildings()) {
                     if (building.getBuildingUse() == Use.LEARN) {
                         satisfactionChange += 4;
@@ -106,12 +108,11 @@ public class LectureHallMaintenance implements Event {
                     satisfactionChange = -2;
                 }
                 System.out.println(satisfactionChange);
-                // student satisfaction + satisfactionChange
+
             }
             return 2;
         }
-        if (elapsedTime == startTime + 10) {
-            // student satisfaction -20
+        if (elapsedTime == startTime + eventDuration) {
             System.out.println("did nothing");
             return 2;
         }
@@ -124,6 +125,7 @@ public class LectureHallMaintenance implements Event {
      * @return 0 to tell eventManager the event has finished.
      */
     public int eventEnd() {
+        // modify student satisfaction by satisfactionChange
         newsPage.remove();
         onlineButton.remove();
         otherHallsButton.remove();
@@ -169,5 +171,29 @@ public class LectureHallMaintenance implements Event {
         onlineButton.setSize(240, 135);
         otherHallsButton.setSize(240, 135);
 
+    }
+
+    public int getStartTime() {
+        return startTime;
+    }
+
+    public int getEventDuration() {
+        return eventDuration;
+    }
+
+    public int getSatisfactionChange() {
+        return satisfactionChange;
+    }
+
+    public boolean isChoiceMade() {
+        return choiceMade;
+    }
+
+    public boolean hasChoseOnline() {
+        return choseOnline;
+    }
+
+    public void setSatisfactionChange(int satisfactionChange) {
+        this.satisfactionChange = satisfactionChange;
     }
 }

@@ -18,7 +18,8 @@ public class GoodBadLecture implements Event {
     private Stage stage;
     private Image newsPage;
     private Texture pageTexture;
-    private int startTime, satisfactionChange;
+    private int startTime, satisfactionChange, eventDuration;
+    private boolean positive;
 
     /**
      * creates an instance of the event and sets up Image.
@@ -31,6 +32,8 @@ public class GoodBadLecture implements Event {
     public GoodBadLecture(World world, Stage stage, boolean positive) {
         this.world = world;
         this.stage = stage;
+        this.positive = positive;
+        eventDuration = 6;
 
         if (positive) {
             pageTexture = new Texture(Gdx.files.internal("newsGreatLecture.png"));
@@ -79,7 +82,7 @@ public class GoodBadLecture implements Event {
      * @return 2 if reached 6 seconds.
      */
     public int eventMain(int elapsedTime) {
-        if (startTime + 6 == elapsedTime) {
+        if (startTime + eventDuration == elapsedTime) {
             return 2;
         }
         return 1;
@@ -95,4 +98,19 @@ public class GoodBadLecture implements Event {
         return 0;
     }
 
+    public boolean getPositive() {
+        return positive;
+    }
+
+    public int getSatisfactionChange() {
+        return satisfactionChange;
+    }
+
+    public int getStartTime() {
+        return startTime;
+    }
+
+    public int getEventDuration() {
+        return eventDuration;
+    }
 }
