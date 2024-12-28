@@ -51,7 +51,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: lib.jar
-          path: game/headless/build/reports/jacoco/test/html/
+          path: game/lwjgl3/build/libs/ENG1-1.0.0.jar
 
   release:
     name: release-version
