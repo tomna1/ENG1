@@ -1,4 +1,4 @@
-name: Build game
+name: Build, Test and Upload game.
 
 on:
   push:
@@ -23,10 +23,33 @@ jobs:
         with:
           distribution: "temurin"
           java-version: "17"
+
+      # Runs all the unit tests
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Run tests with gradle wrapper
+        working-directory: ./game
+        run: ./gradlew test
       
+      # Builds the game and runs the test report
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
       - name: Build with gradle wrapper
         working-directory: ./game
-        run: ./gradlew build
+        run: ./gradlew build jacocoTestReport
+
+      # Uploads a test report
+      - name: Upload the Jacoco coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-test-report
+          path: game/headless/build/reports/jacoco/test/html/
+
+      # Uploads the JAR file
+      - name: Upload JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: jar
+          path: game/headless/build/reports/jacoco/test/html/
+
   
