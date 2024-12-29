@@ -61,7 +61,7 @@ jobs:
     name: release-version
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-2022, macos-12]
+        os: [ubuntu-latest, windows-2022, macos-14]
     runs-on: ${{ matrix.os}}
 
     needs: ["build"]
