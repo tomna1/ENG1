@@ -4,7 +4,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 /**
- * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
+ * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all
+ * platforms.
  */
 public class Main extends Game {
     public static final int VIEWPORT_WIDTH = 960;
@@ -32,6 +33,7 @@ public class Main extends Game {
 
     /**
      * Returns a reference to the viewport that should be used by all screens.
+     * 
      * @return The viewport.
      */
     public FitViewport getViewport() {
