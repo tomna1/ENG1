@@ -68,11 +68,14 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: lib.jar
+
+    - name: Print folder structure
+      run: ls
   
     - name: release
       uses: softprops/action-gh-release@v2
       with:
-        files: lib.jar
+        files: ENG1-1.0.0.jar
 
 
 
