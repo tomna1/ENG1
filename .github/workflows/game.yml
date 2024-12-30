@@ -78,12 +78,12 @@ jobs:
       with:
         name: lib-${{ matrix.os }}.jar
 
-    - name: Print folder structure
-      run: ls
-
       # Renames the build artifact to match the os used
     - name: Rename build artifact
       run: mv ENG1-1.0.0.jar lib-${{ matrix.os }}.jar
+
+    - name: Print folder structure
+      run: ls
   
       # Releases the build artifact to the releases section of the github
     - name: release
