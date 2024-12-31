@@ -1,15 +1,16 @@
 package io.github.archessmn.eng1;
 
+import java.util.HashMap;
+
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
+
 import io.github.archessmn.eng1.buildings.Building;
 import io.github.archessmn.eng1.util.GridCoordTuple;
 import io.github.archessmn.eng1.util.GridUtils;
-
-import java.util.HashMap;
 
 /**
  * Class used to store information about the world and the buildings in it.
@@ -29,13 +30,13 @@ public class World {
     /**
      * Creates a new world which can be used to store buildings.
      * 
-     * @param worldWidth Width of the world. Must be greater than 0.
+     * @param worldWidth  Width of the world. Must be greater than 0.
      * @param worldHeight Height of the world. Must be greater than 0.
      * 
      */
     public World(Integer worldWidth, Integer worldHeight) {
-    
-        testWorldDimensions(worldWidth, worldHeight);
+        if (worldWidth <= 0) throw new IllegalArgumentException("World Width should be greater than 0.");
+        if (worldHeight <= 0) throw new IllegalArgumentException("World Height should be greater than 0.");
         this.width = worldWidth;
         this.height = worldHeight;
         studentCount = 0;
@@ -43,11 +44,6 @@ public class World {
 
         initializeBuildingCounts();
         loadAssests();
-    }
-
-    private void testWorldDimensions(Integer worldWidth, Integer worldHeight){
-        if (worldWidth <= 0) throw new IllegalArgumentException("World Width should be greater than 0.");
-        if (worldHeight <= 0) throw new IllegalArgumentException("World Height should be greater than 0.");
     }
 
     private void initializeBuildingCounts(){
@@ -69,7 +65,9 @@ public class World {
     }
 
     /**
-     * Adds a building to the world building store and returns its location in the store
+     * Adds a building to the world building store and returns its location in the
+     * store
+     * 
      * @param building Building to add to the world
      * @return The index of the building in the world store
      */
@@ -97,6 +95,7 @@ public class World {
     /**
      * Utility method to check if a building overlaps with any others in the world
      * after being snapped to the grid based on its current location
+     * 
      * @param id ID / index of the building in the world building store
      * @return true if the building overlaps with another, else false
      */
@@ -109,6 +108,7 @@ public class World {
     /**
      * Utility method to check if a building overlaps with any others in the world
      * after being snapped to the grid based on its current location
+     * 
      * @param overlapBuilding The building to check for overlaps with others
      * @return true if the building overlaps with another, else false
      */
@@ -150,7 +150,7 @@ public class World {
      */
     public void dispose() {
         if (gridRenderer != null) {
-            gridRenderer.dispose();    
+            gridRenderer.dispose();
         }
         assetManager.dispose();
     }
