@@ -2,7 +2,6 @@ package io.github.archessmn.eng1.leaderboard;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -27,9 +26,17 @@ public class LeaderboardMenu {
     // The label should be changed to fit the description of whatever it is hovering over.
     private Label hoveringLabel;
 
+    /**
+     * Creates the menu for the leaderboard. The menu contains a menu button to go
+     * back to the main menu as well as the leaderboard which shows the username,
+     * score, and any achievement earned throught the playthrough for the top 5
+     * scores in the leaderboard.
+     * @param main Cannot be null.
+     * @param leaderboard The leaderboard which holds the data. Cannot be null
+     */
     public LeaderboardMenu(Main main, Leaderboard leaderboard) {
-        if (leaderboard == null) throw new IllegalArgumentException("Leaderboard should not be null.");
         if (main == null) throw new IllegalArgumentException("main cannot be null");
+        if (leaderboard == null) throw new IllegalArgumentException("Leaderboard should not be null.");
         this.leaderboard = leaderboard;
         records = new LeaderboardPositionRecord[leaderboard.getCount()];
         
@@ -73,21 +80,9 @@ public class LeaderboardMenu {
         Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
         
         final int leaderboardCount = leaderboard.getCount();
-        
-        // The X value of all records in the leaderboard.
-        final float leaderboardX = (stage.getWidth()/4);
-        // The starting Y value of the records in the leaderboard.
-        final float leaderboardY = stage.getHeight();
-        // The width of each record in the leaderboard
-        final float leaderboardWidth = stage.getWidth()/2;
-        // The height of each record in the leaderboard.
-        final float leaderboardRecordHeight = stage.getHeight()/leaderboardCount;
-        Rectangle recordBounds = new Rectangle(leaderboardX, leaderboardY, leaderboardWidth, leaderboardRecordHeight);
-
         for (int i = 0; i < leaderboardCount; i++) {
-            records[i] = new LeaderboardPositionRecord(leaderboardTable, leaderboard.getLeaderboardPos(i), recordBounds, hoveringLabel);
+            records[i] = new LeaderboardPositionRecord(leaderboardTable, leaderboard.getLeaderboardPos(i), hoveringLabel);
             leaderboardTable.row();
-            recordBounds.y -= leaderboardRecordHeight;
         }
 
         skin.dispose();
