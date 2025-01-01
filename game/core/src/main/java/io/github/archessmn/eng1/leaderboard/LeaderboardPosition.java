@@ -34,6 +34,23 @@ public class LeaderboardPosition implements Comparable<LeaderboardPosition> {
         this.completedAchievements = new ArrayList<>(pos.completedAchievements);
     }
 
+    // ====SHOULD NOT BE USED ONLY FOR JSON SERIALISATION===
+    public LeaderboardPosition() {
+        completedAchievements = new ArrayList<>();
+    }
+
+    /**
+     * Adds this completed achievement to the list of completed achievement. Will
+     * not add the achievement if it is already in the list.
+     * @param achievement
+     * @return true if added and false if not.
+     */
+    public boolean addCompletedAchievement(CompletedAchievement achievement) {       
+        if (completedAchievements.contains(achievement)) return false;
+        this.completedAchievements.add(new CompletedAchievement(achievement));
+        return true;
+    }
+
     /**
      * Returns the username of the player who played this game.
      * @return Username of player.
@@ -72,70 +89,5 @@ public class LeaderboardPosition implements Comparable<LeaderboardPosition> {
     @Override
     public int compareTo(LeaderboardPosition position) {
         return ((int)this.score) - ((int)position.score);
-    }
-
-    /**
-     * @return Returns the username, score and achievements of the
-     * record each separated by a colon. If username = "example", 
-     * score = 235.7 and 2 achievements then output is 
-     * "example:235.7:achievement1.toString(),achievement2.toString()".
-     * If no achievements then the achievement section marked as "null".
-     */
-    public String toLeaderboardString() {
-        String output = username + ":" + Float.toString(score) + ":";
-        if (completedAchievements.size() == 0) {
-            output = output + "null";
-            return output;
-        }
-        for (int i = 0; i < completedAchievements.size(); i++) {
-            if (output.endsWith(":") == false) {
-                output = output + "~";
-            }
-            output = output + completedAchievements.get(i).toLeaderboardString();
-        }
-        return output;
-    }
-
-    /**
-     * Will return a LeaderboardPosition object if a valid string is passed into
-     * it. A valid string is one that was created using the {@link #toString()}
-     * method.
-     * @param string A string created using the {@link #toString()} method.
-     * Cannot be null
-     * @return The LeaderboardPosition object created from parsing through
-     * the string.
-     */
-    static LeaderboardPosition fromLeaderboardString(String string) {
-        if (string == null) throw new IllegalArgumentException("string cannot be null");
-        
-        String[] split = string.split(":");
-        if (split.length != 3) {
-            return null;
-        }
-
-        String username = split[0];
-
-        // Calculates the score
-        float score;
-        try {
-            score = Float.parseFloat(split[1]);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-
-        // Calculate the achievements
-        ArrayList<CompletedAchievement> achievements = new ArrayList<>();
-        if (split[2].strip().equals("null")) {
-            return new LeaderboardPosition(username, score, achievements);
-        } else {
-            String[] split2 = split[2].split("~");
-            for (int i = 0; i < split2.length; i++) {
-                CompletedAchievement achievement = CompletedAchievement.fromLeaderboardString(split2[i]);  
-                if (achievement == null) continue;
-                else achievements.add(achievement);  
-            }
-        }
-
-        return new LeaderboardPosition(username, score, achievements);
     }
 }

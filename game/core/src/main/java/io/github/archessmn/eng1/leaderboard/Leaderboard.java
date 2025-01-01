@@ -2,6 +2,7 @@ package io.github.archessmn.eng1.leaderboard;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.utils.Json;
 
 /**
  * This class stores the top 5 scores that have been achieved, the usernames of
@@ -15,6 +16,7 @@ public class Leaderboard {
     private int count;
     private LeaderboardPosition[] leaderboard;
     private String leaderboardPrefsDir;
+    private Json json = new Json();
 
     /**
      * Creates a leaderboard based on the Prefs stored in 
@@ -34,15 +36,14 @@ public class Leaderboard {
      */
     private void readFromFile() {
         Preferences prefs = Gdx.app.getPreferences(leaderboardPrefsDir);
-        String s;
+        String text;
         LeaderboardPosition record;
         for (int i = 0; i < maxCount; i++) {
             // Gets the string stored in the file, converts it to a
             // LeaderboardPosition object then stores it in the leaderboard.
-            s = prefs.getString("pos"+Integer.toString(i), "default");
-            if (s.equals("default")) continue;
-            record = LeaderboardPosition.fromLeaderboardString(s);
-            if (record == null) continue;
+            text = prefs.getString("pos"+Integer.toString(i), "default");
+            if (text.equals("default")) continue;
+            record = json.fromJson(LeaderboardPosition.class, text);
             leaderboard[i] = record;
         }
         setCount();
@@ -64,10 +65,12 @@ public class Leaderboard {
      * Writes the current leaderboard to the file specified in constructor.
      */
     public void writeToFile() {
-        Preferences prefs = Gdx.app.getPreferences(leaderboardPrefsDir);
         setCount();
+        Preferences prefs = Gdx.app.getPreferences(leaderboardPrefsDir);
+        String jsonText;
         for (int i = 0; i < count; i++) {
-            prefs.putString("pos"+Integer.toString(i), leaderboard[i].toLeaderboardString());
+            jsonText = json.prettyPrint(json.toJson(leaderboard[i]));
+            prefs.putString("pos"+Integer.toString(i), jsonText);
         }
         prefs.flush();
     }
