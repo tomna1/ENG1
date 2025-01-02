@@ -46,6 +46,7 @@ public class LeaderboardPosition implements Comparable<LeaderboardPosition> {
      * @return true if added and false if not.
      */
     public boolean addCompletedAchievement(CompletedAchievement achievement) {       
+        if (achievement == null) return false;
         if (completedAchievements.contains(achievement)) return false;
         this.completedAchievements.add(new CompletedAchievement(achievement));
         return true;

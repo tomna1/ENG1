@@ -42,6 +42,7 @@ public class CompletedAchievement {
      * @param achievement
      */
     public CompletedAchievement(CompletedAchievement achievement) {
+        if (achievement == null) throw new IllegalArgumentException("achievement cannot be null");
         this.iconPath = achievement.iconPath;
         this.title = achievement.title;
         this.description = achievement.description;
@@ -72,7 +73,11 @@ public class CompletedAchievement {
     public boolean equals(Object o) {
         if (o instanceof CompletedAchievement == false) return false;
         CompletedAchievement rhs = (CompletedAchievement)o;
-        if ((this.iconPath.equals(rhs.iconPath)) && (this.description.equals(rhs.description))) return true;
+        if (
+            (this.iconPath.equals(rhs.iconPath)) &&
+            (this.description.equals(rhs.description)) &&
+            this.title.equals(rhs.title)
+        ) return true;
         return false;
     }
 }
