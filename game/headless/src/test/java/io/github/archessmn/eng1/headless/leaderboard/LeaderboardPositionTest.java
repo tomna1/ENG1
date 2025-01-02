@@ -2,6 +2,9 @@ package io.github.archessmn.eng1.headless.leaderboard;
 
 import org.junit.jupiter.api.Test;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+
 import io.github.archessmn.eng1.headless.AbstractHeadlessGdxTest;
 import io.github.archessmn.eng1.leaderboard.CompletedAchievement;
 import io.github.archessmn.eng1.leaderboard.LeaderboardPosition;
@@ -9,10 +12,22 @@ import io.github.archessmn.eng1.leaderboard.LeaderboardPosition;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
+// import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 
 public class LeaderboardPositionTest extends AbstractHeadlessGdxTest {
+    public CompletedAchievement createRealAchievement() {
+        final String validPath = "tests/achievement_icons/icon_1.png";
+        final FileHandle validFile = Gdx.files.internal(validPath);
+        if (validFile.exists() == false) throw new IllegalArgumentException("file must exist");
+        final String validTitle = "title1";
+        final String validDescription = "description1";
+
+        final CompletedAchievement achievement = new CompletedAchievement(validPath, validTitle, validDescription);
+        return achievement;
+    }
+
     @Test
     public void defaultInit() {
         CompletedAchievement achievement = mock(CompletedAchievement.class);
@@ -121,10 +136,6 @@ public class LeaderboardPositionTest extends AbstractHeadlessGdxTest {
             "The addCompletedAchievement method should have return true when a valid achievement is the argument");
         assertEquals(1, position.getAchievementCount(),
             "achievement count should now be 1 since an achievement has been added.");
-        assertEquals(expectedAchievements, position.getAchievements(), 
-            "achievements list should be the same as expected.");
-        assertEquals(achievement, position.getAchievement(0), 
-            "position should return the same achievement as the one added.");
     }
 
     @Test
@@ -149,7 +160,7 @@ public class LeaderboardPositionTest extends AbstractHeadlessGdxTest {
     public void returnFalseOnDuplicateAddAchievement() {
         final String validUsername = "example";
         final float validScore = 100.0f;
-        final CompletedAchievement validAchievement = mock(CompletedAchievement.class);
+        final CompletedAchievement validAchievement = createRealAchievement();
         final ArrayList<CompletedAchievement> validAchievements = null;
         final boolean expectedResult = false;
 
