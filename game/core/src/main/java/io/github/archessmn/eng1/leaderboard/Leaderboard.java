@@ -18,6 +18,10 @@ public class Leaderboard {
     private String leaderboardPrefsDir;
     private Json json = new Json();
 
+    public Leaderboard() {
+        this("ENG1/leaderboard");
+    }
+
     /**
      * Creates a leaderboard based on the Prefs stored in 
      * "%UserProfile%/.prefs/leaderboardPrefsDir"

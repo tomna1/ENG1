@@ -44,6 +44,7 @@ public class World {
         studentCount = 0;
         teacherCount = 0;
 
+        satisfactionManager = new SatisfactionManager(this);
         initializeBuildingCounts();
         loadAssests();
     }
@@ -232,5 +233,9 @@ public class World {
 
     public Integer getTeacherCount(){
         return teacherCount;
+    }
+
+    public float getSatisfaction() {
+        return satisfactionManager.getSatisfaction();
     }
 }

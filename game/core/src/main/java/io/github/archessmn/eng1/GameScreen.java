@@ -27,11 +27,14 @@ import io.github.archessmn.eng1.buildings.LectureHallBuilding;
 import io.github.archessmn.eng1.buildings.OfficeBuilding;
 import io.github.archessmn.eng1.buildings.PiazzaBuilding;
 import io.github.archessmn.eng1.events.EventManager;
+import io.github.archessmn.eng1.leaderboard.Leaderboard;
+import io.github.archessmn.eng1.leaderboard.LeaderboardPosition;
 
 public class GameScreen implements Screen {
     private World world;
     private EventManager eventManager;
     private FitViewport viewport;
+    private EndGameMenu endGameMenu;
 
     private TextureAtlas atlas;
     private Skin skin;
@@ -45,7 +48,7 @@ public class GameScreen implements Screen {
 
     private Array<Building> draggablebuildings = new Array<>();
 
-    private Timer timer = new Timer(300, 60);
+    private Timer timer = new Timer(4, 60);
 
     private BitmapFont font;
     private Integer buildingClicked = -1;
@@ -57,6 +60,7 @@ public class GameScreen implements Screen {
     private Table rightTable;
 
     private Label timerLabel;
+    private Label satisfactionLabel;
     private final HashMap<Building.Use, Label> buildingUseCountLabels = new HashMap<>();
     private final HashMap<Building.Use, Label> buildingUseNameLabels = new HashMap<>();
 
@@ -65,6 +69,7 @@ public class GameScreen implements Screen {
         world = new World(Main.VIEWPORT_WIDTH - 300, Main.VIEWPORT_HEIGHT);
         eventManager = new EventManager(5,10); //LOWER VALUES FOR TESTING
         viewport = main.getViewport();
+        endGameMenu = new EndGameMenu(main, this);
 
         atlas = new TextureAtlas(Gdx.files.internal("ui/uiskin.atlas"));
         skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
@@ -94,8 +99,12 @@ public class GameScreen implements Screen {
 
     private void createLabels() {
         Label.LabelStyle labelStyle = skin.get(Label.LabelStyle.class);
-
         timerLabel = new Label("Timer", labelStyle);
+
+        Skin skin2 = new Skin(Gdx.files.internal("ui/uiskin.json"));
+        satisfactionLabel = new Label("Satisfaction = ", skin2);
+
+
         // This is setting up the label for the counters of each building. "Sleep buildings:"
         // is an example of how the labels are meant to look.
         for (Building.Use buildingUse : Building.Use.values()) {
@@ -116,6 +125,7 @@ public class GameScreen implements Screen {
         rightTable.pad(10);
         rootTable.right().add(rightTable).expandY().fillY().width(300);
         rightTable.add(timerLabel).row();
+        rightTable.add(satisfactionLabel).row();
         for (Building.Use buildingUse : Building.Use.values()) {
             rightTable.add(buildingUseNameLabels.get(buildingUse)).left();
             rightTable.add(buildingUseCountLabels.get(buildingUse)).right().row();
@@ -215,7 +225,10 @@ public class GameScreen implements Screen {
         float delta = Gdx.graphics.getDeltaTime();
         timer.update(deltaTime);
         if (timer.hasEnded()) {
+            // ends the game
             gameEnded = true;
+            endGameMenu.setScore(world.getSatisfaction());
+            endGameMenu.setAsInputProcessor();
         }
         stage.act(delta);
 
@@ -231,6 +244,11 @@ public class GameScreen implements Screen {
         viewport.apply();
         batch.setProjectionMatrix(viewport.getCamera().combined);
         world.drawGrid();
+
+        if (gameEnded) {
+            endGameMenu.draw(Gdx.graphics.getDeltaTime());
+            return;
+        }
 
         if (buildingClicked != -1) {
             // Draw red outline on the grid tile where the building is being placed.
@@ -268,6 +286,7 @@ public class GameScreen implements Screen {
         }
         batch.end();
 
+        satisfactionLabel.setText("Satisfaction = " + Float.toString(world.getSatisfaction()));
         timerLabel.setText(String.format("Year: %d, Day: %d", timer.getYearCount(), timer.getDayCount()));
         // Sets the building count labels to the updated building count values.
         for (Building.Use use : Building.Use.values()) {
@@ -275,6 +294,13 @@ public class GameScreen implements Screen {
         }
 
         stage.draw();
+    }
+
+    public void saveToLeaderboard(String username, float score) {
+        Leaderboard leaderboard = new Leaderboard();
+        LeaderboardPosition position = new LeaderboardPosition(username, score, null);
+        leaderboard.addPosition(position);
+        leaderboard.writeToFile();
     }
 
     /**
@@ -308,6 +334,7 @@ public class GameScreen implements Screen {
         font.dispose();
         batch.dispose();
         world.dispose();
+        endGameMenu.dispose();
     }
 
 
