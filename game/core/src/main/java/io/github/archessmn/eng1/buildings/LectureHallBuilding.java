@@ -29,10 +29,10 @@ public class LectureHallBuilding extends Building {
     protected void setSatisfactionContributor() {
         
         satisfactionContributor = new SatisfactionContributor(this, 
-        1f, 
-        1f, 
+        3.5f, 
+        3.5f, 
         0.5f, 
-        0.5f
+        0.7f
         );
     }
 }

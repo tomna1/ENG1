@@ -31,8 +31,8 @@ public class PiazzaBuilding extends Building {
     protected void setSatisfactionContributor() {
         
         satisfactionContributor = new SatisfactionContributor(this, 
-        1f, 
-        1f, 
+        1.5f, 
+        1.5f, 
         0.5f, 
         0.5f
         );

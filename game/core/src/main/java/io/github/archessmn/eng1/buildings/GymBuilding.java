@@ -29,9 +29,9 @@ public class GymBuilding extends Building {
     protected void setSatisfactionContributor() {
 
         satisfactionContributor = new SatisfactionContributor(this, 
-        1f, 
+        1.5f, 
         0f, 
-        0.5f, 
+        0.6f, 
         0.0f
         );
     }

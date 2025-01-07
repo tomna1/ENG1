@@ -24,6 +24,7 @@ public class SatisfactionManager {
 
             satisfaction += satisfactionContributor.getSatisfactionContribution();
             optimumSatisfaction += satisfactionContributor.getOptimumSatisfactionContribution();
+            System.out.println("Satisfaction: " + satisfaction + " Optimum Satisfaction: " + optimumSatisfaction);
         }
     }
 

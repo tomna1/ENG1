@@ -1,6 +1,5 @@
 package io.github.archessmn.eng1.buildings;
 
-import java.util.Comparator;
 import java.util.HashMap;
 //import java.util.stream.Gatherer.Integrator;
 
@@ -45,8 +44,6 @@ public abstract class Building {
     private float x, y;
     private int gridX, gridY;
     private float width, height;
-
-    private float initialBuildTime;
     private float timeUntilBuilt;
 
     private boolean placed, built;
@@ -83,7 +80,6 @@ public abstract class Building {
         placed = false;
         this.bounds = new Rectangle(this.x, this.y, this.width, this.height);
 
-        this.initialBuildTime = timeUntilBuilt;
         this.timeUntilBuilt = timeUntilBuilt;
         this.built = built;
         if (timeUntilBuilt > 0) {
