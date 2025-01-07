@@ -27,6 +27,8 @@ public class World {
     private Integer width, height;
     private Integer studentCount, teacherCount;
 
+    private SatisfactionManager satisfactionManager;
+
     /**
      * Creates a new world which can be used to store buildings.
      * 
@@ -49,6 +51,9 @@ public class World {
     private void initializeBuildingCounts(){
         for (Building.Use use : Building.Use.values()) {
             buildingUseCounts.put(use, 0);
+        }
+        for(Building.Type type : Building.Type.values()){
+            buildingTypeCounts.put(type, 0);
         }
     }
 
@@ -73,13 +78,39 @@ public class World {
      */
     public int addBuilding(Building building) {
         buildings.add(building);
-        updateBuildingDistances(building);
         return buildings.size - 1;
     }
 
-    private void updateBuildingDistances(Building newBuilding){
+    public void updateWorld(Building newBuilding){
+        updateBuildingConnections();
+        satisfactionManager.updateSatisfaction();
+    }
+
+    private void printCounts(){
+        for(Building.Type type : buildingTypeCounts.keySet()){
+            System.out.println(String.format("Type: %-15s Count: %d", type.name(),  buildingTypeCounts.get(type)));
+        }
+    }
+
+    public Integer getTypeCount(Building.Type type){
+        return buildingTypeCounts.get(type);
+    }
+
+    public Float ratioToType(Building.Type typeOne, Building.Type typeTwo){
+        Integer typeCount = getTypeCount(typeTwo);
+        if(typeCount == 0){
+            return null;
+        }
+        else{
+            return (float) getTypeCount(typeOne) / typeCount;
+        }
+    }
+
+
+
+    private void updateBuildingConnections(){
         for(Building building : buildings){
-            building.addDistanceFromOtherBuilding(newBuilding);
+            building.updateConnectedBuildings();
         }
     }
 

@@ -1,6 +1,7 @@
 package io.github.archessmn.eng1.buildings;
 
 import java.util.HashMap;
+//import java.util.stream.Gatherer.Integrator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.utils.Array;
 
 import io.github.archessmn.eng1.util.GridCoordTuple;
 import io.github.archessmn.eng1.util.GridUtils;
+import io.github.archessmn.eng1.SatisfactionContributor;
 import io.github.archessmn.eng1.World;
 
 /**
@@ -42,8 +44,6 @@ public abstract class Building {
     private float x, y;
     private int gridX, gridY;
     private float width, height;
-
-    private float initialBuildTime;
     private float timeUntilBuilt;
 
     private boolean placed, built;
@@ -53,7 +53,9 @@ public abstract class Building {
     private Sprite unbuiltSprite;
 
     protected HashMap<Type, Float> connections;
-    private HashMap<Building, Float> distanceFromOtherBuildings;
+    private HashMap<Building, Integer> connectedBuildings;
+
+    protected SatisfactionContributor satisfactionContributor;
    
     /**
      * Initialises a new building.
@@ -78,7 +80,6 @@ public abstract class Building {
         placed = false;
         this.bounds = new Rectangle(this.x, this.y, this.width, this.height);
 
-        this.initialBuildTime = timeUntilBuilt;
         this.timeUntilBuilt = timeUntilBuilt;
         this.built = built;
         if (timeUntilBuilt > 0) {
@@ -92,8 +93,10 @@ public abstract class Building {
         this.bounds = new Rectangle(this.x, this.y, this.width, this.height);
 
         connections = new HashMap<>();
+        connectedBuildings = new HashMap<>();
+
         setConnections();
-        distanceFromOtherBuildings = new HashMap<>();
+        setSatisfactionContributor();
     }
 
     /**
@@ -156,8 +159,20 @@ public abstract class Building {
         this.y = y - this.height / 2;
     }
 
-    public void addDistanceFromOtherBuilding(Building otherBuilding){
-        distanceFromOtherBuildings.put(otherBuilding, getDistanceFrom(otherBuilding));
+    public void updateConnectedBuildings(){
+
+        connectedBuildings = new HashMap<>();
+        for(Building otherBuilding : new Array<Building>(world.getBuildings())){
+
+            if(isConnectedBuilding(otherBuilding)){
+
+                connectedBuildings.put(otherBuilding, getManhattenDistanceFrom(otherBuilding));
+            }
+        }
+    }
+
+    public boolean isConnectedBuilding(Building building){
+        return connections.containsKey(building.getBuildingType());
     }
 
     /**
@@ -166,10 +181,10 @@ public abstract class Building {
      */
     public abstract Building makeCopy();
 
-    protected abstract void setConnections();
-    
-    public HashMap<Type, Float> getConnections(){
-        return connections;
+    protected abstract void setSatisfactionContributor();
+
+    public SatisfactionContributor getSatisfactionContributor(){
+        return satisfactionContributor;
     }
 
     /**
@@ -185,6 +200,42 @@ public abstract class Building {
         sprite.setPosition(this.x, this.y);
         sprite.draw(batch);
     }
+
+    // Sets the connections for this building, holding the building type, and its weighting for this building
+    protected abstract void setConnections();
+    
+    public HashMap<Type, Float> getConnections(){
+        return connections;
+    }
+
+    public HashMap<Building, Integer> getConnectedBuildingsOfType(Type type){
+
+        HashMap<Building, Integer> connectionBuildingsOfType = new HashMap<>(); 
+        for(Building building : connectedBuildings.keySet()){
+            if(building.getBuildingType() == type){
+                connectionBuildingsOfType.put(building, connectedBuildings.get(building));
+            }
+        }
+        return connectionBuildingsOfType;
+    }
+
+    public Integer getClosestConnectedBuildingDistanceOfType(Type type){
+
+        HashMap<Building, Integer> connectedBuildingsOfType = getConnectedBuildingsOfType(type);
+
+        Integer closestConnectedDistance = Integer.MAX_VALUE;
+
+        for(Building connectedBuilding : connectedBuildingsOfType.keySet()){
+
+            Integer distanceToConnection = connectedBuildingsOfType.get(connectedBuilding);
+            if(distanceToConnection < closestConnectedDistance){
+                closestConnectedDistance = distanceToConnection;
+            }
+        }
+
+        return closestConnectedDistance;
+    }
+
 
     public int getID() { return this.id; }
     
@@ -212,12 +263,16 @@ public abstract class Building {
         return new Vector2(x, y);
     }
 
-    public Float getDistanceFrom(Building otherBuilding){
-        return getPositionVector().dst(otherBuilding.getPositionVector());
+    public Integer getManhattenDistanceFrom(Building otherBuilding){
+        return Math.abs(gridX - otherBuilding.getGridX()) + Math.abs(gridY - otherBuilding.getGridY());
     }
 
-    public HashMap<Building, Float> getDistanceFromOtherBuildings(){
-        return distanceFromOtherBuildings;
+    public HashMap<Building, Integer> getConnectedBuildings(){
+        return connectedBuildings;
+    }
+
+    public Float getConnectionWeight(Type type){
+        return getConnections().get(type);
     }
     
     public int getGridX() {
@@ -271,6 +326,7 @@ public abstract class Building {
     public GridCoordTuple getGridCoords() {
         return GridUtils.getGridCoords(this.x + this.width / 2, this.y + this.height / 2);
     }
+
 
     public Type getBuildingType(){
         return buildingType;

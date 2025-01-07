@@ -196,6 +196,10 @@ public class GameScreen implements Screen {
                 world.buildingUseCounts.put(building.getBuildingUse(),
                                             world.buildingUseCounts.get(building.getBuildingUse()) + 1
                                             );
+                world.buildingTypeCounts.put(building.getBuildingType(),
+                                            world.buildingTypeCounts.get(building.getBuildingType()) + 1
+                                            );
+                world.updateWorld(building);
             }
             buildingClicked = -1;
         }
