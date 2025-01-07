@@ -1,15 +1,19 @@
-name: Build game
+name: Build, Test and Upload game.
 
 on:
   push:
     branches: [ 'main' ]
+    tags: [ "v[0-9]+.[0-9]+.[0-9]+" ]
   pull_request:
     branches: [ 'main' ]
 
 jobs:
   build:
-    name: Build
-    runs-on: ubuntu-latest
+    name: build
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-2022, macos-14]
+    runs-on: ${{ matrix.os}}
     permissions: 
       contents: read
 
@@ -23,10 +27,66 @@ jobs:
         with:
           distribution: "temurin"
           java-version: "17"
+
+      # Runs all the unit tests
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Run tests with gradle wrapper
+        working-directory: ./game
+        run: ./gradlew test
       
+      # Builds the game and runs the test report
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
       - name: Build with gradle wrapper
         working-directory: ./game
-        run: ./gradlew build
+        run: ./gradlew build jacocoTestReport
+
+      # Uploads a test report
+      - name: Upload the Jacoco coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-test-report-${{ matrix.os }}
+          path: game/headless/build/reports/jacoco/test/html/
+
+      # Uploads the JAR file
+      - name: Upload JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: lib-${{ matrix.os }}.jar
+          path: game/lwjgl3/build/libs/ENG1-1.0.0.jar
+
+
+  release:
+    name: release-version
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-2022, macos-14]
+    runs-on: ${{ matrix.os}}
+
+    needs: ["build"]
+    
+    if: startsWith(github.ref, 'refs/tags/')
+    
+    permissions:
+      contents: write
+    
+    steps:
+      # Fetch the jar file produced by the specified os
+    - name: Download jar file
+      uses: actions/download-artifact@v4
+      with:
+        name: lib-${{ matrix.os }}.jar
+
+      # Renames the build artifact to match the os used
+    - name: Rename build artifact
+      run: mv ENG1-1.0.0.jar lib-${{ matrix.os }}.jar
+
+    - name: Print folder structure
+      run: ls
   
+      # Releases the build artifact to the releases section of the github
+    - name: release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: lib-${{ matrix.os }}.jar

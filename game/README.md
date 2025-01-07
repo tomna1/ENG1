@@ -28,8 +28,10 @@ If you are using VSCode, when you click open the ```ProjectDir/game``` folder an
 # Test instructions
 
 ## Using CMD
-To test the game, clone the project then in command prompt:
+To test the game and get a test report, clone the project then in command prompt:
 ```
 cd ProjectDir/game
-gradlew test
+gradlew jacocoTestReport
 ```
+The test report will be located in ```game/headless/build/reports/jacoco/test/html/index.html```.
+Just open the index.html file and the entire test report should be shown.
