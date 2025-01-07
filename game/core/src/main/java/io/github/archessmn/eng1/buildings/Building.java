@@ -1,5 +1,8 @@
 package io.github.archessmn.eng1.buildings;
 
+import java.util.HashMap;
+//import java.util.stream.Gatherer.Integrator;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -7,8 +10,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+
 import io.github.archessmn.eng1.util.GridCoordTuple;
 import io.github.archessmn.eng1.util.GridUtils;
+import io.github.archessmn.eng1.SatisfactionContributor;
 import io.github.archessmn.eng1.World;
 
 /**
@@ -35,24 +41,21 @@ public abstract class Building {
     private final int id;
     private final World world;
     
-    private float x;
-    private float y;
-
-    private int gridX;
-    private int gridY;
-
-    private float width;
-    private float height;
-
-    private float initialBuildTime;
+    private float x, y;
+    private int gridX, gridY;
+    private float width, height;
     private float timeUntilBuilt;
 
-    private boolean placed = false;
-    private boolean built;
+    private boolean placed, built;
 
     private Rectangle bounds;
     private final Sprite sprite;
     private Sprite unbuiltSprite;
+
+    protected HashMap<Type, Float> connections;
+    private HashMap<Building, Integer> connectedBuildings;
+
+    protected SatisfactionContributor satisfactionContributor;
    
     /**
      * Initialises a new building.
@@ -74,9 +77,9 @@ public abstract class Building {
         this.y = y;
         this.width = width;
         this.height = height;
+        placed = false;
         this.bounds = new Rectangle(this.x, this.y, this.width, this.height);
 
-        this.initialBuildTime = timeUntilBuilt;
         this.timeUntilBuilt = timeUntilBuilt;
         this.built = built;
         if (timeUntilBuilt > 0) {
@@ -88,74 +91,12 @@ public abstract class Building {
         this.sprite = new Sprite(world.assetManager.get(spriteFileName, Texture.class));
         this.sprite.setSize(width, height);
         this.bounds = new Rectangle(this.x, this.y, this.width, this.height);
-    }
 
-    public int getID() { return this.id; }
-    
-    /**
-     * Sets the X position of the building
-     * @param x The X position to use
-     */
-    public void setX(float x) {
-        this.x = x;
-    }
-    public float getX() { return this.x; }
-   
-    /**
-     * Sets the Y position of the building
-     * @param y The Y position to use
-     */
-    public void setY(float y) {
-        this.y = y;
-    }
-    public float getY() { 
-        return this.y;
-    }
-    
-    public int getGridX() {
-        return this.gridX;
-    }
-    
-    public int getGridY() {
-        return this.gridY;
-    }
-    
-    public float getWidth() {
-        return this.width;
-    }
-    
-    public float getHeight() {
-        return this.height;
-    }
-    
-    /**
-     * Calculates and returns the bounding box of the building.
-     * @return The bounding box {@link Rectangle} of the building.
-     */
-    public Rectangle getBounds() {
-        return this.bounds.set(this.x, this.y, this.width, this.height);
-    }
+        connections = new HashMap<>();
+        connectedBuildings = new HashMap<>();
 
-    /**
-     * Get the use of the building, inferred from its {@link Type}.
-     * @return The {@link Use} of the building.
-     */
-    public Use getBuildingUse() {
-        return Building.getBuildingUse(this.buildingType);
-    }
-
-    /**
-     * Draws the building into the game using the provided {@link SpriteBatch}.
-     * @param batch The {@link SpriteBatch} to use to draw the building.
-     */
-    public void draw(SpriteBatch batch) {
-        if (timeUntilBuilt > 0 && !built) {
-            unbuiltSprite.setPosition(x, y);
-            unbuiltSprite.draw(batch);
-            return;
-        }
-        sprite.setPosition(this.x, this.y);
-        sprite.draw(batch);
+        setConnections();
+        setSatisfactionContributor();
     }
 
     /**
@@ -201,6 +142,14 @@ public abstract class Building {
     }
 
     /**
+     * Snaps the building to the grid.
+     */
+    public void snapToGrid() {
+        Vector2 gridCoords = getRawGridCoords();
+        this.setCenter(gridCoords.x, gridCoords.y);
+    }
+
+    /**
      * Used to update the position of the building in the world.
      * @param x The X position to use
      * @param y The Y position to use
@@ -210,11 +159,153 @@ public abstract class Building {
         this.y = y - this.height / 2;
     }
 
+    public void updateConnectedBuildings(){
+
+        connectedBuildings = new HashMap<>();
+        for(Building otherBuilding : new Array<Building>(world.getBuildings())){
+
+            if(isConnectedBuilding(otherBuilding)){
+
+                connectedBuildings.put(otherBuilding, getManhattenDistanceFrom(otherBuilding));
+            }
+        }
+    }
+
+    public boolean isConnectedBuilding(Building building){
+        return connections.containsKey(building.getBuildingType());
+    }
+
     /**
      * Makes an un-built deep copy of the current building type
      * @return A copy of the building.
      */
     public abstract Building makeCopy();
+
+    protected abstract void setSatisfactionContributor();
+
+    public SatisfactionContributor getSatisfactionContributor(){
+        return satisfactionContributor;
+    }
+
+    /**
+     * Draws the building into the game using the provided {@link SpriteBatch}.
+     * @param batch The {@link SpriteBatch} to use to draw the building.
+     */
+    public void draw(SpriteBatch batch) {
+        if (timeUntilBuilt > 0 && !built) {
+            unbuiltSprite.setPosition(x, y);
+            unbuiltSprite.draw(batch);
+            return;
+        }
+        sprite.setPosition(this.x, this.y);
+        sprite.draw(batch);
+    }
+
+    // Sets the connections for this building, holding the building type, and its weighting for this building
+    protected abstract void setConnections();
+    
+    public HashMap<Type, Float> getConnections(){
+        return connections;
+    }
+
+    public HashMap<Building, Integer> getConnectedBuildingsOfType(Type type){
+
+        HashMap<Building, Integer> connectionBuildingsOfType = new HashMap<>(); 
+        for(Building building : connectedBuildings.keySet()){
+            if(building.getBuildingType() == type){
+                connectionBuildingsOfType.put(building, connectedBuildings.get(building));
+            }
+        }
+        return connectionBuildingsOfType;
+    }
+
+    public Integer getClosestConnectedBuildingDistanceOfType(Type type){
+
+        HashMap<Building, Integer> connectedBuildingsOfType = getConnectedBuildingsOfType(type);
+
+        Integer closestConnectedDistance = Integer.MAX_VALUE;
+
+        for(Building connectedBuilding : connectedBuildingsOfType.keySet()){
+
+            Integer distanceToConnection = connectedBuildingsOfType.get(connectedBuilding);
+            if(distanceToConnection < closestConnectedDistance){
+                closestConnectedDistance = distanceToConnection;
+            }
+        }
+
+        return closestConnectedDistance;
+    }
+
+
+    public int getID() { return this.id; }
+    
+    /**
+     * Sets the X position of the building
+     * @param x The X position to use
+     */
+    public void setX(float x) {
+        this.x = x;
+    }
+    public float getX() { return this.x; }
+   
+    /**
+     * Sets the Y position of the building
+     * @param y The Y position to use
+     */
+    public void setY(float y) {
+        this.y = y;
+    }
+    public float getY() { 
+        return this.y;
+    }
+
+    public Vector2 getPositionVector(){
+        return new Vector2(x, y);
+    }
+
+    public Integer getManhattenDistanceFrom(Building otherBuilding){
+        return Math.abs(gridX - otherBuilding.getGridX()) + Math.abs(gridY - otherBuilding.getGridY());
+    }
+
+    public HashMap<Building, Integer> getConnectedBuildings(){
+        return connectedBuildings;
+    }
+
+    public Float getConnectionWeight(Type type){
+        return getConnections().get(type);
+    }
+    
+    public int getGridX() {
+        return this.gridX;
+    }
+    
+    public int getGridY() {
+        return this.gridY;
+    }
+    
+    public float getWidth() {
+        return this.width;
+    }
+    
+    public float getHeight() {
+        return this.height;
+    }
+    
+    /**
+     * Calculates and returns the bounding box of the building.
+     * @return The bounding box {@link Rectangle} of the building.
+     */
+    public Rectangle getBounds() {
+        return this.bounds.set(this.x, this.y, this.width, this.height);
+    }
+
+    /**
+     * Get the use of the building, inferred from its {@link Type}.
+     * @return The {@link Use} of the building.
+     */
+    public Use getBuildingUse() {
+        return Building.getBuildingUse(this.buildingType);
+    }
 
     /**
      * Get the raw coordinates of the grid square the building would
@@ -236,13 +327,6 @@ public abstract class Building {
         return GridUtils.getGridCoords(this.x + this.width / 2, this.y + this.height / 2);
     }
 
-    /**
-     * Snaps the building to the grid.
-     */
-    public void snapToGrid() {
-        Vector2 gridCoords = getRawGridCoords();
-        this.setCenter(gridCoords.x, gridCoords.y);
-    }
 
     public Type getBuildingType(){
         return buildingType;

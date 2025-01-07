@@ -74,18 +74,22 @@ public class GameScreen implements Screen {
         blockRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
 
-        // These are the icons for the drawable buildings on the right hand side of the menu.
-        draggablebuildings.add(new GymBuilding(world));
-        draggablebuildings.add(new HallsBuilding(world));
-        draggablebuildings.add(new LectureHallBuilding(world));
-        draggablebuildings.add(new OfficeBuilding(world));
-        draggablebuildings.add(new PiazzaBuilding(world));
+        initializeBuildingIcons();
 
         stage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
 
         createLabels();
         font = createFont();
+    }
+
+    private void initializeBuildingIcons(){
+        // These are the icons for the drawable buildings on the right hand side of the menu.
+        draggablebuildings.add(new GymBuilding(world));
+        draggablebuildings.add(new HallsBuilding(world));
+        draggablebuildings.add(new LectureHallBuilding(world));
+        draggablebuildings.add(new OfficeBuilding(world));
+        draggablebuildings.add(new PiazzaBuilding(world));
     }
 
     private void createLabels() {
@@ -192,6 +196,10 @@ public class GameScreen implements Screen {
                 world.buildingUseCounts.put(building.getBuildingUse(),
                                             world.buildingUseCounts.get(building.getBuildingUse()) + 1
                                             );
+                world.buildingTypeCounts.put(building.getBuildingType(),
+                                            world.buildingTypeCounts.get(building.getBuildingType()) + 1
+                                            );
+                world.updateWorld(building);
             }
             buildingClicked = -1;
         }
