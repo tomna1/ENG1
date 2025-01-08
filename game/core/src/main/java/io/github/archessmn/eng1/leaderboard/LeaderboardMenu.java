@@ -88,10 +88,17 @@ public class LeaderboardMenu {
         skin.dispose();
     }
 
+    /**
+     * Sets the current menu as the input processor used by libgdx.
+     */
     public void setAsInputProcessor() {
         Gdx.input.setInputProcessor(stage);
     }
 
+    /**
+     * Draws the menu.
+     * @param delta Time since last frame.
+     */
     public void draw(float delta) {
         stage.act(delta);
         stage.draw();

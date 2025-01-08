@@ -27,6 +27,10 @@ public class LeaderboardPosition implements Comparable<LeaderboardPosition> {
         }
     }
 
+    /**
+     * Copy constructor.
+     * @param pos The position to copy.
+     */
     public LeaderboardPosition(LeaderboardPosition pos) {
         if (pos == null) throw new IllegalArgumentException("argument cannot be null");
         this.username = pos.username;
@@ -42,7 +46,7 @@ public class LeaderboardPosition implements Comparable<LeaderboardPosition> {
     /**
      * Adds this completed achievement to the list of completed achievement. Will
      * not add the achievement if it is already in the list.
-     * @param achievement
+     * @param achievement The achievement to add.
      * @return true if added and false if not.
      */
     public boolean addCompletedAchievement(CompletedAchievement achievement) {       
@@ -78,11 +82,20 @@ public class LeaderboardPosition implements Comparable<LeaderboardPosition> {
         return new ArrayList<>(completedAchievements);
     }
 
+    /**
+     * Returns a reference to the CompletedAchievement at the specified index.
+     * @param index The index of the CompletedAchievement.
+     * @return The completed achievement or null if not possible.
+     */
     public CompletedAchievement getAchievement(int index) {
         if (index < 0 || index >= completedAchievements.size()) return null;
         return completedAchievements.get(index);
     }
 
+    /**
+     * Returns the amount of achievement that this position currently has.
+     * @return The amount of achievements.
+     */
     public int getAchievementCount() {
         return completedAchievements.size();
     }

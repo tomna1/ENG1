@@ -18,6 +18,10 @@ public class Leaderboard {
     private String leaderboardPrefsDir;
     private Json json = new Json();
 
+    /**
+     * Create a new leaderboard with the default file path. The default file path
+     * is "%UserProfile%"/.prefs/ENG1/leaderboard".
+     */
     public Leaderboard() {
         this("ENG1/leaderboard");
     }
