@@ -1,36 +1,52 @@
 package io.github.archessmn.eng1.achievements;
 
+import io.github.archessmn.eng1.leaderboard.CompletedAchievement;
+
 public abstract class AbstractAchievement {
     private int id;     // Used by the manager to add and remove it from arrays.
-    private String name;
+    private String title;
     private String description;
+    private String iconPath;
     protected AchievementManager manager;
     
-    public AbstractAchievement(AchievementManager manager, int id, String name, String description) {
+    public AbstractAchievement(AchievementManager manager, int id, String title, String description, String iconPath) {
         if (manager == null) throw new IllegalArgumentException("Manager cannot be null");
-        if (name == null) throw new IllegalArgumentException("achievement cannot be null");
+        if (title == null) throw new IllegalArgumentException("achievement cannot be null");
         if (description == null) throw new IllegalArgumentException("decription cannot be null");
+        if (iconPath == null) throw new IllegalArgumentException("iconPath cannot be null.");
         this.manager = manager;
         this.id = id;
+        this.title = title;
+        this.description = description;
+        this.iconPath = iconPath;
     }
 
     public int getID() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
     public String getDescription() {
         return description;
     }
 
+    public String getIconPath() {
+        return iconPath;
+    }
+
     
     public abstract boolean checkIfAchieved();
 
-    // public abstract CompletedAchievement getCompletedAchievement();
+    public CompletedAchievement getCompletedAchievement() {
+        return new CompletedAchievement(iconPath, title, description);
+    }
 
+    /**
+     * This method should be called when the achievement is completed.
+     */
     protected void onCompleted() {
         manager.onAchievementCompletion(this);
     }

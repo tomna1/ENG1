@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import io.github.archessmn.eng1.achievements.AchievementManager;
 import io.github.archessmn.eng1.buildings.Building;
 import io.github.archessmn.eng1.buildings.GymBuilding;
 import io.github.archessmn.eng1.buildings.HallsBuilding;
@@ -33,6 +34,7 @@ import io.github.archessmn.eng1.leaderboard.LeaderboardPosition;
 public class GameScreen implements Screen {
     private World world;
     private EventManager eventManager;
+    private AchievementManager achievementManager;
     private FitViewport viewport;
     private EndGameMenu endGameMenu;
 
@@ -48,7 +50,7 @@ public class GameScreen implements Screen {
 
     private Array<Building> draggablebuildings = new Array<>();
 
-    private Timer timer = new Timer(4, 60);
+    private Timer timer = new Timer(300, 60);
 
     private BitmapFont font;
     private Integer buildingClicked = -1;
@@ -68,6 +70,7 @@ public class GameScreen implements Screen {
         // 300 here represents the pixel width of the UI on the right hand side
         world = new World(Main.VIEWPORT_WIDTH - 300, Main.VIEWPORT_HEIGHT);
         eventManager = new EventManager(5,10); //LOWER VALUES FOR TESTING
+        achievementManager = new AchievementManager(world.getWorldStats(), world.getSatisfactionStats(), 1.0f);
         viewport = main.getViewport();
         endGameMenu = new EndGameMenu(main, this);
 
@@ -222,12 +225,13 @@ public class GameScreen implements Screen {
     private void logic(float deltaTime) {
         if (paused || gameEnded) return;
         world.tickbuildings();
+        achievementManager.update(deltaTime);
         float delta = Gdx.graphics.getDeltaTime();
         timer.update(deltaTime);
         if (timer.hasEnded()) {
             // ends the game
             gameEnded = true;
-            endGameMenu.setScore(world.getSatisfaction());
+            endGameMenu.setScore(world.getSatisfaction(), achievementManager.getCompletedAchievementCount());
             endGameMenu.setAsInputProcessor();
         }
         stage.act(delta);
@@ -298,7 +302,7 @@ public class GameScreen implements Screen {
 
     public void saveToLeaderboard(String username, float score) {
         Leaderboard leaderboard = new Leaderboard();
-        LeaderboardPosition position = new LeaderboardPosition(username, score, null);
+        LeaderboardPosition position = new LeaderboardPosition(username, score, achievementManager.getCompletedAchievements());
         leaderboard.addPosition(position);
         leaderboard.writeToFile();
     }
