@@ -69,7 +69,7 @@ public class GameScreen implements Screen {
     public GameScreen(Main main) {
         // 300 here represents the pixel width of the UI on the right hand side
         world = new World(Main.VIEWPORT_WIDTH - 300, Main.VIEWPORT_HEIGHT);
-        eventManager = new EventManager(5, 10); // LOWER VALUES FOR TESTING
+        eventManager = new EventManager(35, 50); // LOWER VALUES FOR TESTING
         achievementManager = new AchievementManager(world.getWorldStats(), world.getSatisfactionStats(), 1.0f);
         viewport = main.getViewport();
         endGameMenu = new EndGameMenu(main, this);
