@@ -27,6 +27,7 @@ public class AlienInvasion implements Event {
     private Texture pageTexture;
     private Image newsPage;
     private int clickCount, startTime, tractorStart, eventDuration;
+    private float startSatisfaction, satisfactionChange;
     private float[] UFOcoords = new float[2];
     private float[][] nextBuildingPos = new float[2][2];
     private boolean started, tractorActive, hit, abduction;
@@ -51,7 +52,9 @@ public class AlienInvasion implements Event {
 
         rand = new Random();
 
-        eventDuration = 20;
+        startSatisfaction = 2;
+        satisfactionChange = 0;
+        eventDuration = 18;
         abduction = false;
         tractorActive = false;
         started = false;
@@ -110,18 +113,22 @@ public class AlienInvasion implements Event {
      */
     public int eventMain(int elapsedTime) {
         if (tractorActive) {
-            abduction = false;
-            if (elapsedTime == (tractorStart + 5)) {
+
+            if (elapsedTime == (tractorStart + 4)) {
                 abduction = true;
-                System.out.println("-5 satisfaction");
-                // -5 student satisfaction
+                satisfactionChange -= 2.5;
+                tractorStart = elapsedTime;
             }
             if (clickCount >= 5) {
                 tractorActive = false;
                 clickCount = 0;
 
-                UFO.setDrawable(UFOidle);
+                if (!abduction) {
+                    satisfactionChange += 0.5;
+                }
+                abduction = false;
 
+                UFO.setDrawable(UFOidle);
                 nextBuildingPos = findNextBuildingPos();
             }
 
@@ -180,6 +187,10 @@ public class AlienInvasion implements Event {
         if (Math.abs(UFOcoords[0] - nextBuildingPos[0][0]) < 0.02
                 && Math.abs(UFOcoords[1] - nextBuildingPos[0][1]) < 0.02) {
             UFO.remove();
+
+            // +4 from the 0.5 satisfaction gained per building saved, and the UFO can visit
+            // 8 buildings max.
+            world.updateEventSatisfaction(startSatisfaction + satisfactionChange, startSatisfaction + 4);
             return 0;
         } else {
             return 2;

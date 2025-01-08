@@ -3,23 +3,24 @@ package io.github.archessmn.eng1;
 import io.github.archessmn.eng1.buildings.Building;
 
 public class SatisfactionManager {
-    
+
     private World world;
     private Float satisfaction = 0f;
     private Float optimumSatisfaction = 0f;
+    private Float totalEventSatisfaction = 0f, optimumTotalEventSatisfaction = 0f;
     private SatisfactionStats satisfactionStats;
-    
-    public SatisfactionManager(World world){
+
+    public SatisfactionManager(World world) {
         this.world = world;
         satisfaction = 0f;
         satisfactionStats = new SatisfactionStats(this);
     }
 
-    public void updateSatisfaction(){
+    public void updateSatisfaction() {
 
         satisfaction = 0f;
         optimumSatisfaction = 0f;
-        for(Building building : world.getBuildings()){
+        for (Building building : world.getBuildings()) {
 
             SatisfactionContributor satisfactionContributor = building.getSatisfactionContributor();
             satisfactionContributor.updateSatisfactionContribution();
@@ -28,26 +29,42 @@ public class SatisfactionManager {
             optimumSatisfaction += satisfactionContributor.getOptimumSatisfactionContribution();
             System.out.println("Satisfaction: " + satisfaction + " Optimum Satisfaction: " + optimumSatisfaction);
         }
+        satisfaction += totalEventSatisfaction;
+        optimumSatisfaction += optimumTotalEventSatisfaction;
+
         satisfactionStats.addSatisfaction(satisfaction, 0.0f);
     }
 
-    public Float getAvergageSatisfactionContribution(){
+    public void updateEventSatisfaction(float eventSatisfaction, float optimumEventSatisfaction) {
+        totalEventSatisfaction += eventSatisfaction;
+        optimumTotalEventSatisfaction += optimumEventSatisfaction;
+    }
+
+    public Float getAvergageSatisfactionContribution() {
         return satisfaction / world.getBuildings().size;
     }
 
-    public Float getAverageOptimumContribution(){
+    public Float getAverageOptimumContribution() {
         return optimumSatisfaction / world.getBuildings().size;
     }
 
-    public Float getSatisfaction(){
+    public Float getSatisfaction() {
         return satisfaction;
     }
 
-    public Float getOptimumSatisfaction(){
+    public Float getOptimumSatisfaction() {
         return optimumSatisfaction;
     }
 
-    public Float getPercentageSatisfaction(){
+    public Float getTotalEventSatisfaction() {
+        return totalEventSatisfaction;
+    }
+
+    public Float getOptimumTotalEventSatisfaction() {
+        return optimumTotalEventSatisfaction;
+    }
+
+    public Float getPercentageSatisfaction() {
         return satisfaction / optimumSatisfaction * 100;
     }
 
