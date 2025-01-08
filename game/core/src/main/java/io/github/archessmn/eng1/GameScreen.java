@@ -69,7 +69,7 @@ public class GameScreen implements Screen {
     public GameScreen(Main main) {
         // 300 here represents the pixel width of the UI on the right hand side
         world = new World(Main.VIEWPORT_WIDTH - 300, Main.VIEWPORT_HEIGHT);
-        eventManager = new EventManager(5,10); //LOWER VALUES FOR TESTING
+        eventManager = new EventManager(5, 10); // LOWER VALUES FOR TESTING
         achievementManager = new AchievementManager(world.getWorldStats(), world.getSatisfactionStats(), 1.0f);
         viewport = main.getViewport();
         endGameMenu = new EndGameMenu(main, this);
@@ -91,8 +91,9 @@ public class GameScreen implements Screen {
         font = createFont();
     }
 
-    private void initializeBuildingIcons(){
-        // These are the icons for the drawable buildings on the right hand side of the menu.
+    private void initializeBuildingIcons() {
+        // These are the icons for the drawable buildings on the right hand side of the
+        // menu.
         draggablebuildings.add(new GymBuilding(world));
         draggablebuildings.add(new HallsBuilding(world));
         draggablebuildings.add(new LectureHallBuilding(world));
@@ -107,8 +108,8 @@ public class GameScreen implements Screen {
         Skin skin2 = new Skin(Gdx.files.internal("ui/uiskin.json"));
         satisfactionLabel = new Label("Satisfaction = ", skin2);
 
-
-        // This is setting up the label for the counters of each building. "Sleep buildings:"
+        // This is setting up the label for the counters of each building. "Sleep
+        // buildings:"
         // is an example of how the labels are meant to look.
         for (Building.Use buildingUse : Building.Use.values()) {
             String useName = buildingUse.toString().charAt(0) + buildingUse.toString().substring(1).toLowerCase();
@@ -118,7 +119,7 @@ public class GameScreen implements Screen {
         for (Building.Use buildingUse : Building.Use.values()) {
             buildingUseCountLabels.put(buildingUse, new Label("0", labelStyle));
         }
-        
+
         // I have no idea what this rootTable nonsense is.
         Table rootTable = new Table();
         rootTable.setFillParent(true);
@@ -160,7 +161,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void resume() {
-        
+
     }
 
     @Override
@@ -176,7 +177,8 @@ public class GameScreen implements Screen {
     }
 
     private void input() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) paused = !paused;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
+            paused = !paused;
 
         if (paused || gameEnded) {
             buildingClicked = -1;
@@ -195,7 +197,7 @@ public class GameScreen implements Screen {
                     break;
                 }
             }
-        } 
+        }
         // If the player lets go of click button after they have pressed the
         // a building button, places the builing at that location.
         else if (!Gdx.input.isTouched() && buildingClicked != -1) {
@@ -203,15 +205,12 @@ public class GameScreen implements Screen {
             boolean placeSuccess = building.place();
             if (!placeSuccess) {
                 world.buildings.removeIndex(buildingClicked);
-            }
-            else {
+            } else {
                 // Updates the building count labels.
                 world.buildingUseCounts.put(building.getBuildingUse(),
-                                            world.buildingUseCounts.get(building.getBuildingUse()) + 1
-                                            );
+                        world.buildingUseCounts.get(building.getBuildingUse()) + 1);
                 world.buildingTypeCounts.put(building.getBuildingType(),
-                                            world.buildingTypeCounts.get(building.getBuildingType()) + 1
-                                            );
+                        world.buildingTypeCounts.get(building.getBuildingType()) + 1);
                 world.updateWorld(building);
             }
             buildingClicked = -1;
@@ -223,7 +222,8 @@ public class GameScreen implements Screen {
     }
 
     private void logic(float deltaTime) {
-        if (paused || gameEnded) return;
+        if (paused || gameEnded)
+            return;
         world.tickbuildings();
         achievementManager.update(deltaTime);
         float delta = Gdx.graphics.getDeltaTime();
@@ -237,10 +237,6 @@ public class GameScreen implements Screen {
         stage.act(delta);
 
         eventManager.checkEvents(world, stage, (int) timer.getElapsedTime());
-
-        if(((int) timer.getElapsedTime())%2 == 0){
-            System.out.println(stage.getActors());
-        }
     }
 
     private void draw() {
@@ -264,8 +260,9 @@ public class GameScreen implements Screen {
             }
             shapeRenderer.setColor(Color.RED);
             Vector2 buldingCoords = building.getRawGridCoords();
-            shapeRenderer.rect(buldingCoords.x - (building.getWidth() / 2), buldingCoords.y - (building.getHeight() / 2),
-                               building.getWidth(), building.getHeight());
+            shapeRenderer.rect(buldingCoords.x - (building.getWidth() / 2),
+                    buldingCoords.y - (building.getHeight() / 2),
+                    building.getWidth(), building.getHeight());
             shapeRenderer.end();
 
             batch.begin();
@@ -302,7 +299,8 @@ public class GameScreen implements Screen {
 
     public void saveToLeaderboard(String username, float score) {
         Leaderboard leaderboard = new Leaderboard();
-        LeaderboardPosition position = new LeaderboardPosition(username, score, achievementManager.getCompletedAchievements());
+        LeaderboardPosition position = new LeaderboardPosition(username, score,
+                achievementManager.getCompletedAchievements());
         leaderboard.addPosition(position);
         leaderboard.writeToFile();
     }
@@ -340,6 +338,5 @@ public class GameScreen implements Screen {
         world.dispose();
         endGameMenu.dispose();
     }
-
 
 }

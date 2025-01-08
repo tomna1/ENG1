@@ -38,8 +38,10 @@ public class World {
      * 
      */
     public World(Integer worldWidth, Integer worldHeight) {
-        if (worldWidth <= 0) throw new IllegalArgumentException("World Width should be greater than 0.");
-        if (worldHeight <= 0) throw new IllegalArgumentException("World Height should be greater than 0.");
+        if (worldWidth <= 0)
+            throw new IllegalArgumentException("World Width should be greater than 0.");
+        if (worldHeight <= 0)
+            throw new IllegalArgumentException("World Height should be greater than 0.");
         this.width = worldWidth;
         this.height = worldHeight;
         worldStats = new WorldStats();
@@ -51,16 +53,16 @@ public class World {
         loadAssests();
     }
 
-    private void initializeBuildingCounts(){
+    private void initializeBuildingCounts() {
         for (Building.Use use : Building.Use.values()) {
             buildingUseCounts.put(use, 0);
         }
-        for(Building.Type type : Building.Type.values()){
+        for (Building.Type type : Building.Type.values()) {
             buildingTypeCounts.put(type, 0);
         }
     }
 
-    private void loadAssests(){
+    private void loadAssests() {
         assetManager = new AssetManager();
         assetManager.load("gym.png", Texture.class);
         assetManager.load("halls.png", Texture.class);
@@ -85,37 +87,39 @@ public class World {
         return buildings.size - 1;
     }
 
-    public void updateWorld(Building newBuilding){
+    public void updateWorld(Building newBuilding) {
         updateBuildingConnections();
         satisfactionManager.updateSatisfaction();
     }
 
-    private void printCounts(){
-        for(Building.Type type : buildingTypeCounts.keySet()){
-            System.out.println(String.format("Type: %-15s Count: %d", type.name(),  buildingTypeCounts.get(type)));
+    private void printCounts() {
+        for (Building.Type type : buildingTypeCounts.keySet()) {
+            System.out.println(String.format("Type: %-15s Count: %d", type.name(), buildingTypeCounts.get(type)));
         }
     }
 
-    public Integer getTypeCount(Building.Type type){
+    public Integer getTypeCount(Building.Type type) {
         return buildingTypeCounts.get(type);
     }
 
-    public Float ratioToType(Building.Type typeOne, Building.Type typeTwo){
+    public Float ratioToType(Building.Type typeOne, Building.Type typeTwo) {
         Integer typeCount = getTypeCount(typeTwo);
-        if(typeCount == 0){
+        if (typeCount == 0) {
             return null;
-        }
-        else{
+        } else {
             return (float) getTypeCount(typeOne) / typeCount;
         }
     }
 
-
-
-    private void updateBuildingConnections(){
-        for(Building building : buildings){
+    private void updateBuildingConnections() {
+        for (Building building : buildings) {
             building.updateConnectedBuildings();
         }
+    }
+
+    public void updateEventSatisfaction(float satChange, float optSatChange) {
+        satisfactionManager.updateEventSatisfaction(satChange, optSatChange);
+        satisfactionManager.updateSatisfaction();
     }
 
     /**
@@ -164,7 +168,8 @@ public class World {
      */
     public void drawbuildings(SpriteBatch batch) {
         batch.begin();
-        for (Building building : buildings) building.draw(batch);
+        for (Building building : buildings)
+            building.draw(batch);
         batch.end();
     }
 
@@ -200,14 +205,16 @@ public class World {
 
     /**
      * Returns the width of the world as defined in the constructor..
+     * 
      * @return World width, always greater than 0.
      */
     public int getWidth() {
         return this.width;
     }
-    
+
     /**
      * Returns the height of the world as defined in the constructor.
+     * 
      * @return World height, always greater than 0.
      */
     public int getHeight() {
@@ -216,33 +223,36 @@ public class World {
 
     /**
      * Get a building from the world building store
+     * 
      * @param id The ID of a building (its index).
      * @return The building with the given ID / index
      */
     public Building getBuilding(Integer id) {
         return buildings.get(id);
     }
+
     /**
      * Gets the array of all buildings in the world.
+     * 
      * @return The array buildings containing each building object.
      */
-    public Array<Building> getBuildings(){
+    public Array<Building> getBuildings() {
         return buildings;
     }
 
-    public HashMap<Building.Use, Integer> getBuildingUseCounts(){
+    public HashMap<Building.Use, Integer> getBuildingUseCounts() {
         return buildingUseCounts;
     }
 
-    public HashMap<Building.Type, Integer> getBuildingTypeCount(){
+    public HashMap<Building.Type, Integer> getBuildingTypeCount() {
         return buildingTypeCounts;
     }
 
-    public Integer getStudentCount(){
+    public Integer getStudentCount() {
         return studentCount;
     }
 
-    public Integer getTeacherCount(){
+    public Integer getTeacherCount() {
         return teacherCount;
     }
 
