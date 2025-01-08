@@ -231,6 +231,7 @@ public class GameScreen implements Screen {
         if (timer.hasEnded()) {
             // ends the game
             gameEnded = true;
+            achievementManager.onGameEnd();
             endGameMenu.setScore(world.getSatisfaction(), achievementManager.getCompletedAchievementCount());
             endGameMenu.setAsInputProcessor();
         }

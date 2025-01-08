@@ -8,8 +8,9 @@ public abstract class AbstractAchievement {
     private String description;
     private String iconPath;
     protected AchievementManager manager;
+    private boolean onlyCheckAtEnd;
     
-    public AbstractAchievement(AchievementManager manager, int id, String title, String description, String iconPath) {
+    public AbstractAchievement(AchievementManager manager, int id, String title, String description, String iconPath, boolean onlyCheckAtEnd) {
         if (manager == null) throw new IllegalArgumentException("Manager cannot be null");
         if (title == null) throw new IllegalArgumentException("achievement cannot be null");
         if (description == null) throw new IllegalArgumentException("decription cannot be null");
@@ -19,6 +20,7 @@ public abstract class AbstractAchievement {
         this.title = title;
         this.description = description;
         this.iconPath = iconPath;
+        this.onlyCheckAtEnd = onlyCheckAtEnd;
     }
 
     public int getID() {
@@ -37,6 +39,9 @@ public abstract class AbstractAchievement {
         return iconPath;
     }
 
+    public boolean getOnlyCheckAtEnd() {
+        return onlyCheckAtEnd;
+    }
     
     public abstract boolean checkIfAchieved();
 

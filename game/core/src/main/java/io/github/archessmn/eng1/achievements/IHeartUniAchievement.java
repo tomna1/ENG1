@@ -13,7 +13,8 @@ public class IHeartUniAchievement extends AbstractAchievement {
         super(manager, 2, 
         "I heart Uni",
         "Earned by maintaining student satisfaction over 80% for over 3 minutes.",
-        "achievement_icons/icon_1.png");
+        "achievement_icons/icon_1.png",
+        false);
         if (satisfactionStats == null) throw new IllegalArgumentException("satisfaction stats cannot be null.");
         this.satisfactionStats = satisfactionStats;
     }

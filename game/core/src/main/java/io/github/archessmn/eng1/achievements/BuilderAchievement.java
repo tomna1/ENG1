@@ -12,7 +12,8 @@ public class BuilderAchievement extends AbstractAchievement {
         super(manager, 1, 
         "Builder",
         "Earned by building at least 10 buildings.",
-        "achievement_icons/icon_3.png");
+        "achievement_icons/icon_3.png",
+        true);
         if (worldStats == null) throw new IllegalArgumentException("worldstats cannot be null");
         this.worldStats = worldStats;
     }

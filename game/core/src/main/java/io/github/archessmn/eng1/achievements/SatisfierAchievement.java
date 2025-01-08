@@ -12,7 +12,8 @@ public class SatisfierAchievement extends AbstractAchievement {
         super(manager, 5, 
         "Satisfier",
         "Earned by getting at least 10 satisfaction.",
-        "achievement_icons/icon_2.png");
+        "achievement_icons/icon_2.png",
+        true);
         if (satisfactionStats == null) throw new IllegalArgumentException("Satisfaction stats cannot be null");
         this.satisfactionStats = satisfactionStats;
     }
