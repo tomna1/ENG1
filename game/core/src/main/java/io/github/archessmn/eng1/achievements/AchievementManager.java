@@ -7,7 +7,8 @@ import io.github.archessmn.eng1.WorldStats;
 import io.github.archessmn.eng1.leaderboard.CompletedAchievement;
 
 /**
- * Manages all achievements in the game.
+ * Manages all achievements in the game. Will create all the achievement in the
+ * game and will periodically check if they have been achieved or not.
  */
 public class AchievementManager {
     private WorldStats worldStats; // References to worldstats to make it easy to create achievements.
@@ -19,6 +20,14 @@ public class AchievementManager {
     private float timeBetweenChecks;
     private boolean isTimeChecksEnabled;
 
+    /**
+     * Creates a new AchievementManager with the parameters.
+     * @param worldStats A reference to the stats of the world used by some achievements.
+     * @param satisfactionStats A reference to the stats of satisfaction used by some achievements.
+     * @param timeBetweenChecks The time in seconds in between checks. For example if this was 1.0f,
+     * every 1 second the manager would forcefully check all achievements to see if they have been
+     * completed or not.
+     */
     public AchievementManager(WorldStats worldStats, SatisfactionStats satisfactionStats, float timeBetweenChecks) {
         if (worldStats == null) throw new IllegalArgumentException("World stats cannot be null");
         if (satisfactionStats == null) throw new IllegalArgumentException("satisfaction stats cannot be null");
@@ -87,10 +96,18 @@ public class AchievementManager {
         completedAchievements.add(achievement.getCompletedAchievement());
     }
 
+    /**
+     * Returns the list of all completed achievements throughout the game.
+     * @return List of completed achievements. Wont be null
+     */
     public ArrayList<CompletedAchievement> getCompletedAchievements() {
         return completedAchievements;
     }
 
+    /**
+     * Returns the amount of achievement that were completed throughout the game.
+     * @return
+     */
     public int getCompletedAchievementCount() {
         return completedAchievements.size();
     }
