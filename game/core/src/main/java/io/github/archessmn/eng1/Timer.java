@@ -22,6 +22,28 @@ public class Timer {
     }
 
     /**
+     * Adds to the elapsed time based on the value passed in.
+     * @param delta The amount of time to add to the elapsed time.
+     */
+    public void update(float delta) {
+        if (this.hasEnded()) return;
+        elapsedTime += delta;
+        if (elapsedTime > maxTime) elapsedTime = maxTime;
+    }
+
+    /**
+     * Checks if the timer has ended based on the elapsed time and the 
+     * {@link #maxTime} value passed into the constructor.
+     * @return true if timer has reached max time and false otherwise.
+     */
+    public boolean hasEnded() {
+        if (elapsedTime >= (float)maxTime) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Returns the amount of time passed in seconds. This value will never be
      * bigger than {@link #maxTime}.
      * @return Seconds passed. e.g. 16.27 = 16.27 seconds.
@@ -62,27 +84,5 @@ public class Timer {
      */
     public int getDayCount() {
         return (int)((elapsedTime % secondsPerYear) * (365/secondsPerYear) + 1);
-    }
-
-    /**
-     * Adds to the elapsed time based on the value passed in.
-     * @param delta The amount of time to add to the elapsed time.
-     */
-    public void update(float delta) {
-        if (this.hasEnded()) return;
-        elapsedTime += delta;
-        if (elapsedTime > maxTime) elapsedTime = maxTime;
-    }
-
-    /**
-     * Checks if the timer has ended based on the elapsed time and the 
-     * {@link #maxTime} value passed into the constructor.
-     * @return true if timer has reached max time and false otherwise.
-     */
-    public boolean hasEnded() {
-        if (elapsedTime >= (float)maxTime) {
-            return true;
-        }
-        return false;
     }
 }
