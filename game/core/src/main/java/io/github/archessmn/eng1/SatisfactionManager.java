@@ -7,10 +7,12 @@ public class SatisfactionManager {
     private World world;
     private Float satisfaction = 0f;
     private Float optimumSatisfaction = 0f;
+    private SatisfactionStats satisfactionStats;
     
     public SatisfactionManager(World world){
         this.world = world;
         satisfaction = 0f;
+        satisfactionStats = new SatisfactionStats(this);
     }
 
     public void updateSatisfaction(){
@@ -26,6 +28,7 @@ public class SatisfactionManager {
             optimumSatisfaction += satisfactionContributor.getOptimumSatisfactionContribution();
             System.out.println("Satisfaction: " + satisfaction + " Optimum Satisfaction: " + optimumSatisfaction);
         }
+        satisfactionStats.addSatisfaction(satisfaction, 0.0f);
     }
 
     public Float getAvergageSatisfactionContribution(){
@@ -48,5 +51,7 @@ public class SatisfactionManager {
         return satisfaction / optimumSatisfaction * 100;
     }
 
-
+    public SatisfactionStats getSatisfactionStats() {
+        return satisfactionStats;
+    }
 }

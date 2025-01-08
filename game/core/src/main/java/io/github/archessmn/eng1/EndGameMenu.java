@@ -40,10 +40,11 @@ public class EndGameMenu {
         stage.setDebugAll(true);
     }
 
-    public void setScore(float score) {
+    public void setScore(float score, int achievementCount) {
         this.score = score;
         mainLabel.setText("Your Score was " + Float.toString(score) + 
-            ". Please Enter your username below to save it to the leaderboard.\n" + 
+            " and you earned " + Integer.toString(achievementCount) + " achievements." + 
+            " Please Enter your username below to save it to the leaderboard.\n" + 
             "Usernames must be between 1 and 16 characters inclusively.");
     }
 

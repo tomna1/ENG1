@@ -16,6 +16,7 @@ import io.github.archessmn.eng1.util.GridUtils;
  * Class used to store information about the world and the buildings in it.
  */
 public class World {
+    private WorldStats worldStats;
 
     public AssetManager assetManager;
     private ShapeRenderer gridRenderer;
@@ -41,6 +42,7 @@ public class World {
         if (worldHeight <= 0) throw new IllegalArgumentException("World Height should be greater than 0.");
         this.width = worldWidth;
         this.height = worldHeight;
+        worldStats = new WorldStats();
         studentCount = 0;
         teacherCount = 0;
 
@@ -79,6 +81,7 @@ public class World {
      */
     public int addBuilding(Building building) {
         buildings.add(building);
+        worldStats.onBuildingBuilt(building);
         return buildings.size - 1;
     }
 
@@ -185,6 +188,14 @@ public class World {
             gridRenderer.dispose();
         }
         assetManager.dispose();
+    }
+
+    public WorldStats getWorldStats() {
+        return worldStats;
+    }
+
+    public SatisfactionStats getSatisfactionStats() {
+        return satisfactionManager.getSatisfactionStats();
     }
 
     /**
