@@ -50,7 +50,7 @@ public class GameScreen implements Screen {
 
     private Array<Building> draggablebuildings = new Array<>();
 
-    private Timer timer = new Timer(10, 100);
+    private Timer timer = new Timer(300, 100);
 
     private BitmapFont font;
     private Integer buildingClicked = -1;
