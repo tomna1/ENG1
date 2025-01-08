@@ -18,10 +18,10 @@ import io.github.archessmn.eng1.buildings.Building.Use;
  * Displays a pop up saying that a lecture hall has shut down and
  * gives the player 2 choices.
  * 
- * Move lectures online: -10 student satisfaction.
+ * Move lectures online: -6 student satisfaction.
  * 
- * Use other lecture halls: -20 baseline but +4 for every hall that has
- * been placed, to a maximum of -2.
+ * Use other lecture halls: -11 baseline but +2.5 for every hall that has
+ * been placed, to a maximum of -1.
  * 
  * If the player hasn't made a decision in 10 seconds the event ends
  * and they get -20 satisfaction
@@ -32,7 +32,8 @@ public class LectureHallMaintenance implements Event {
     private Image newsPage;
     private Texture pageTexture;
     private ImageButton onlineButton, otherHallsButton;
-    private int startTime, eventDuration, satisfactionChange;
+    private int startTime, eventDuration;
+    private float startSatisfaction, satisfactionChange;
     private boolean choseOnline, choiceMade;
 
     /**
@@ -45,8 +46,9 @@ public class LectureHallMaintenance implements Event {
     public LectureHallMaintenance(World world, Stage stage) {
         this.world = world;
         this.stage = stage;
-        eventDuration = 10;
-        satisfactionChange = -20;
+        eventDuration = 15;
+        startSatisfaction = -11;
+        satisfactionChange = 0;
         choiceMade = false;
 
         pageTexture = new Texture(Gdx.files.internal("newsMaintenance.png"));
@@ -96,16 +98,15 @@ public class LectureHallMaintenance implements Event {
     public int eventMain(int elapsedTime) {
         if (choiceMade) {
             if (choseOnline) {
-                satisfactionChange = -10;
-                System.out.println("online");
+                satisfactionChange = 5;
             } else {
                 for (Building building : world.getBuildings()) {
                     if (building.getBuildingUse() == Use.LEARN) {
-                        satisfactionChange += 4;
+                        satisfactionChange += 2.5f;
                     }
                 }
-                if (satisfactionChange > -2) {
-                    satisfactionChange = -2;
+                if (startSatisfaction + satisfactionChange > -1) {
+                    satisfactionChange = 10;
                 }
                 System.out.println(satisfactionChange);
 
@@ -113,7 +114,6 @@ public class LectureHallMaintenance implements Event {
             return 2;
         }
         if (elapsedTime == startTime + eventDuration) {
-            System.out.println("did nothing");
             return 2;
         }
         return 1;
@@ -125,7 +125,8 @@ public class LectureHallMaintenance implements Event {
      * @return 0 to tell eventManager the event has finished.
      */
     public int eventEnd() {
-        // modify student satisfaction by satisfactionChange
+        world.updateEventSatisfaction(startSatisfaction + satisfactionChange, -1);
+
         newsPage.remove();
         onlineButton.remove();
         otherHallsButton.remove();
@@ -181,7 +182,7 @@ public class LectureHallMaintenance implements Event {
         return eventDuration;
     }
 
-    public int getSatisfactionChange() {
+    public float getSatisfactionChange() {
         return satisfactionChange;
     }
 

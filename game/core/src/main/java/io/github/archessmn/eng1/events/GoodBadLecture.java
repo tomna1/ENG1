@@ -18,7 +18,8 @@ public class GoodBadLecture implements Event {
     private Stage stage;
     private Image newsPage;
     private Texture pageTexture;
-    private int startTime, satisfactionChange, eventDuration;
+    private int startTime, eventDuration;
+    private float satisfactionChange;
     private boolean positive;
 
     /**
@@ -37,10 +38,10 @@ public class GoodBadLecture implements Event {
 
         if (positive) {
             pageTexture = new Texture(Gdx.files.internal("newsGreatLecture.png"));
-            satisfactionChange = 5;
+            satisfactionChange = 4;
         } else {
             pageTexture = new Texture(Gdx.files.internal("newsAwfulLecture.png"));
-            satisfactionChange = -5;
+            satisfactionChange = -3;
         }
         newsPage = new Image(pageTexture);
         newsPage.setSize(400, 205);
@@ -69,8 +70,6 @@ public class GoodBadLecture implements Event {
         stage.addActor(newsPage);
         newsPage.setPosition(0, 0);
 
-        // change satisfaction by satisfactionChange.
-
         return 1;
     }
 
@@ -94,6 +93,7 @@ public class GoodBadLecture implements Event {
      * @return 0 to tell eventManager that the event is finished.
      */
     public int eventEnd() {
+        world.updateEventSatisfaction(satisfactionChange, 3.5f);
         newsPage.remove();
         return 0;
     }
@@ -102,7 +102,7 @@ public class GoodBadLecture implements Event {
         return positive;
     }
 
-    public int getSatisfactionChange() {
+    public float getSatisfactionChange() {
         return satisfactionChange;
     }
 

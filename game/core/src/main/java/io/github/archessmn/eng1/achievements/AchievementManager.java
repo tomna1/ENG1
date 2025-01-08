@@ -14,7 +14,8 @@ public class AchievementManager {
     private WorldStats worldStats; // References to worldstats to make it easy to create achievements.
     private SatisfactionStats satisfactionStats; // Reference to satisfaction stats to make it easy to create achievements.
     
-    private ArrayList<AbstractAchievement> uncompletedAchievements = new ArrayList<>();
+    private ArrayList<AbstractAchievement> uncompletedRuntimeAchievements = new ArrayList<>();
+    private ArrayList<AbstractAchievement> uncompletedEndAchievements = new ArrayList<>();
     private ArrayList<CompletedAchievement> completedAchievements = new ArrayList<>();
     private float deltaTime = 0.0f; // Used for managing time between update calls.
     private float timeBetweenChecks;
@@ -42,11 +43,16 @@ public class AchievementManager {
     }
 
     private void createAchievements() {
-        uncompletedAchievements.add(new BuilderAchievement(this, worldStats));
-        uncompletedAchievements.add(new IHeartUniAchievement(this, satisfactionStats));
-        uncompletedAchievements.add(new JamPackedAchievement(this, worldStats));
-        uncompletedAchievements.add(new MinimalistAchievement(this, worldStats));
-        uncompletedAchievements.add(new SatisfierAchievement(this, satisfactionStats));
+        addAchievement(new BuilderAchievement(this, worldStats));
+        addAchievement(new IHeartUniAchievement(this, satisfactionStats));
+        addAchievement(new JamPackedAchievement(this, worldStats));
+        addAchievement(new MinimalistAchievement(this, worldStats));
+        addAchievement(new SatisfierAchievement(this, satisfactionStats));
+    }
+
+    private void addAchievement(AbstractAchievement achievement) {
+        if (achievement.getOnlyCheckAtEnd()) uncompletedEndAchievements.add(achievement);
+        else uncompletedRuntimeAchievements.add(achievement);
     }
 
     /**
@@ -58,10 +64,19 @@ public class AchievementManager {
         if (isTimeChecksEnabled) {
             this.deltaTime += deltaTime;
             if (this.deltaTime >= timeBetweenChecks) {
-                checkAllAchievements();
+                checkAllRuntimeAchievements();
                 this.deltaTime = 0.0f;
             }
         }
+    }
+
+    /**
+     * This method should be called when the game ends. Will check all achievements with
+     * {@link AbstractAchievement#getOnlyCheckAtEnd()} being true.  
+     */
+    public void onGameEnd() {
+        checkAllRuntimeAchievements();
+        checkAllEndAchievements();
     }
 
     /**
@@ -69,10 +84,21 @@ public class AchievementManager {
      * achievements and adds them to completedAchievements if they have been
      * completed.
      */
-    private void checkAllAchievements() {
+    private void checkAllRuntimeAchievements() {
         AbstractAchievement achievement;
-        for (int i = 0; i < uncompletedAchievements.size(); i++) {
-            achievement = uncompletedAchievements.get(i);
+        for (int i = 0; i < uncompletedRuntimeAchievements.size(); i++) {
+            achievement = uncompletedRuntimeAchievements.get(i);
+            if (achievement != null && achievement.checkIfAchieved() == true) {
+                onAchievementCompletion(achievement);
+                i--;
+            }
+        }
+    }
+
+    private void checkAllEndAchievements() {
+        AbstractAchievement achievement;
+        for (int i = 0; i < uncompletedEndAchievements.size(); i++) {
+            achievement = uncompletedEndAchievements.get(i);
             if (achievement != null && achievement.checkIfAchieved() == true) {
                 onAchievementCompletion(achievement);
                 i--;
@@ -87,13 +113,33 @@ public class AchievementManager {
      * @param achievement
      */
     public void onAchievementCompletion(AbstractAchievement achievement) {
-        for (int i = 0; i < uncompletedAchievements.size(); i++) {
-            if (uncompletedAchievements.get(i).getID() == achievement.getID()) {
-                uncompletedAchievements.remove(i);
-                break;
+        if (achievement.checkIfAchieved() == false) return;
+        removeAchievement(achievement);
+        completedAchievements.add(achievement.getCompletedAchievement());
+    }
+
+    /**
+     * Removes the achievement from either the list of end achievements or runtime
+     * achievements
+     * @param achievement The achievement to remove.
+     * @return true if successful and false if not.
+     */
+    private boolean removeAchievement(AbstractAchievement achievement) {
+        // Checks all runtime achievement for achievement with id.
+        for (int i = 0; i < uncompletedRuntimeAchievements.size(); i++) {
+            if (uncompletedRuntimeAchievements.get(i).getID() == achievement.getID()) {
+                uncompletedRuntimeAchievements.remove(i);
+                return true;
             }
         }
-        completedAchievements.add(achievement.getCompletedAchievement());
+        // Checks all end achievement for achievement with id.
+        for (int i = 0; i < uncompletedEndAchievements.size(); i++) {
+            if (uncompletedEndAchievements.get(i).getID() == achievement.getID()) {
+                uncompletedEndAchievements.remove(i);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

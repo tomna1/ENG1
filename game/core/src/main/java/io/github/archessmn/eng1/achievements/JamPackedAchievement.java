@@ -12,7 +12,8 @@ public class JamPackedAchievement extends AbstractAchievement {
         super(manager, 3, 
         "Jam Packed",
         "Earned by placing the maximum number of buildings.",
-        "achievement_icons/icon_3.png");
+        "achievement_icons/icon_3.png",
+        true);
         if (worldStats == null) throw new IllegalArgumentException("worldstats cannot be null");
         this.worldStats = worldStats;
     }

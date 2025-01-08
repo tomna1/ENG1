@@ -28,9 +28,9 @@ public class LectureHallMaintenanceTest extends AbstractHeadlessGdxTest {
                 LectureHallMaintenance testEvent = new LectureHallMaintenance(world, stage);
 
                 // test getter
-                assertEquals(-20, testEvent.getSatisfactionChange(),
+                assertEquals(0f, testEvent.getSatisfactionChange(),
                                 "Satisfaction change should start at a baseline of -20.");
-                assertEquals(10, testEvent.getEventDuration(),
+                assertEquals(15, testEvent.getEventDuration(),
                                 "Event duration should be 10 seconds.");
                 assertFalse(testEvent.isChoiceMade(),
                                 "Choice made should be false at initialisation.");
@@ -113,7 +113,7 @@ public class LectureHallMaintenanceTest extends AbstractHeadlessGdxTest {
                 testPhase = testEvent.eventMain(testEvent.getEventDuration());
                 assertEquals(2, testPhase,
                                 "Test phase should be 2 after elapsed time has reached event duration.");
-                assertEquals(-20, testEvent.getSatisfactionChange(),
+                assertEquals(0f, testEvent.getSatisfactionChange(),
                                 "Satisfaction change should still be -20 on event timeout.");
 
                 stage.dispose();
@@ -157,7 +157,7 @@ public class LectureHallMaintenanceTest extends AbstractHeadlessGdxTest {
                 testPhase = testEvent.eventMain(0);
                 assertEquals(2, testPhase,
                                 "Test phase should be 2 after online choice has been processed.");
-                assertEquals(-10, testEvent.getSatisfactionChange(),
+                assertEquals(5f, testEvent.getSatisfactionChange(),
                                 "Satisfaction change should be -10 after choosing online lectures.");
 
                 stage.dispose();
@@ -203,23 +203,23 @@ public class LectureHallMaintenanceTest extends AbstractHeadlessGdxTest {
                 testPhase = testEvent.eventMain(0);
                 assertEquals(2, testPhase,
                                 "Test phase should be 2 after online choice has been processed.");
-                assertEquals(-16, testEvent.getSatisfactionChange(),
+                assertEquals(2.5f, testEvent.getSatisfactionChange(),
                                 "Satisfaction change should be -16 after choosing online lectures, with 1 lecture hall present.");
 
                 // satisfaction change with 3 lecture halls (middle)
-                testEvent.setSatisfactionChange(-20);
+                testEvent.setSatisfactionChange(0);
                 world.addBuilding(lectureHall);
                 world.addBuilding(lectureHall);
                 testPhase = testEvent.eventMain(0);
-                assertEquals(-8, testEvent.getSatisfactionChange(),
+                assertEquals(7.5f, testEvent.getSatisfactionChange(),
                                 "Satisfaction change should be -8 with 3 lecture halls.");
 
                 // satisfaction change with 5 lecture halls(satisfactionChange cap)
-                testEvent.setSatisfactionChange(-20);
+                testEvent.setSatisfactionChange(0);
                 world.addBuilding(lectureHall);
                 world.addBuilding(lectureHall);
                 testPhase = testEvent.eventMain(0);
-                assertEquals(-2, testEvent.getSatisfactionChange(),
+                assertEquals(10, testEvent.getSatisfactionChange(),
                                 "Satisfaction change should be -2 with 5 lecture halls.");
 
                 stage.dispose();

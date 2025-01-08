@@ -11,6 +11,7 @@ public abstract class AbstractAchievement {
     private String description;
     private String iconPath;
     protected AchievementManager manager;
+    private boolean onlyCheckAtEnd;
     
     /**
      * Creates a new achievement with the all the specified attributes.
@@ -24,7 +25,7 @@ public abstract class AbstractAchievement {
      * @param iconPath The path to the icon in the assets folder used to represent
      * the achievement. Cannot be null.
      */
-    public AbstractAchievement(AchievementManager manager, int id, String title, String description, String iconPath) {
+    public AbstractAchievement(AchievementManager manager, int id, String title, String description, String iconPath, boolean onlyCheckAtEnd) {
         if (manager == null) throw new IllegalArgumentException("Manager cannot be null");
         if (title == null) throw new IllegalArgumentException("title cannot be null");
         if (title.equals("")) throw new IllegalArgumentException("title cannot be empty");
@@ -36,6 +37,7 @@ public abstract class AbstractAchievement {
         this.title = title;
         this.description = description;
         this.iconPath = iconPath;
+        this.onlyCheckAtEnd = onlyCheckAtEnd;
     }
 
     /**
@@ -77,6 +79,10 @@ public abstract class AbstractAchievement {
      * Checks if the achievement has been achieved or not.
      * @return true if has been achieved and false if not.
      */
+    public boolean getOnlyCheckAtEnd() {
+        return onlyCheckAtEnd;
+    }
+    
     public abstract boolean checkIfAchieved();
 
     /**

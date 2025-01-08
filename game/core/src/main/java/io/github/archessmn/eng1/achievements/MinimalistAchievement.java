@@ -13,7 +13,8 @@ public class MinimalistAchievement extends AbstractAchievement {
         super(manager, 4, 
         "Minimalist",
         "Earned by placing a total of 5 buildings.",
-        "achievement_icons/icon_2.png");
+        "achievement_icons/icon_2.png",
+        true);
         if (worldStats == null) throw new IllegalArgumentException("worldstats cannot be null");
         this.worldStats = worldStats;
     }
