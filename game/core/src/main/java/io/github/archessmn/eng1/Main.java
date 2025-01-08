@@ -55,7 +55,6 @@ public class Main extends Game {
 
     /**
      * Returns a reference to the viewport that should be used by all screens.
-     * 
      * @return The viewport.
      */
     public FitViewport getViewport() {
