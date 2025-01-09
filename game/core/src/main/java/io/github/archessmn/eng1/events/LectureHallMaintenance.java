@@ -23,8 +23,8 @@ import io.github.archessmn.eng1.buildings.Building.Use;
  * Use other lecture halls: -11 baseline but +2.5 for every hall that has
  * been placed, to a maximum of -1.
  * 
- * If the player hasn't made a decision in 10 seconds the event ends
- * and they get -20 satisfaction
+ * If the player hasn't made a decision in 15 seconds the event ends
+ * and they get -11 satisfaction
  */
 public class LectureHallMaintenance implements Event {
     private World world;
@@ -67,6 +67,7 @@ public class LectureHallMaintenance implements Event {
      * @return -1 if event failed due to there being no lecture halls.
      */
     public int eventStart(int elapsedTime) {
+        // check for any lecture halls or offices
         boolean lectureHall = false;
         for (Building building : world.getBuildings()) {
             if (building.getBuildingUse() == Use.LEARN) {
@@ -78,6 +79,7 @@ public class LectureHallMaintenance implements Event {
             return -1;
         }
 
+        // if no learning buildings present, return -1 and end event
         stage.addActor(newsPage);
         stage.addActor(onlineButton);
         stage.addActor(otherHallsButton);
@@ -98,18 +100,19 @@ public class LectureHallMaintenance implements Event {
     public int eventMain(int elapsedTime) {
         if (choiceMade) {
             if (choseOnline) {
+                // increase base change by 5
                 satisfactionChange = 5;
             } else {
+                // count learning buildings and increase the base satisfaction by 2.5 for each
                 for (Building building : world.getBuildings()) {
                     if (building.getBuildingUse() == Use.LEARN) {
                         satisfactionChange += 2.5f;
                     }
                 }
-                if (startSatisfaction + satisfactionChange > -1) {
+                // cap satisfaction at 10
+                if (satisfactionChange > 10) {
                     satisfactionChange = 10;
                 }
-                System.out.println(satisfactionChange);
-
             }
             return 2;
         }
@@ -120,7 +123,7 @@ public class LectureHallMaintenance implements Event {
     }
 
     /**
-     * removes the page and buttons from stage.
+     * updates satisfaction and removes the page and buttons from stage.
      * 
      * @return 0 to tell eventManager the event has finished.
      */
@@ -138,16 +141,19 @@ public class LectureHallMaintenance implements Event {
      * set the textures, events and positions of the ImageButtons.
      */
     private void buildButtons() {
+        // build textures
         Texture onlineButtonTextureUp = new Texture(Gdx.files.internal("online_up.png"));
         Texture onlineButtonTextureDown = new Texture(Gdx.files.internal("online_down.png"));
         Texture otherHallsTextureUp = new Texture(Gdx.files.internal("other_halls_up.png"));
         Texture otherHallsTextureDown = new Texture(Gdx.files.internal("other_halls_down.png"));
 
+        // build drawables
         Drawable onlineButtonUp = new TextureRegionDrawable(onlineButtonTextureUp);
         Drawable onlineButtonDown = new TextureRegionDrawable(onlineButtonTextureDown);
         Drawable otherHallsButtonUp = new TextureRegionDrawable(otherHallsTextureUp);
         Drawable otherHallsButtonDown = new TextureRegionDrawable(otherHallsTextureDown);
 
+        // build imageButtons
         onlineButton = new ImageButton(onlineButtonUp, onlineButtonDown, onlineButtonUp);
         otherHallsButton = new ImageButton(otherHallsButtonUp, otherHallsButtonDown, otherHallsButtonUp);
 

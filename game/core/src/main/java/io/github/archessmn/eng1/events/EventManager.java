@@ -18,6 +18,11 @@ public class EventManager {
 
     /**
      * create an EventManager instance to manage when events are run.
+     * 
+     * @param minBound the minimum amount of time the manager should wait before
+     *                 starting an event.
+     * @param maxBound the maximum amount of time the manager should wait before
+     *                 starting an event.
      */
     public EventManager(int minBound, int maxBound) {
         if (minBound < 0) {
@@ -39,6 +44,7 @@ public class EventManager {
     /**
      * Allows you to specify what the first event ran should be.
      * Mainly for testing.
+     * 
      * @param firstEvent int 1, 2, or 3, to decide which event to run.
      */
     public EventManager(int minBound, int maxBound, int firstEvent) {
@@ -62,6 +68,7 @@ public class EventManager {
      */
     public boolean checkEvents(World world, Stage stage, int elapsedTime) {
         if (eventActive) {
+            // run event
             switch (eventPhase) {
                 case 0 -> {
                     eventPhase = currentEvent.eventStart(elapsedTime);
@@ -79,6 +86,7 @@ public class EventManager {
                 default -> throw new AssertionError();
             }
 
+            // after event finished, get new event and start time
             if (!eventActive) {
                 eventStartTime = elapsedTime + rand.nextInt(minStartBound, maxStartBound);
                 eventPhase = 0;

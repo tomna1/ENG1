@@ -56,6 +56,7 @@ public class GoodBadLecture implements Event {
      * @return -1 if event failed due to there being no lecture halls.
      */
     public int eventStart(int elapsedTime) {
+        // check for any lecture halls or offices
         boolean lectureHall = false;
         for (Building building : world.getBuildings()) {
             if (building.getBuildingUse() == Use.LEARN) {
@@ -63,13 +64,15 @@ public class GoodBadLecture implements Event {
                 break;
             }
         }
+        // if no learning buildings present, return -1 and end event
         if (lectureHall != true) {
             return -1;
         }
+
+        // start game if learning building present
         startTime = elapsedTime;
         stage.addActor(newsPage);
         newsPage.setPosition(0, 0);
-
         return 1;
     }
 
@@ -88,7 +91,7 @@ public class GoodBadLecture implements Event {
     }
 
     /**
-     * removes page from the screen.
+     * updates satisfaction and removes page from the screen.
      * 
      * @return 0 to tell eventManager that the event is finished.
      */

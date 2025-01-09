@@ -113,12 +113,13 @@ public class AlienInvasion implements Event {
      */
     public int eventMain(int elapsedTime) {
         if (tractorActive) {
-
+            // lose satisfaction if UFO sits on one building for 4 seconds
             if (elapsedTime == (tractorStart + 4)) {
                 abduction = true;
                 satisfactionChange -= 2.5;
                 tractorStart = elapsedTime;
             }
+            // UFO switches target if clicked 5 times
             if (clickCount >= 5) {
                 tractorActive = false;
                 clickCount = 0;
@@ -126,12 +127,12 @@ public class AlienInvasion implements Event {
                 if (!abduction) {
                     satisfactionChange += 0.5;
                 }
-                abduction = false;
 
                 UFO.setDrawable(UFOidle);
                 nextBuildingPos = findNextBuildingPos();
             }
 
+            // UFO flashes every second when on a building
             if (!hit) {
                 if (elapsedTime % 2 == 0) {
                     UFO.setDrawable(UFOactive);
@@ -142,10 +143,12 @@ public class AlienInvasion implements Event {
             hit = false;
 
         } else {
+            // move UFO towards next building
             UFOcoords[0] += nextBuildingPos[1][0];
             UFOcoords[1] += nextBuildingPos[1][1];
             UFO.setPosition(UFOcoords[0], UFOcoords[1]);
 
+            // check if UFO is on top of building
             if (Math.abs(UFOcoords[0] - nextBuildingPos[0][0]) < 0.02
                     && Math.abs(UFOcoords[1] - nextBuildingPos[0][1]) < 0.02) {
                 tractorActive = true;
@@ -153,6 +156,7 @@ public class AlienInvasion implements Event {
             }
         }
 
+        // set UFO to fly off screen when event ends
         if (elapsedTime == (startTime + eventDuration)) {
             tractorActive = false;
 
@@ -180,10 +184,12 @@ public class AlienInvasion implements Event {
      * @return 2 if the UFO is still moving off screen.
      */
     public int eventEnd() {
+        // move UFO towards final position
         UFOcoords[0] += nextBuildingPos[1][0];
         UFOcoords[1] += nextBuildingPos[1][1];
         UFO.setPosition(UFOcoords[0], UFOcoords[1]);
 
+        // if UFO is at final position, update satisfaction and end event.
         if (Math.abs(UFOcoords[0] - nextBuildingPos[0][0]) < 0.02
                 && Math.abs(UFOcoords[1] - nextBuildingPos[0][1]) < 0.02) {
             UFO.remove();
@@ -206,14 +212,19 @@ public class AlienInvasion implements Event {
         Array<Building> buildings = world.getBuildings();
         int index;
         Building nextBuilding = currentBuilding;
+        // find a building that is not the current building
         while (nextBuilding == currentBuilding) {
             index = rand.nextInt(buildings.size);
             nextBuilding = buildings.get(index);
         }
         currentBuilding = nextBuilding;
+
+        // set X and Y so the UFO hovers in the center of the tile and not the bottom
+        // left corner.
         float nextBuildingX = nextBuilding.getX() + 10;
         float nextBuildingY = nextBuilding.getY() + 25;
 
+        // UFO moves to position in 2 seconds -> 60 fps, 120 for 2 seconds
         float xSpeed = (nextBuildingX - UFOcoords[0]) / 120;
         float ySpeed = (nextBuildingY - UFOcoords[1]) / 120;
 
@@ -227,10 +238,12 @@ public class AlienInvasion implements Event {
      * set the textures and click-event of the UFO.
      */
     private void buildUFO() {
+        // build textures
         Texture UFOidleTexture = new Texture(Gdx.files.internal("UFOidle.png"));
         Texture UFOactiveTexture = new Texture(Gdx.files.internal("UFOactive.png"));
         Texture UFOhitTexture = new Texture(Gdx.files.internal("UFOhit.png"));
 
+        // build drawables
         UFOidle = new TextureRegionDrawable(UFOidleTexture);
         UFOactive = new TextureRegionDrawable(UFOactiveTexture);
         UFOhit = new TextureRegionDrawable(UFOhitTexture);
