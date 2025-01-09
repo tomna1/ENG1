@@ -29,9 +29,9 @@ public class LectureHallMaintenanceTest extends AbstractHeadlessGdxTest {
 
                 // test getter
                 assertEquals(0f, testEvent.getSatisfactionChange(),
-                                "Satisfaction change should start at a baseline of -20.");
+                                "Satisfaction change should start at 0.");
                 assertEquals(15, testEvent.getEventDuration(),
-                                "Event duration should be 10 seconds.");
+                                "Event duration should be 15 seconds.");
                 assertFalse(testEvent.isChoiceMade(),
                                 "Choice made should be false at initialisation.");
 
@@ -114,7 +114,7 @@ public class LectureHallMaintenanceTest extends AbstractHeadlessGdxTest {
                 assertEquals(2, testPhase,
                                 "Test phase should be 2 after elapsed time has reached event duration.");
                 assertEquals(0f, testEvent.getSatisfactionChange(),
-                                "Satisfaction change should still be -20 on event timeout.");
+                                "Satisfaction change should still be 0 on event timeout.");
 
                 stage.dispose();
                 world.dispose();
@@ -158,7 +158,7 @@ public class LectureHallMaintenanceTest extends AbstractHeadlessGdxTest {
                 assertEquals(2, testPhase,
                                 "Test phase should be 2 after online choice has been processed.");
                 assertEquals(5f, testEvent.getSatisfactionChange(),
-                                "Satisfaction change should be -10 after choosing online lectures.");
+                                "Satisfaction change should be 5 after choosing online lectures.");
 
                 stage.dispose();
                 world.dispose();
@@ -202,9 +202,9 @@ public class LectureHallMaintenanceTest extends AbstractHeadlessGdxTest {
                 // satisfaction change with 1 lecture hall (minimum)
                 testPhase = testEvent.eventMain(0);
                 assertEquals(2, testPhase,
-                                "Test phase should be 2 after online choice has been processed.");
+                                "Test phase should be 2 after halls choice has been processed.");
                 assertEquals(2.5f, testEvent.getSatisfactionChange(),
-                                "Satisfaction change should be -16 after choosing online lectures, with 1 lecture hall present.");
+                                "Satisfaction change should be 2.5 after choosing hall, with 1 lecture hall present.");
 
                 // satisfaction change with 3 lecture halls (middle)
                 testEvent.setSatisfactionChange(0);
@@ -212,7 +212,7 @@ public class LectureHallMaintenanceTest extends AbstractHeadlessGdxTest {
                 world.addBuilding(lectureHall);
                 testPhase = testEvent.eventMain(0);
                 assertEquals(7.5f, testEvent.getSatisfactionChange(),
-                                "Satisfaction change should be -8 with 3 lecture halls.");
+                                "Satisfaction change should be 7.5 with 3 lecture halls.");
 
                 // satisfaction change with 5 lecture halls(satisfactionChange cap)
                 testEvent.setSatisfactionChange(0);
@@ -220,7 +220,7 @@ public class LectureHallMaintenanceTest extends AbstractHeadlessGdxTest {
                 world.addBuilding(lectureHall);
                 testPhase = testEvent.eventMain(0);
                 assertEquals(10, testEvent.getSatisfactionChange(),
-                                "Satisfaction change should be -2 with 5 lecture halls.");
+                                "Satisfaction change should be 10 with 5 lecture halls.");
 
                 stage.dispose();
                 world.dispose();
@@ -241,6 +241,7 @@ public class LectureHallMaintenanceTest extends AbstractHeadlessGdxTest {
 
                 LectureHallMaintenance testEvent = new LectureHallMaintenance(world, stage);
                 int testPhase;
+                float initialSatisfaction = world.getSatisfaction();
 
                 testPhase = testEvent.eventStart(0);
                 testPhase = testEvent.eventEnd();
@@ -248,6 +249,8 @@ public class LectureHallMaintenanceTest extends AbstractHeadlessGdxTest {
                                 "Test phase should be 0 after event has fully finished.");
                 assertEquals(0, stage.getActors().size,
                                 "Stage should have no actors if the newsPage and ImageButtons were successfully removed from event.");
+                assertEquals(initialSatisfaction - 11f, world.getSatisfaction(),
+                                "Satisfaction should have decreases by 11.");
 
                 stage.dispose();
                 world.dispose();

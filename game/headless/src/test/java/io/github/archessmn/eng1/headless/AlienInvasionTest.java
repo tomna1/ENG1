@@ -193,15 +193,15 @@ public class AlienInvasionTest extends AbstractHeadlessGdxTest {
                 assertFalse(testEvent.getAbduction(),
                                 "Should be false as tractor has not been active for 5 seconds.");
 
-                // test when tractor has been active for 5 seconds and UFO clicked 5 times.
+                // test when tractor has been active for 4 seconds and UFO clicked 5 times.
                 testEvent.setClickCount(5);
-                testEvent.eventMain(12);
+                testEvent.eventMain(11);
                 assertEquals(0, testEvent.getClickCount(),
                                 "Should be 0 as it resets after 5 clicks.");
                 assertFalse(testEvent.isTractorActive(),
                                 "Should be false as the UFO was clicked 5 times.");
-                assertFalse(testEvent.getAbduction(),
-                                "Should be true as tractor has been true for 5 seconds.");
+                assertTrue(testEvent.getAbduction(),
+                                "Should be true as tractor has been true for 4 seconds.");
 
                 stage.dispose();
                 world.dispose();
