@@ -49,6 +49,7 @@ public class GameScreen implements Screen {
     private Vector2 unprojectedTouchPos = new Vector2();
 
     private Array<Building> draggablebuildings = new Array<>();
+    private Array<Lake> lakes = new Array<>();
 
     private Timer timer = new Timer(300, 100);
 
@@ -285,6 +286,7 @@ public class GameScreen implements Screen {
         }
 
         this.drawBuildingMenu();
+        world.drawLakes(batch);
 
         world.drawbuildings(batch);
 

@@ -63,6 +63,16 @@ public class GridUtils {
         return new GridCoordTuple(gridX, gridY);
     }
 
+    public static Vector2 getRealCoords(float gridX, float gridY) {
+        float gridWidth = (VIEWPORT_WIDTH / 16f);
+        float gridHeight = (VIEWPORT_HEIGHT / 9f);
+
+        float x = (gridX * gridWidth) - (gridWidth / 2f);
+        float y = (gridY * gridHeight) - (gridHeight / 2f);
+
+        return new Vector2(x, y);
+    }
+
     /**
      * Used to calculate the closes grid square in the X direction
      * @param coord The X coordinate of the object
@@ -82,4 +92,15 @@ public class GridUtils {
         float gridHeight = (VIEWPORT_HEIGHT / 9f);
         return (MathUtils.round(coord / (gridHeight) + 0.5f) * gridHeight) - (gridHeight / 2f);
     }
+
+    public static float calcRealWorldXCoord(int gridX) {
+        float gridWidth = (VIEWPORT_WIDTH / 16f);
+        return (gridX * gridWidth) - (gridWidth / 2f);
+    }
+
+    public static float calcRealWorldYCoord(int gridY) {
+        float gridHeight = (VIEWPORT_HEIGHT / 9f);
+        return (gridY * gridHeight) - (gridHeight / 2f);
+    }
+
 }

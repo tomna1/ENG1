@@ -25,6 +25,8 @@ public class World {
     public HashMap<Building.Use, Integer> buildingUseCounts = new HashMap<>();
     public HashMap<Building.Type, Integer> buildingTypeCounts = new HashMap<>();
 
+    private Array<Lake> lakes = new Array<>();
+
     private Integer width, height;
     private Integer studentCount, teacherCount;
 
@@ -51,6 +53,12 @@ public class World {
         satisfactionManager = new SatisfactionManager(this);
         initializeBuildingCounts();
         loadAssests();
+        initializeLakes();
+    }
+
+    private void initializeLakes(){
+        lakes.add(new Lake(3, 4, this));
+        lakes.add(new Lake(9, 7, this));
     }
 
     private void initializeBuildingCounts() {
@@ -71,6 +79,7 @@ public class World {
         assetManager.load("piazza.png", Texture.class);
         assetManager.load("construction.png", Texture.class);
         assetManager.load("missing_texture.png", Texture.class);
+        assetManager.load("lake.png", Texture.class);
         assetManager.finishLoading();
     }
 
@@ -160,6 +169,11 @@ public class World {
                 }
             }
         }
+        for(Lake lake : lakes){
+            if (gridCoords.x == lake.getGridX() && gridCoords.y == lake.getGridY()){
+                return true;
+            }
+        }
         return false;
     }
 
@@ -183,6 +197,14 @@ public class World {
             gridRenderer = new ShapeRenderer();
         }
         GridUtils.drawGrid(gridRenderer);
+    }
+
+    public void drawLakes(SpriteBatch batch){ 
+        batch.begin();
+        for (Lake lake : lakes){
+            lake.draw(batch);
+        }
+        batch.end();
     }
 
     /**
