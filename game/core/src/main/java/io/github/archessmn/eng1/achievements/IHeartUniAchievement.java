@@ -8,6 +8,7 @@ import io.github.archessmn.eng1.SatisfactionStats;
  */
 public class IHeartUniAchievement extends AbstractAchievement {
     private SatisfactionStats satisfactionStats;
+    private static final float LENGTH = 180.0f;
     
     public IHeartUniAchievement(AchievementManager manager, SatisfactionStats satisfactionStats) {
         super(manager, 2, 
@@ -20,7 +21,10 @@ public class IHeartUniAchievement extends AbstractAchievement {
     }
 
     public boolean checkIfAchieved() {
-        if (satisfactionStats.getPercentageSatisfaction() > 80.0f) return true;
+        float time = satisfactionStats.timeSinceGreaterThanPercent(80.0f, (int)LENGTH);
+        if (time >= LENGTH) {
+            return true;   
+        }
         return false;
     }
 }

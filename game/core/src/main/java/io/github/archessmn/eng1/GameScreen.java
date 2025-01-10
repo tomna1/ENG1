@@ -51,7 +51,7 @@ public class GameScreen implements Screen {
     private Array<Building> draggablebuildings = new Array<>();
     private Array<Lake> lakes = new Array<>();
 
-    private Timer timer = new Timer(300, 100);
+    private Timer timer;
 
     private BitmapFont font;
     private Integer buildingClicked = -1;
@@ -69,8 +69,9 @@ public class GameScreen implements Screen {
     private final HashMap<Building.Use, Label> buildingUseNameLabels = new HashMap<>();
 
     public GameScreen(Main main) {
+        timer = new Timer(300, 100);
         // 300 here represents the pixel width of the UI on the right hand side
-        world = new World(Main.VIEWPORT_WIDTH - 300, Main.VIEWPORT_HEIGHT);
+        world = new World(Main.VIEWPORT_WIDTH - 300, Main.VIEWPORT_HEIGHT, timer);
         eventManager = new EventManager(35, 50); // LOWER VALUES FOR TESTING
         achievementManager = new AchievementManager(world.getWorldStats(), world.getSatisfactionStats(), 1.0f);
         viewport = main.getViewport();
