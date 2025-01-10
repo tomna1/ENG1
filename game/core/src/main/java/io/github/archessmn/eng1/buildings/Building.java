@@ -280,6 +280,10 @@ public abstract class Building {
         return this.y;
     }
 
+    public Sprite getSprite() {
+        return this.sprite;
+    }
+
     public Vector2 getPositionVector(){
         return new Vector2(x, y);
     }

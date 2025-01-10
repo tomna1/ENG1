@@ -49,11 +49,13 @@ public class GameScreen implements Screen {
     private Vector2 unprojectedTouchPos = new Vector2();
 
     private Array<Building> draggablebuildings = new Array<>();
+    private Array<Lake> lakes = new Array<>();
 
     private Timer timer = new Timer(300, 100);
 
     private BitmapFont font;
     private Integer buildingClicked = -1;
+    private boolean isBuildingSelected = false;
 
     private Boolean paused = true;
     private Boolean gameEnded = false;
@@ -194,34 +196,44 @@ public class GameScreen implements Screen {
         // If the player clicks on the building icons of the menu, makes a copy and idk
         // all of this should probably be refactored to use buttons anyway.
         if (Gdx.input.justTouched()) {
-            for (int i = draggablebuildings.size - 1; i >= 0; i--) {
-                Building building = draggablebuildings.get(i);
-                if (building.getBounds().contains(unprojectedTouchPos)) {
-                    buildingClicked = world.addBuilding(building.makeCopy());
-                    break;
+            if(!isBuildingSelected){
+                for (int i = draggablebuildings.size - 1; i >= 0; i--) {
+                    Building building = draggablebuildings.get(i);
+                    if (building.getBounds().contains(unprojectedTouchPos)) {
+                        buildingClicked = world.addBuilding(building.makeCopy());
+                        isBuildingSelected = true;
+                        break;
+                    }
                 }
             }
-        }
-        // If the player lets go of click button after they have pressed the
-        // a building button, places the builing at that location.
-        else if (!Gdx.input.isTouched() && buildingClicked != -1) {
-            Building building = world.getBuilding(buildingClicked);
-            boolean placeSuccess = building.place();
-            if (!placeSuccess) {
-                world.buildings.removeIndex(buildingClicked);
-            } else {
-                // Updates the building count labels.
-                world.buildingUseCounts.put(building.getBuildingUse(),
-                        world.buildingUseCounts.get(building.getBuildingUse()) + 1);
-                world.buildingTypeCounts.put(building.getBuildingType(),
-                        world.buildingTypeCounts.get(building.getBuildingType()) + 1);
-                world.updateWorld(building);
+            else{
+                Building building = world.getBuilding(buildingClicked);
+                boolean placeSuccess = building.place();
+                if (!placeSuccess) {
+                    world.buildings.removeIndex(buildingClicked);
+                } else {
+                    // Updates the building count labels.
+                    world.buildingUseCounts.put(building.getBuildingUse(),
+                            world.buildingUseCounts.get(building.getBuildingUse()) + 1);
+                    world.buildingTypeCounts.put(building.getBuildingType(),
+                            world.buildingTypeCounts.get(building.getBuildingType()) + 1);
+                    world.updateWorld(building);
+                }
+                buildingClicked = -1;
+                isBuildingSelected = false;
+                
             }
-            buildingClicked = -1;
+            
         }
 
-        if (buildingClicked != -1) {
-            world.getBuilding(buildingClicked).setCenter(touchPos.x, touchPos.y);
+        if (buildingClicked != -1 && isBuildingSelected) {
+            Building building = world.getBuilding(buildingClicked);
+            building.setCenter(unprojectedTouchPos.x, unprojectedTouchPos.y);
+            if(Gdx.input.isKeyJustPressed(Input.Keys.BACKSPACE)){
+                world.buildings.removeIndex(buildingClicked);
+                buildingClicked = -1;
+                isBuildingSelected = false;
+            }
         }
     }
 
@@ -278,6 +290,7 @@ public class GameScreen implements Screen {
         }
 
         this.drawBuildingMenu();
+        world.drawLakes(batch);
 
         world.drawbuildings(batch);
 

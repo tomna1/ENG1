@@ -126,6 +126,7 @@ public class GoodBadLectureTest extends AbstractHeadlessGdxTest {
 
                 GoodBadLecture testEvent = new GoodBadLecture(world, stage, true);
                 int testPhase;
+                float initialSatisfaction = world.getSatisfaction();
 
                 testPhase = testEvent.eventStart(0);
                 testPhase = testEvent.eventEnd();
@@ -133,6 +134,16 @@ public class GoodBadLectureTest extends AbstractHeadlessGdxTest {
                                 "Test phase should be 0 after event has fully finished.");
                 assertEquals(0, stage.getActors().size,
                                 "Stage should have no actors if the newsPage was successfully removed from event.");
+                assertEquals(initialSatisfaction + 4f, world.getSatisfaction(),
+                                "Satisfaction should have increased by 4.");
+
+                testEvent = new GoodBadLecture(world, stage, false);
+                initialSatisfaction = world.getSatisfaction();
+
+                testPhase = testEvent.eventStart(0);
+                testPhase = testEvent.eventEnd();
+                assertEquals(initialSatisfaction - 3f, world.getSatisfaction(),
+                                "Satisfaction should have decreased by 3.");
 
                 stage.dispose();
                 world.dispose();

@@ -27,10 +27,10 @@ public class SatisfactionManager {
 
             satisfaction += satisfactionContributor.getSatisfactionContribution();
             optimumSatisfaction += satisfactionContributor.getOptimumSatisfactionContribution();
-            System.out.println("Satisfaction: " + satisfaction + " Optimum Satisfaction: " + optimumSatisfaction);
         }
         satisfaction += totalEventSatisfaction;
         optimumSatisfaction += optimumTotalEventSatisfaction;
+        System.out.println("Satisfaction: " + satisfaction + " Optimum Satisfaction: " + optimumSatisfaction);
 
         satisfactionStats.addSatisfaction(satisfaction, 0.0f);
     }
