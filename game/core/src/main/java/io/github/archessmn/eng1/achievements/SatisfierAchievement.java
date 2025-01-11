@@ -22,4 +22,8 @@ public class SatisfierAchievement extends AbstractAchievement {
         if (satisfactionStats.getCurrentSatisfaction() >= 10) return true;
         return false;
     }
+
+    public SatisfactionStats getSatisfactionStats() {
+        return satisfactionStats;
+    }
 }

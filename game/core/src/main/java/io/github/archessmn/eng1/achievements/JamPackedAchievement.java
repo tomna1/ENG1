@@ -22,4 +22,8 @@ public class JamPackedAchievement extends AbstractAchievement {
         if (worldStats.getTotalBuildingsPlaced() == WorldStats.maxPossibleBuildings) return true;
         return false;
     }
+
+    public WorldStats getWorldStats() {
+        return worldStats;
+    }
 }

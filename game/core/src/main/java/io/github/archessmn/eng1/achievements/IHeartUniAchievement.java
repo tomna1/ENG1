@@ -23,4 +23,8 @@ public class IHeartUniAchievement extends AbstractAchievement {
         if (satisfactionStats.getPercentageSatisfaction() > 80.0f) return true;
         return false;
     }
+
+    public SatisfactionStats getSatisfactionStats() {
+        return satisfactionStats;
+    }
 }

@@ -23,4 +23,8 @@ public class MinimalistAchievement extends AbstractAchievement {
         if (worldStats.getTotalBuildingsPlaced() == 5) return true;
         return false;
     }
+
+    public WorldStats getWorldStats() {
+        return worldStats;
+    }
 }
