@@ -22,4 +22,8 @@ public class BuilderAchievement extends AbstractAchievement {
         if (worldStats.getTotalBuildingsPlaced() >= 10) return true;
         return false;
     }
+
+    public WorldStats getWorldStats() {
+        return worldStats;
+    }
 }
