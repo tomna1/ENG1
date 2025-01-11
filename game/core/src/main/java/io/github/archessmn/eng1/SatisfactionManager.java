@@ -13,10 +13,10 @@ public class SatisfactionManager {
     public SatisfactionManager(World world) {
         this.world = world;
         satisfaction = 0f;
-        satisfactionStats = new SatisfactionStats(this);
+        satisfactionStats = new SatisfactionStats(this, world.getTimer());
     }
 
-    public void updateSatisfaction() {
+    public void updateSatisfaction(float currentTime) {
 
         satisfaction = 0f;
         optimumSatisfaction = 0f;
@@ -30,9 +30,9 @@ public class SatisfactionManager {
         }
         satisfaction += totalEventSatisfaction;
         optimumSatisfaction += optimumTotalEventSatisfaction;
-        System.out.println("Satisfaction: " + satisfaction + " Optimum Satisfaction: " + optimumSatisfaction);
+        System.out.println("Satisfaction: " + satisfaction + " Optimum Satisfaction: " + optimumSatisfaction + "Percent: " + getPercentageSatisfaction());
 
-        satisfactionStats.addSatisfaction(satisfaction, 0.0f);
+        satisfactionStats.addSatisfaction(satisfaction, getPercentageSatisfaction());
     }
 
     public void updateEventSatisfaction(float eventSatisfaction, float optimumEventSatisfaction) {
