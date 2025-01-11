@@ -16,6 +16,7 @@ import io.github.archessmn.eng1.util.GridUtils;
  * Class used to store information about the world and the buildings in it.
  */
 public class World {
+    private Timer timer;
     private WorldStats worldStats;
 
     public AssetManager assetManager;
@@ -39,13 +40,15 @@ public class World {
      * @param worldHeight Height of the world. Must be greater than 0.
      * 
      */
-    public World(Integer worldWidth, Integer worldHeight) {
+    public World(Integer worldWidth, Integer worldHeight, Timer timer) {
         if (worldWidth <= 0)
             throw new IllegalArgumentException("World Width should be greater than 0.");
         if (worldHeight <= 0)
             throw new IllegalArgumentException("World Height should be greater than 0.");
+        if (timer == null) throw new IllegalArgumentException("timer cannot be null");
         this.width = worldWidth;
         this.height = worldHeight;
+        this.timer = timer;
         worldStats = new WorldStats();
         studentCount = 0;
         teacherCount = 0;
@@ -98,7 +101,7 @@ public class World {
 
     public void updateWorld(Building newBuilding) {
         updateBuildingConnections();
-        satisfactionManager.updateSatisfaction();
+        satisfactionManager.updateSatisfaction(timer.getElapsedTime());
     }
 
     private void printCounts() {
@@ -128,7 +131,7 @@ public class World {
 
     public void updateEventSatisfaction(float satChange, float optSatChange) {
         satisfactionManager.updateEventSatisfaction(satChange, optSatChange);
-        satisfactionManager.updateSatisfaction();
+        satisfactionManager.updateSatisfaction(timer.getElapsedTime());
     }
 
     /**
@@ -219,6 +222,10 @@ public class World {
 
     public WorldStats getWorldStats() {
         return worldStats;
+    }
+
+    public Timer getTimer() {
+        return timer;
     }
 
     public SatisfactionStats getSatisfactionStats() {

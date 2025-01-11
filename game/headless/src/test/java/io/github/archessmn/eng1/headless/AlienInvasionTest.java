@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import io.github.archessmn.eng1.Timer;
 import io.github.archessmn.eng1.World;
 import io.github.archessmn.eng1.buildings.GymBuilding;
 import io.github.archessmn.eng1.buildings.LectureHallBuilding;
@@ -26,7 +27,8 @@ public class AlienInvasionTest extends AbstractHeadlessGdxTest {
          */
         @Test
         public void eventInit() {
-                World world = new World(100, 100);
+                Timer timer = mock(Timer.class);
+                World world = new World(100, 100, timer);
                 FitViewport viewport = new FitViewport(1000, 1000);
                 Stage stage = new Stage(viewport, mock(SpriteBatch.class));
 
@@ -69,7 +71,8 @@ public class AlienInvasionTest extends AbstractHeadlessGdxTest {
          */
         @Test
         public void testEventStart() {
-                World world = new World(100, 100);
+                Timer timer = mock(Timer.class);
+                World world = new World(100, 100, timer);
                 GymBuilding gym = new GymBuilding(world);
 
                 FitViewport viewport = new FitViewport(1000, 1000);
@@ -117,7 +120,8 @@ public class AlienInvasionTest extends AbstractHeadlessGdxTest {
          */
         @Test
         public void testEventMainMovementAndEndOfMain() {
-                World world = new World(100, 100);
+                Timer timer = mock(Timer.class);
+                World world = new World(100, 100, timer);
                 GymBuilding gym = new GymBuilding(world);
                 gym.setX(65);
                 gym.setY(50);
@@ -161,7 +165,8 @@ public class AlienInvasionTest extends AbstractHeadlessGdxTest {
          */
         @Test
         public void testEventMainWhenTractorActive() {
-                World world = new World(100, 100);
+                Timer timer = mock(Timer.class);
+                World world = new World(100, 100, timer);
                 LectureHallBuilding lecturehall = new LectureHallBuilding(world);
                 GymBuilding gym = new GymBuilding(world);
                 gym.setX(65);
@@ -213,7 +218,8 @@ public class AlienInvasionTest extends AbstractHeadlessGdxTest {
          */
         @Test
         public void testEventEnd() {
-                World world = new World(100, 100);
+                Timer timer = mock(Timer.class);
+                World world = new World(100, 100, timer);
                 GymBuilding gym = new GymBuilding(world);
                 gym.setX(65);
                 gym.setY(50);
@@ -257,7 +263,8 @@ public class AlienInvasionTest extends AbstractHeadlessGdxTest {
          */
         @Test
         public void testUFOclick() {
-                World world = new World(100, 100);
+                Timer timer = mock(Timer.class);
+                World world = new World(100, 100, timer);
                 GymBuilding gym = new GymBuilding(world);
                 gym.setX(65);
                 gym.setY(50);

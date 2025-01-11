@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import io.github.archessmn.eng1.Timer;
 import io.github.archessmn.eng1.World;
 import io.github.archessmn.eng1.buildings.LectureHallBuilding;
 import io.github.archessmn.eng1.events.AlienInvasion;
@@ -91,7 +92,8 @@ public class EventManagerTest extends AbstractHeadlessGdxTest {
          */
         @Test
         public void eventsStartTest() {
-                World world = new World(100, 100);
+                Timer timer = mock(Timer.class);
+                World world = new World(100, 100, timer);
                 FitViewport viewport = new FitViewport(1000, 1000);
 
                 // not really sure about this :/
@@ -148,7 +150,8 @@ public class EventManagerTest extends AbstractHeadlessGdxTest {
          */
         @Test
         public void eventPhaseChangeTest() {
-                World world = new World(100, 100);
+                Timer timer = mock(Timer.class);
+                World world = new World(100, 100, timer);
                 LectureHallBuilding lecturehall = new LectureHallBuilding(world);
                 world.addBuilding(lecturehall);
 

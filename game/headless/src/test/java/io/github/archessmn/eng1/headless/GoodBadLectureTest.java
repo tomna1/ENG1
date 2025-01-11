@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import io.github.archessmn.eng1.Timer;
 import io.github.archessmn.eng1.World;
 import io.github.archessmn.eng1.buildings.GymBuilding;
 import io.github.archessmn.eng1.buildings.LectureHallBuilding;
@@ -19,7 +20,8 @@ public class GoodBadLectureTest extends AbstractHeadlessGdxTest {
         /* Tests GoodBadLecture constructor and getters */
         @Test
         public void GoodBadLectureInit() {
-                World world = new World(100, 100);
+                Timer timer = mock(Timer.class);
+                World world = new World(100, 100, timer);
                 FitViewport viewport = new FitViewport(1000, 1000);
                 Stage stage = new Stage(viewport, mock(SpriteBatch.class));
 
@@ -51,7 +53,8 @@ public class GoodBadLectureTest extends AbstractHeadlessGdxTest {
          */
         @Test
         public void testEventStart() {
-                World world = new World(100, 100);
+                Timer timer = mock(Timer.class);
+                World world = new World(100, 100, timer);
                 LectureHallBuilding lectureHall = new LectureHallBuilding(world);
                 GymBuilding gym = new GymBuilding(world);
 
@@ -89,7 +92,8 @@ public class GoodBadLectureTest extends AbstractHeadlessGdxTest {
          */
         @Test
         public void testEventMain() {
-                World world = new World(100, 100);
+                Timer timer = mock(Timer.class);
+                World world = new World(100, 100, timer);
                 LectureHallBuilding lectureHall = new LectureHallBuilding(world);
                 world.addBuilding(lectureHall);
 
@@ -117,7 +121,8 @@ public class GoodBadLectureTest extends AbstractHeadlessGdxTest {
          */
         @Test
         public void testEventEnd() {
-                World world = new World(100, 100);
+                Timer timer = mock(Timer.class);
+                World world = new World(100, 100, timer);
                 LectureHallBuilding lectureHall = new LectureHallBuilding(world);
                 world.addBuilding(lectureHall);
 
