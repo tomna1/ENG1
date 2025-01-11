@@ -27,4 +27,8 @@ public class IHeartUniAchievement extends AbstractAchievement {
         }
         return false;
     }
+
+    public SatisfactionStats getSatisfactionStats() {
+        return satisfactionStats;
+    }
 }

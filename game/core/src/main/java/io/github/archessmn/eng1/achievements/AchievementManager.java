@@ -140,4 +140,12 @@ public class AchievementManager {
     public int getCompletedAchievementCount() {
         return completedAchievements.size();
     }
+
+    public float getTimeBetweenChecks() {
+        return timeBetweenChecks;
+    }
+
+    public boolean areTimeChecksEnabled() {
+        return isTimeChecksEnabled;
+    }
 }
