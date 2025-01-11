@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-import io.github.archessmn.eng1.Main;
+import io.github.archessmn.eng1.core.Main;
 
 /**
  * This class is the UI of the {@link Leaderboard}.

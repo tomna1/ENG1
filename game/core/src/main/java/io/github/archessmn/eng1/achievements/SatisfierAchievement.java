@@ -1,6 +1,6 @@
 package io.github.archessmn.eng1.achievements;
 
-import io.github.archessmn.eng1.SatisfactionStats;
+import io.github.archessmn.eng1.satisfaction.SatisfactionStats;
 
 /**
  * Earned by getting at least 10 total satisfaction

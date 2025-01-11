@@ -2,8 +2,8 @@ package io.github.archessmn.eng1.buildings;
 
 import java.util.HashMap;
 
-import io.github.archessmn.eng1.SatisfactionContributor;
-import io.github.archessmn.eng1.World;
+import io.github.archessmn.eng1.core.World;
+import io.github.archessmn.eng1.satisfaction.SatisfactionContributor;
 
 /**
  * Wrapper of {@link Building} that creates a building with the PIAZZA type.

@@ -11,10 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-import io.github.archessmn.eng1.Timer;
-import io.github.archessmn.eng1.World;
 import io.github.archessmn.eng1.buildings.GymBuilding;
 import io.github.archessmn.eng1.buildings.LectureHallBuilding;
+import io.github.archessmn.eng1.core.Timer;
+import io.github.archessmn.eng1.core.World;
 import io.github.archessmn.eng1.events.LectureHallMaintenance;
 
 public class LectureHallMaintenanceTest extends AbstractHeadlessGdxTest {

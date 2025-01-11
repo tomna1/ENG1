@@ -1,4 +1,4 @@
-package io.github.archessmn.eng1;
+package io.github.archessmn.eng1.core;
 
 import java.util.ArrayList;
 import java.util.HashMap;

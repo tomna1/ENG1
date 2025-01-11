@@ -1,6 +1,8 @@
-package io.github.archessmn.eng1;
+package io.github.archessmn.eng1.satisfaction;
 
 import java.util.ArrayList;
+
+import io.github.archessmn.eng1.core.Timer;
 
 public class SatisfactionStats { 
     private class SatisfactionStat {

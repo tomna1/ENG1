@@ -5,9 +5,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-import io.github.archessmn.eng1.World;
 import io.github.archessmn.eng1.buildings.Building;
 import io.github.archessmn.eng1.buildings.Building.Use;
+import io.github.archessmn.eng1.core.World;
 
 /**
  * Randomly adds or takes 5 student satisfaction

@@ -2,7 +2,8 @@ package io.github.archessmn.eng1.lwjgl3;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import io.github.archessmn.eng1.Main;
+
+import io.github.archessmn.eng1.core.Main;
 
 /** Launches the desktop (LWJGL3) application. */
 public class Lwjgl3Launcher {

@@ -1,6 +1,7 @@
-package io.github.archessmn.eng1;
+package io.github.archessmn.eng1.satisfaction;
 
 import io.github.archessmn.eng1.buildings.Building;
+import io.github.archessmn.eng1.core.World;
 
 public class SatisfactionManager {
 

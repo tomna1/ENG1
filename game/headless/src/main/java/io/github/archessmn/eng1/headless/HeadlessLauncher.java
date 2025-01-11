@@ -3,7 +3,8 @@ package io.github.archessmn.eng1.headless;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
-import io.github.archessmn.eng1.Main;
+
+import io.github.archessmn.eng1.core.Main;
 
 /** Launches the headless application. Can be converted into a utilities project or a server application. */
 public class HeadlessLauncher {

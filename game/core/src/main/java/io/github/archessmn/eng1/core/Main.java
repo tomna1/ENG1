@@ -1,8 +1,12 @@
-package io.github.archessmn.eng1;
+package io.github.archessmn.eng1.core;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+
+import io.github.archessmn.eng1.screens.GameScreen;
+import io.github.archessmn.eng1.screens.LeaderboardScreen;
+import io.github.archessmn.eng1.screens.MainMenuScreen;
 
 /**
  * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all

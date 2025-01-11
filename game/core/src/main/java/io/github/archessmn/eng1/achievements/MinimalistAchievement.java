@@ -1,6 +1,6 @@
 package io.github.archessmn.eng1.achievements;
 
-import io.github.archessmn.eng1.WorldStats;
+import io.github.archessmn.eng1.core.WorldStats;
 
 /**
  * This achievement is earned by placing a total of 5 building at the end of the game

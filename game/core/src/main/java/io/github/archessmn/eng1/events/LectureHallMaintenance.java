@@ -10,9 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-import io.github.archessmn.eng1.World;
 import io.github.archessmn.eng1.buildings.Building;
 import io.github.archessmn.eng1.buildings.Building.Use;
+import io.github.archessmn.eng1.core.World;
 
 /**
  * Displays a pop up saying that a lecture hall has shut down and
