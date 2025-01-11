@@ -309,7 +309,11 @@ public class GameScreen implements Screen {
         }
         batch.end();
 
-        satisfactionLabel.setText("Satisfaction = " + Float.toString(world.getSatisfaction()));
+        float satisfaction = world.getSatisfaction();
+        float satisfactionPercent = world.getSatisfactionStats().getPercentageSatisfaction();
+        if (Float.isNaN(satisfactionPercent)) satisfactionPercent = 0.0f;
+        satisfactionLabel.setText(String.format("Satisfaction: %.1f ( %.1f ", satisfaction, satisfactionPercent) + "%)");
+
         timerLabel.setText(String.format("Year: %d, Day: %d", timer.getYearCount(), timer.getDayCount()));
         // Sets the building count labels to the updated building count values.
         for (Building.Use use : Building.Use.values()) {
