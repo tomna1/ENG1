@@ -69,7 +69,7 @@ public class GameScreen implements Screen {
     private final HashMap<Building.Use, Label> buildingUseNameLabels = new HashMap<>();
 
     public GameScreen(Main main) {
-        timer = new Timer(5, 100);
+        timer = new Timer(300, 100);
         // 300 here represents the pixel width of the UI on the right hand side
         world = new World(Main.VIEWPORT_WIDTH - 300, Main.VIEWPORT_HEIGHT, timer);
         eventManager = new EventManager(35, 50); // LOWER VALUES FOR TESTING
