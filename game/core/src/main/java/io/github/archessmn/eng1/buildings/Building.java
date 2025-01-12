@@ -214,6 +214,10 @@ public abstract class Building {
         return connections;
     }
 
+    /**
+     * Returns the connected buildings of a certain type of the building.
+     * @return connected buildings.
+     */
     public HashMap<Building, Integer> getConnectedBuildingsOfType(Type type){
 
         HashMap<Building, Integer> connectionBuildingsOfType = new HashMap<>(); 
@@ -225,6 +229,10 @@ public abstract class Building {
         return connectionBuildingsOfType;
     }
 
+    /**
+     * Returns the distance to the closest connected building of a certain type.
+     * @return distance.
+     */
     public Integer getClosestConnectedBuildingDistanceOfType(Type type){
 
         HashMap<Building, Integer> connectedBuildingsOfType = getConnectedBuildingsOfType(type);

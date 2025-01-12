@@ -63,6 +63,12 @@ public class GridUtils {
         return new GridCoordTuple(gridX, gridY);
     }
 
+    /**
+     * Get the real world coordinates of the center of the grid square at the given grid coordinates.
+     * @param gridX The X coordinate of the grid square
+     * @param gridY The Y coordinate of the grid square
+     * @return A {@link Vector2} with the real world coordinates.
+     */
     public static Vector2 getRealCoords(float gridX, float gridY) {
         float gridWidth = (VIEWPORT_WIDTH / 16f);
         float gridHeight = (VIEWPORT_HEIGHT / 9f);
@@ -93,11 +99,21 @@ public class GridUtils {
         return (MathUtils.round(coord / (gridHeight) + 0.5f) * gridHeight) - (gridHeight / 2f);
     }
 
+    /**
+     * Used to calculate the real world X coordinate of the grid square
+     * @param gridX The X coordinate of the grid square
+     * @return The real world X coordinate of the grid square
+     */
     public static float calcRealWorldXCoord(int gridX) {
         float gridWidth = (VIEWPORT_WIDTH / 16f);
         return (gridX * gridWidth) - (gridWidth / 2f);
     }
 
+    /**
+     * Used to calculate the real world Y coordinate of the grid square
+     * @param gridY The Y coordinate of the grid square
+     * @return The real world Y coordinate of the grid square
+     */
     public static float calcRealWorldYCoord(int gridY) {
         float gridHeight = (VIEWPORT_HEIGHT / 9f);
         return (gridY * gridHeight) - (gridHeight / 2f);
