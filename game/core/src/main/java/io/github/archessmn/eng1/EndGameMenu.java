@@ -13,6 +13,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
+/**
+ * The menu that shows up when the game ends.
+ */
 public class EndGameMenu {
     private GameScreen gameScreen;
     private Stage stage;
@@ -22,6 +25,13 @@ public class EndGameMenu {
     private ImageButton confirmButton;
     private float score = 0;
 
+    /**
+     * Creates a new menu with the score label, a username input field and a
+     * confirm button. The score label will be empty and has to be set using
+     * the {@link #setScore(float, int)} method.
+     * @param main Reference to main. Cannot be null.
+     * @param gameScreen Reference to gamescreen. Cannot be null.
+     */
     public EndGameMenu(Main main, GameScreen gameScreen) {
         if (main == null) throw new IllegalArgumentException("main cannot be null");
         if (gameScreen == null) throw new IllegalArgumentException("gameScreen cannot be null");
@@ -40,6 +50,12 @@ public class EndGameMenu {
         stage.setDebugAll(true);
     }
 
+    /**
+     * Sets the label text which tells the player how much score they earned and
+     * how many achievements they earned.
+     * @param score The score the player got.
+     * @param achievementCount The amount of achievements the player got.
+     */
     public void setScore(float score, int achievementCount) {
         this.score = score;
         mainLabel.setText("Your Score was " + Float.toString(score) + 
@@ -80,15 +96,25 @@ public class EndGameMenu {
         table.add(confirmButton).pad(10.0f).row();
     }
 
+    /**
+     * Used to set this menu as the input processor that libgdx uses.
+     */
     public void setAsInputProcessor() {
         Gdx.input.setInputProcessor(stage);
     }
 
+    /**
+     * Draws the menu.
+     * @param delta Time since last frame.
+     */
     public void draw(float delta) {
         stage.act(delta);
         stage.draw();
     }
 
+    /**
+     * Disposes of the menu.
+     */
     public void dispose() {
         stage.dispose();
     }

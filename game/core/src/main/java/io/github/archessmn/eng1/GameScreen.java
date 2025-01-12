@@ -68,6 +68,10 @@ public class GameScreen implements Screen {
     private final HashMap<Building.Use, Label> buildingUseCountLabels = new HashMap<>();
     private final HashMap<Building.Use, Label> buildingUseNameLabels = new HashMap<>();
 
+    /**
+     * Creates a new gamescreen. The gamescreen is the screen when the game takes place.
+     * @param main Reference to Main. Cannot be null.
+     */
     public GameScreen(Main main) {
         timer = new Timer(300, 100);
         // 300 here represents the pixel width of the UI on the right hand side
@@ -323,6 +327,11 @@ public class GameScreen implements Screen {
         stage.draw();
     }
 
+    /**
+     * Saves a new username and score to the leaderboard.
+     * @param username The username of the player.
+     * @param score The score the player got.
+     */
     public void saveToLeaderboard(String username, float score) {
         Leaderboard leaderboard = new Leaderboard();
         LeaderboardPosition position = new LeaderboardPosition(username, score,

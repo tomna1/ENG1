@@ -2,6 +2,10 @@ package io.github.archessmn.eng1;
 
 import io.github.archessmn.eng1.buildings.Building;
 
+/**
+ * This class calculates the combination of all satisfaction contributions every building.
+ * It also calculates the total optimum satisfaction of all buildings.
+ *    */
 public class SatisfactionManager {
 
     private World world;
@@ -16,11 +20,15 @@ public class SatisfactionManager {
         satisfactionStats = new SatisfactionStats(this, world.getTimer());
     }
 
-    public void updateSatisfaction(float currentTime) {
+    /**
+     * Updates the satisfaction of all buildings and add them to the total satisfaction.
+     */
+    public void updateSatisfaction() {
 
         satisfaction = 0f;
         optimumSatisfaction = 0f;
         for (Building building : world.getBuildings()) {
+
 
             SatisfactionContributor satisfactionContributor = building.getSatisfactionContributor();
             satisfactionContributor.updateSatisfactionContribution();
@@ -35,6 +43,11 @@ public class SatisfactionManager {
         satisfactionStats.addSatisfaction(satisfaction, getPercentageSatisfaction());
     }
 
+    /**
+     * Updates the total event satisfaction and the total optimum event satisfaction.
+     * @param eventSatisfaction The satisfaction of the event.
+     * @param optimumEventSatisfaction The optimum satisfaction of the event.
+     */
     public void updateEventSatisfaction(float eventSatisfaction, float optimumEventSatisfaction) {
         totalEventSatisfaction += eventSatisfaction;
         optimumTotalEventSatisfaction += optimumEventSatisfaction;

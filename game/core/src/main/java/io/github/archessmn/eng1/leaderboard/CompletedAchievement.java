@@ -22,7 +22,9 @@ public class CompletedAchievement {
      * in the assets folder and descriptions is a short descriptions about how the
      * achievement was earned.
      * @param iconPath Filehandle for the icon. Cannot be null.
-     * @param description How the achievement is completed. Can be null.
+     * @param title Title for the achievement. Cannot be null or empty string.
+     * @param description How the achievement is completed. Can be null. If null
+     * then description is empty string.
      */
     public CompletedAchievement(String iconPath, String title, String description){
         if (iconPath == null) throw new IllegalArgumentException("iconPath cannot be null.");
@@ -52,19 +54,37 @@ public class CompletedAchievement {
     public CompletedAchievement() {
     }
 
+    /**
+     * Returns the path to the icon in the assets folder used to represent the
+     * achievement. Wont be null or empty string.
+     * @return Icon path.
+     */
     public String getIconPath() {
         return iconPath;
     }
 
+    /**
+     * Returns a filehandle to the path of the icon in the assets folder used
+     * to represent the achievement.
+     * @return Icon filehandle.
+     */
     public FileHandle getIconFile() {
         FileHandle output = Gdx.files.internal(iconPath);
         return output;
     }
 
+    /**
+     * Returns the title of the achievement. Wont be null.
+     * @return Achievement title.
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Returns the description of the achievement. Wont be null.
+     * @return Achievement description.
+     */
     public String getDescription() {
         return description;
     }

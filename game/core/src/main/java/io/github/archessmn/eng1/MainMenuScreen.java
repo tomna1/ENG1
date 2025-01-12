@@ -14,6 +14,10 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+/**
+ * This is the screen that shows at the start of the game. It allows the player
+ * to select between playing the game or viewing the leaderboard.
+ */
 public class MainMenuScreen implements Screen {
     private Stage stage;
     private FitViewport viewport;
@@ -21,6 +25,10 @@ public class MainMenuScreen implements Screen {
     private ImageButton leaderboardButton;
     private Main main;
 
+    /**
+     * Creates a new main menu.
+     * @param main Reference to Main. Cannot be null.
+     */
     public MainMenuScreen(Main main) {
         if (main == null) throw new IllegalArgumentException("main cannot be null");
         this.main = main;
@@ -30,6 +38,10 @@ public class MainMenuScreen implements Screen {
         setupButtons();
     }
 
+    /**
+     * Sets up the start game button and leaderboard button and adds them
+     * to the stage.
+     */
     private void setupButtons() {
         final float buttonHeight = stage.getHeight()/4;
         final float buttonWidth = stage.getWidth()/4;

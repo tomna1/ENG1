@@ -159,18 +159,24 @@ public abstract class Building {
         this.y = y - this.height / 2;
     }
 
+    /**
+     * Updates the connectedBuildings map with the distances from the buildings.
+     */
     public void updateConnectedBuildings(){
-
         connectedBuildings = new HashMap<>();
-        for(Building otherBuilding : new Array<Building>(world.getBuildings())){
-
-            if(isConnectedBuilding(otherBuilding)){
-
+        for (Building otherBuilding : new Array<Building>(world.getBuildings())){
+            if (isConnectedBuilding(otherBuilding)){
                 connectedBuildings.put(otherBuilding, getManhattenDistanceFrom(otherBuilding));
             }
         }
     }
 
+    /**
+     * Checks if this building is connected to another building. 2 buildings are 
+     * connected if TODO: THIS
+     * @param building
+     * @return
+     */
     public boolean isConnectedBuilding(Building building){
         return connections.containsKey(building.getBuildingType());
     }
@@ -208,6 +214,10 @@ public abstract class Building {
         return connections;
     }
 
+    /**
+     * Returns the connected buildings of a certain type of the building.
+     * @return connected buildings.
+     */
     public HashMap<Building, Integer> getConnectedBuildingsOfType(Type type){
 
         HashMap<Building, Integer> connectionBuildingsOfType = new HashMap<>(); 
@@ -219,6 +229,10 @@ public abstract class Building {
         return connectionBuildingsOfType;
     }
 
+    /**
+     * Returns the distance to the closest connected building of a certain type.
+     * @return distance.
+     */
     public Integer getClosestConnectedBuildingDistanceOfType(Type type){
 
         HashMap<Building, Integer> connectedBuildingsOfType = getConnectedBuildingsOfType(type);
@@ -236,8 +250,13 @@ public abstract class Building {
         return closestConnectedDistance;
     }
 
-
-    public int getID() { return this.id; }
+    /**
+     * Returns the id of the building. The id is its index in {@link World#buildings}.
+     * @return id.
+     */
+    public int getID() {
+        return this.id;
+    }
     
     /**
      * Sets the X position of the building
@@ -246,7 +265,13 @@ public abstract class Building {
     public void setX(float x) {
         this.x = x;
     }
-    public float getX() { return this.x; }
+    /**
+     * Returns the x position of the building.
+     * @return X coordinate.
+     */
+    public float getX() { 
+        return this.x;
+    }
    
     /**
      * Sets the Y position of the building
@@ -255,6 +280,10 @@ public abstract class Building {
     public void setY(float y) {
         this.y = y;
     }
+    /**
+     * Returns the y position of the building.
+     * @return y coordinate.
+     */
     public float getY() { 
         return this.y;
     }
@@ -287,10 +316,18 @@ public abstract class Building {
         return this.gridY;
     }
     
+    /**
+     * Returns the width of the building.
+     * @return width.
+     */
     public float getWidth() {
         return this.width;
     }
     
+    /**
+     * Returns the height of the building.
+     * @return height.
+     */
     public float getHeight() {
         return this.height;
     }
@@ -331,11 +368,19 @@ public abstract class Building {
         return GridUtils.getGridCoords(this.x + this.width / 2, this.y + this.height / 2);
     }
 
-
+    /**
+     * Returns the {@link Building.Type} of the building.
+     * @return type.
+     */
     public Type getBuildingType(){
         return buildingType;
     }
 
+    /**
+     * Returns the {@link Building.Use} of a building based on its type.
+     * @param buildingType type of the building.
+     * @return use of the building.
+     */
     public static Use getBuildingUse(Type buildingType) {
         return switch(buildingType) {
             case GYM -> Use.RECREATION;
@@ -345,6 +390,12 @@ public abstract class Building {
         };
     }
 
+    /**
+     * Returns the file path of the texture that represents the building in
+     * the assets folder
+     * @param buildingType The type of the building
+     * @return File path of building.
+     */
     private static String getFileOfType(Type buildingType) {
         return switch (buildingType) {
             case GYM -> "gym.png";
@@ -355,6 +406,10 @@ public abstract class Building {
         };
     }
 
+    /**
+     * Returns a reference to the world the building is located in.
+     * @return The world.
+     */
     public World getWorld(){
         return world;
     }

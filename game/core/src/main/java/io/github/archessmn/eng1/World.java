@@ -101,7 +101,7 @@ public class World {
 
     public void updateWorld(Building newBuilding) {
         updateBuildingConnections();
-        satisfactionManager.updateSatisfaction(timer.getElapsedTime());
+        satisfactionManager.updateSatisfaction();
     }
 
     private void printCounts() {
@@ -110,10 +110,24 @@ public class World {
         }
     }
 
+    /**
+     * Returns the amount of buildings in the world that have the specified type.
+     * @param type The type of the building.
+     * @return Integer. Always >= 0.
+     */
     public Integer getTypeCount(Building.Type type) {
         return buildingTypeCounts.get(type);
     }
 
+    /**
+     * Returns the ratio of the number of buildings of one type to the number
+     * of buildings of another type. If there are 2 gyms a 1 halls
+     * then ratioToType(Building.GYM, Building.HALLS) = 2.0f.
+     * @param typeOne The type of a building.
+     * @param typeTwo The type of a building.
+     * @return The ratio between the buildings. May be null if the number of
+     * buildings of typeTwo is 0.
+     */
     public Float ratioToType(Building.Type typeOne, Building.Type typeTwo) {
         Integer typeCount = getTypeCount(typeTwo);
         if (typeCount == 0) {
@@ -129,9 +143,14 @@ public class World {
         }
     }
 
+    /**
+     * Updates the satisfaction in the satisfaction manager by the amounts.
+     * @param satChange The actual change in satisfaction.
+     * @param optSatChange The max possible change in satisfaction.
+     */
     public void updateEventSatisfaction(float satChange, float optSatChange) {
         satisfactionManager.updateEventSatisfaction(satChange, optSatChange);
-        satisfactionManager.updateSatisfaction(timer.getElapsedTime());
+        satisfactionManager.updateSatisfaction();
     }
 
     /**
@@ -220,6 +239,10 @@ public class World {
         assetManager.dispose();
     }
 
+    /**
+     * Returns a reference to the {@link #worldStats}.
+     * @return world stats.
+     */
     public WorldStats getWorldStats() {
         return worldStats;
     }
