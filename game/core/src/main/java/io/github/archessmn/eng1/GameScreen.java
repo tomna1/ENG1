@@ -6,9 +6,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -16,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -132,8 +136,15 @@ public class GameScreen implements Screen {
         rootTable.setFillParent(true);
         stage.addActor(rootTable);
 
+        Pixmap bgPixmap = new Pixmap(1,1, Pixmap.Format.RGB565);
+        bgPixmap.setColor(Color.DARK_GRAY);
+        bgPixmap.fill();
+        TextureRegionDrawable textureRegionDrawableBg = new TextureRegionDrawable(new TextureRegion(new Texture(bgPixmap)));
+
         rightTable = new Table();
         rightTable.pad(10);
+        rightTable.setBackground(textureRegionDrawableBg);
+        System.out.println();
         rootTable.right().add(rightTable).expandY().fillY().width(300);
         rightTable.add(timerLabel).row();
         rightTable.add(satisfactionLabel).row();
@@ -297,9 +308,7 @@ public class GameScreen implements Screen {
             batch.end();
         }
 
-        this.drawBuildingMenu();
         world.drawLakes(batch);
-
         world.drawbuildings(batch);
 
         batch.begin();
@@ -325,6 +334,7 @@ public class GameScreen implements Screen {
         }
 
         stage.draw();
+        this.drawBuildingMenuIcons();
     }
 
     /**
@@ -341,15 +351,9 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * Draws the dark grey building menu.
+     * Draws the building icons of the building menu.
      */
-    private void drawBuildingMenu() {
-        // Give the menu its drak grey background.
-        blockRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        blockRenderer.setColor(Color.DARK_GRAY);
-        blockRenderer.rect(rightTable.getX(), rightTable.getY(), rightTable.getWidth(), rightTable.getHeight());
-        blockRenderer.end();
-
+    private void drawBuildingMenuIcons() {
         batch.begin();
         for (Building building : draggablebuildings) {
             building.draw(batch);
