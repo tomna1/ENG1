@@ -26,8 +26,9 @@ public class AchievementManager {
      * @param worldStats A reference to the stats of the world used by some achievements.
      * @param satisfactionStats A reference to the stats of satisfaction used by some achievements.
      * @param timeBetweenChecks The time in seconds in between checks. For example if this was 1.0f,
-     * every 1 second the manager would forcefully check all achievements to see if they have been
-     * completed or not.
+     * every 1 second the manager would forcefully check all runtime achievements to see if they have been
+     * completed or not. If this value iss 0.0f or lower then the manager will only
+     * check the achievements at the end/
      */
     public AchievementManager(WorldStats worldStats, SatisfactionStats satisfactionStats, float timeBetweenChecks) {
         if (worldStats == null) throw new IllegalArgumentException("World stats cannot be null");
@@ -156,5 +157,24 @@ public class AchievementManager {
      */
     public int getCompletedAchievementCount() {
         return completedAchievements.size();
+    }
+
+    /**
+     * Returns the amount of time that the manager waits before it calls
+     * {@link AbstractAchievement#checkIfAchieved()} on all runtime achievements.
+     * Should be the same as defined in the constructor.
+     * @return time in between checks as defined in constructor.
+     */
+    public float getTimeBetweenChecks() {
+        return timeBetweenChecks;
+    }
+
+    /**
+     * Time checks will be enabled if the {@link #timeBetweenChecks} variable
+     * that was defined in the constructor is greater than 0.0f.
+     * @return If time checks are enabled or not.
+     */
+    public boolean areTimeChecksEnabled() {
+        return isTimeChecksEnabled;
     }
 }

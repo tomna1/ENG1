@@ -51,7 +51,7 @@ public class GameScreen implements Screen {
     private Array<Building> draggablebuildings = new Array<>();
     private Array<Lake> lakes = new Array<>();
 
-    private Timer timer = new Timer(300, 100);
+    private Timer timer;
 
     private BitmapFont font;
     private Integer buildingClicked = -1;
@@ -73,8 +73,9 @@ public class GameScreen implements Screen {
      * @param main Reference to Main. Cannot be null.
      */
     public GameScreen(Main main) {
+        timer = new Timer(300, 100);
         // 300 here represents the pixel width of the UI on the right hand side
-        world = new World(Main.VIEWPORT_WIDTH - 300, Main.VIEWPORT_HEIGHT);
+        world = new World(Main.VIEWPORT_WIDTH - 300, Main.VIEWPORT_HEIGHT, timer);
         eventManager = new EventManager(35, 50); // LOWER VALUES FOR TESTING
         achievementManager = new AchievementManager(world.getWorldStats(), world.getSatisfactionStats(), 1.0f);
         viewport = main.getViewport();
@@ -183,8 +184,14 @@ public class GameScreen implements Screen {
     }
 
     private void input() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            if (!paused && buildingClicked != -1) {
+                world.buildings.removeIndex(buildingClicked);
+                buildingClicked = -1;
+                isBuildingSelected = false;
+            }
             paused = !paused;
+        }
 
         if (paused || gameEnded) {
             buildingClicked = -1;
@@ -195,7 +202,7 @@ public class GameScreen implements Screen {
         unprojectedTouchPos.set(viewport.unproject(touchPos));
         // If the player clicks on the building icons of the menu, makes a copy and idk
         // all of this should probably be refactored to use buttons anyway.
-        if (Gdx.input.justTouched()) {
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             if(!isBuildingSelected){
                 for (int i = draggablebuildings.size - 1; i >= 0; i--) {
                     Building building = draggablebuildings.get(i);
@@ -226,10 +233,11 @@ public class GameScreen implements Screen {
             
         }
 
+        // If there is a building being placed.
         if (buildingClicked != -1 && isBuildingSelected) {
             Building building = world.getBuilding(buildingClicked);
             building.setCenter(unprojectedTouchPos.x, unprojectedTouchPos.y);
-            if(Gdx.input.isKeyJustPressed(Input.Keys.BACKSPACE)){
+            if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)){
                 world.buildings.removeIndex(buildingClicked);
                 buildingClicked = -1;
                 isBuildingSelected = false;

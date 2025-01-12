@@ -24,14 +24,18 @@ public abstract class AbstractAchievement {
      * Cannot be null or empty
      * @param iconPath The path to the icon in the assets folder used to represent
      * the achievement. Cannot be null.
+     * @param onlyCheckAtEnd Specifies whether the achievement should only be checked
+     * at the end of the game or not.
      */
     public AbstractAchievement(AchievementManager manager, int id, String title, String description, String iconPath, boolean onlyCheckAtEnd) {
         if (manager == null) throw new IllegalArgumentException("Manager cannot be null");
-        if (title == null) throw new IllegalArgumentException("title cannot be null");
+        if (title == null) throw new IllegalArgumentException("achievement cannot be null");
         if (title.equals("")) throw new IllegalArgumentException("title cannot be empty");
         if (description == null) throw new IllegalArgumentException("decription cannot be null");
-        if (description.equals("")) throw new IllegalArgumentException("description cannot be empty");
+        if (description.equals("")) throw new IllegalArgumentException("descriptions cannot be empty");
         if (iconPath == null) throw new IllegalArgumentException("iconPath cannot be null.");
+        if (iconPath.equals("")) throw new IllegalArgumentException("iconPath cannot be empty");
+        
         this.manager = manager;
         this.id = id;
         this.title = title;
@@ -83,6 +87,11 @@ public abstract class AbstractAchievement {
         return onlyCheckAtEnd;
     }
     
+    /**
+     * Checks if the achievement has been achieved and returns true if it has and
+     * false if not.
+     * @return true if achievement achieved and false otherwise.
+     */
     public abstract boolean checkIfAchieved();
 
     /**

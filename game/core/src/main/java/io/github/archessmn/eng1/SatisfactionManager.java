@@ -17,11 +17,11 @@ public class SatisfactionManager {
     public SatisfactionManager(World world) {
         this.world = world;
         satisfaction = 0f;
-        satisfactionStats = new SatisfactionStats(this);
+        satisfactionStats = new SatisfactionStats(this, world.getTimer());
     }
 
     /**
-     * Updates the satisfaction of all buildings in the world and adds them to total satisfaction.
+     * Updates the satisfaction of all buildings and add them to the total satisfaction.
      */
     public void updateSatisfaction() {
 
@@ -38,9 +38,9 @@ public class SatisfactionManager {
         }
         satisfaction += totalEventSatisfaction;
         optimumSatisfaction += optimumTotalEventSatisfaction;
-        System.out.println("Satisfaction: " + satisfaction + " Optimum Satisfaction: " + optimumSatisfaction);
+        System.out.println("Satisfaction: " + satisfaction + " Optimum Satisfaction: " + optimumSatisfaction + "Percent: " + getPercentageSatisfaction());
 
-        satisfactionStats.addSatisfaction(satisfaction, 0.0f);
+        satisfactionStats.addSatisfaction(satisfaction, getPercentageSatisfaction());
     }
 
     /**
