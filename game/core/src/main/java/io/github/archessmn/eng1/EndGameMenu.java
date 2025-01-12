@@ -74,7 +74,7 @@ public class EndGameMenu {
                 String text = textField.getText();
                 if (text.length() < 1 || text.length() > 16) return;
                 gameScreen.saveToLeaderboard(text, score);
-                main.viewMainMenu();
+                main.viewLeaderboard();
             }
         });
         table.add(confirmButton).pad(10.0f).row();
