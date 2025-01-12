@@ -2,7 +2,8 @@ package io.github.archessmn.eng1.events;
 
 import java.util.Random;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import io.github.archessmn.eng1.World;
+
+import io.github.archessmn.eng1.core.World;
 
 /**
  * determines a random time for the event to start and checks each frame if

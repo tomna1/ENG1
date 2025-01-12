@@ -1,7 +1,7 @@
 package io.github.archessmn.eng1.headless;
 
 import org.junit.jupiter.api.Test;
-import io.github.archessmn.eng1.Timer;
+import io.github.archessmn.eng1.core.Timer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

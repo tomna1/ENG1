@@ -1,4 +1,4 @@
-package io.github.archessmn.eng1;
+package io.github.archessmn.eng1.core;
 
 import java.util.HashMap;
 
@@ -9,6 +9,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
 import io.github.archessmn.eng1.buildings.Building;
+import io.github.archessmn.eng1.obstacles.Lake;
+import io.github.archessmn.eng1.satisfaction.SatisfactionManager;
+import io.github.archessmn.eng1.satisfaction.SatisfactionStats;
 import io.github.archessmn.eng1.util.GridCoordTuple;
 import io.github.archessmn.eng1.util.GridUtils;
 

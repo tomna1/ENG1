@@ -2,7 +2,7 @@ package io.github.archessmn.eng1.headless.achievements;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.archessmn.eng1.SatisfactionStats;
+import io.github.archessmn.eng1.satisfaction.SatisfactionStats;
 import io.github.archessmn.eng1.achievements.AchievementManager;
 import io.github.archessmn.eng1.achievements.SatisfierAchievement;
 

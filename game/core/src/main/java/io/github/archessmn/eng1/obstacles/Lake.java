@@ -1,9 +1,10 @@
-package io.github.archessmn.eng1;
+package io.github.archessmn.eng1.obstacles;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
+import io.github.archessmn.eng1.core.World;
 import io.github.archessmn.eng1.util.GridCoordTuple;
 import io.github.archessmn.eng1.util.GridUtils;
 

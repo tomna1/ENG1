@@ -12,8 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 
-import io.github.archessmn.eng1.World;
 import io.github.archessmn.eng1.buildings.Building;
+import io.github.archessmn.eng1.core.World;
 
 /**
  * A UFO stops on random buildings and starts a 5 second timer, if the player

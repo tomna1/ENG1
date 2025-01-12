@@ -1,6 +1,8 @@
-package io.github.archessmn.eng1;
+package io.github.archessmn.eng1.satisfaction;
 
 import java.util.ArrayList;
+
+import io.github.archessmn.eng1.core.Timer;
 
 /**
  * This class is used to track all of the stats that the achievements may need
