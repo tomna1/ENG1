@@ -2,8 +2,8 @@ package io.github.archessmn.eng1.headless.achievements;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.archessmn.eng1.SatisfactionStats;
-import io.github.archessmn.eng1.WorldStats;
+import io.github.archessmn.eng1.satisfaction.SatisfactionStats;
+import io.github.archessmn.eng1.core.WorldStats;
 import io.github.archessmn.eng1.achievements.AchievementManager;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

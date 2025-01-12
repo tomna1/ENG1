@@ -1,4 +1,4 @@
-package io.github.archessmn.eng1;
+package io.github.archessmn.eng1.core;
 
 public class Timer {
     private float elapsedTime = 0.0f;

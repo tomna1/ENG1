@@ -14,8 +14,8 @@ import com.badlogic.gdx.utils.Array;
 
 import io.github.archessmn.eng1.util.GridCoordTuple;
 import io.github.archessmn.eng1.util.GridUtils;
-import io.github.archessmn.eng1.SatisfactionContributor;
-import io.github.archessmn.eng1.World;
+import io.github.archessmn.eng1.satisfaction.SatisfactionContributor;
+import io.github.archessmn.eng1.core.World;
 
 /**
  * Base class for each building type ({@link io.github.archessmn.eng1.buildings.Building.Type}),

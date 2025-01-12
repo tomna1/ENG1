@@ -1,4 +1,4 @@
-package io.github.archessmn.eng1;
+package io.github.archessmn.eng1.screens;
 
 import java.util.HashMap;
 
@@ -31,9 +31,13 @@ import io.github.archessmn.eng1.buildings.HallsBuilding;
 import io.github.archessmn.eng1.buildings.LectureHallBuilding;
 import io.github.archessmn.eng1.buildings.OfficeBuilding;
 import io.github.archessmn.eng1.buildings.PiazzaBuilding;
+import io.github.archessmn.eng1.core.Main;
+import io.github.archessmn.eng1.core.Timer;
+import io.github.archessmn.eng1.core.World;
 import io.github.archessmn.eng1.events.EventManager;
 import io.github.archessmn.eng1.leaderboard.Leaderboard;
 import io.github.archessmn.eng1.leaderboard.LeaderboardPosition;
+import io.github.archessmn.eng1.obstacles.Lake;
 
 public class GameScreen implements Screen {
     private World world;

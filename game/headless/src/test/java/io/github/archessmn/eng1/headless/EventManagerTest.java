@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-import io.github.archessmn.eng1.Timer;
-import io.github.archessmn.eng1.World;
+import io.github.archessmn.eng1.core.Timer;
+import io.github.archessmn.eng1.core.World;
 import io.github.archessmn.eng1.buildings.LectureHallBuilding;
 import io.github.archessmn.eng1.events.AlienInvasion;
 import io.github.archessmn.eng1.events.EventManager;
