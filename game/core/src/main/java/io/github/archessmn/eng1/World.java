@@ -212,6 +212,7 @@ public class World {
     /**
      * Draws the grid using {@link GridUtils}
      */
+    /*
     public void drawGrid() {
         // This is here instead of constructor because it breaks some of the
         // tests and this method is not called in the tests.
@@ -219,7 +220,7 @@ public class World {
             gridRenderer = new ShapeRenderer();
         }
         GridUtils.drawGrid(gridRenderer);
-    }
+    }*/
 
     public void drawLakes(SpriteBatch batch){ 
         batch.begin();

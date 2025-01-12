@@ -6,9 +6,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -16,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -42,7 +46,7 @@ public class GameScreen implements Screen {
     private Skin skin;
 
     private ShapeRenderer shapeRenderer;
-    private ShapeRenderer blockRenderer;
+    private ShapeRenderer gridRenderer;
     private SpriteBatch batch;
 
     private Vector2 touchPos = new Vector2();
@@ -61,10 +65,15 @@ public class GameScreen implements Screen {
     private Boolean gameEnded = false;
 
     private Stage stage;
+    private Table table;
     private Table rightTable;
 
     private Label timerLabel;
     private Label satisfactionLabel;
+    private Label pauseLabel;
+    private final String pausedString = "Game is paused, press ESC to unpause.";
+    private final String unpausedString = "Game is not paused, press ESC to pause.";
+
     private final HashMap<Building.Use, Label> buildingUseCountLabels = new HashMap<>();
     private final HashMap<Building.Use, Label> buildingUseNameLabels = new HashMap<>();
 
@@ -86,7 +95,7 @@ public class GameScreen implements Screen {
         skin.addRegions(atlas);
 
         shapeRenderer = new ShapeRenderer();
-        blockRenderer = new ShapeRenderer();
+        gridRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
 
         initializeBuildingIcons();
@@ -115,6 +124,12 @@ public class GameScreen implements Screen {
         Skin skin2 = new Skin(Gdx.files.internal("ui/uiskin.json"));
         satisfactionLabel = new Label("Satisfaction = ", skin2);
 
+        Skin skin3 = new Skin(Gdx.files.internal("ui/uiskin.json"));
+        pauseLabel = new Label(unpausedString, skin3);
+        pauseLabel.setWrap(true);
+        pauseLabel.setPosition((Main.VIEWPORT_WIDTH/2) - Main.VIEWPORT_WIDTH/4, (Main.VIEWPORT_HEIGHT/2) - Main.VIEWPORT_HEIGHT/4);
+        pauseLabel.setSize(Main.VIEWPORT_WIDTH/2, Main.VIEWPORT_HEIGHT/2);
+
         // This is setting up the label for the counters of each building. "Sleep
         // buildings:"
         // is an example of how the labels are meant to look.
@@ -127,14 +142,22 @@ public class GameScreen implements Screen {
             buildingUseCountLabels.put(buildingUse, new Label("0", labelStyle));
         }
 
-        // I have no idea what this rootTable nonsense is.
-        Table rootTable = new Table();
-        rootTable.setFillParent(true);
-        stage.addActor(rootTable);
+        // I have no idea what this table nonsense is.
+        table = new Table();
+        stage.addActor(table);
+        table.setFillParent(true);
+        
+
+        // This is the background of the building menu.
+        Pixmap bgPixmap = new Pixmap(1,1, Pixmap.Format.RGB565);
+        bgPixmap.setColor(Color.DARK_GRAY);
+        bgPixmap.fill();
+        TextureRegionDrawable textureRegionDrawableBg = new TextureRegionDrawable(new TextureRegion(new Texture(bgPixmap)));
 
         rightTable = new Table();
         rightTable.pad(10);
-        rootTable.right().add(rightTable).expandY().fillY().width(300);
+        rightTable.setBackground(textureRegionDrawableBg);
+        table.right().add(rightTable).expandY().fillY().width(300);
         rightTable.add(timerLabel).row();
         rightTable.add(satisfactionLabel).row();
         for (Building.Use buildingUse : Building.Use.values()) {
@@ -191,6 +214,11 @@ public class GameScreen implements Screen {
                 isBuildingSelected = false;
             }
             paused = !paused;
+            if (paused) {
+                pauseLabel.setText(pausedString);
+            } else {
+                pauseLabel.setText(unpausedString);
+            }
         }
 
         if (paused || gameEnded) {
@@ -268,7 +296,10 @@ public class GameScreen implements Screen {
         ScreenUtils.clear(Color.OLIVE);
         viewport.apply();
         batch.setProjectionMatrix(viewport.getCamera().combined);
-        world.drawGrid();
+        gridRenderer.setProjectionMatrix(viewport.getCamera().combined);
+        shapeRenderer.setProjectionMatrix(viewport.getCamera().combined);
+        
+        drawGrid(gridRenderer);
 
         if (gameEnded) {
             endGameMenu.draw(Gdx.graphics.getDeltaTime());
@@ -297,21 +328,8 @@ public class GameScreen implements Screen {
             batch.end();
         }
 
-        this.drawBuildingMenu();
         world.drawLakes(batch);
-
         world.drawbuildings(batch);
-
-        batch.begin();
-        if (paused) {
-            font.draw(batch, "Paused, press [ESC] to resume", 20, 460);
-            font.draw(batch, "Building icons from macrovector on Freepik", 0, 25);
-        }
-        if (gameEnded) {
-            font.draw(batch, "End of the game!", 20, 460);
-            font.draw(batch, "Building icons from macrovector on Freepik", 0, 25);
-        }
-        batch.end();
 
         float satisfaction = world.getSatisfaction();
         float satisfactionPercent = world.getSatisfactionStats().getPercentageSatisfaction();
@@ -325,6 +343,13 @@ public class GameScreen implements Screen {
         }
 
         stage.draw();
+        this.drawBuildingMenuIcons();
+
+        if (paused) {
+            batch.begin();
+            pauseLabel.draw(batch, 1.0f);
+            batch.end();
+        }
     }
 
     /**
@@ -341,20 +366,38 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * Draws the dark grey building menu.
+     * Draws the building icons of the building menu.
      */
-    private void drawBuildingMenu() {
-        // Give the menu its drak grey background.
-        blockRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        blockRenderer.setColor(Color.DARK_GRAY);
-        blockRenderer.rect(rightTable.getX(), rightTable.getY(), rightTable.getWidth(), rightTable.getHeight());
-        blockRenderer.end();
-
+    private void drawBuildingMenuIcons() {
         batch.begin();
         for (Building building : draggablebuildings) {
             building.draw(batch);
         }
         batch.end();
+    }
+
+    /**
+     * Draws a grid into the viewport using the {@link ShapeRenderer} passed to it.
+     * @param gridRenderer The {@link ShapeRenderer} used to draw the grid.
+     */
+    public void drawGrid(ShapeRenderer gridRenderer) {
+        float gridWidth = (table.getWidth() / 16f);
+        float gridHeight = (table.getHeight() / 9f);
+        
+        gridRenderer.begin(ShapeRenderer.ShapeType.Line);
+        gridRenderer.setProjectionMatrix(viewport.getCamera().combined);
+        gridRenderer.setColor(new Color(0x5b7e13ff));
+
+        for (int v = 1; v < 9; v++) {
+            // These are the ones that go across the screen
+            gridRenderer.line(0, gridHeight * v,  table.getWidth() - rightTable.getWidth(), gridHeight * v);
+        }
+        for (int h = 1; h < 11; h++) {
+            // These are the ones that go top to bottom.
+            gridRenderer.line(gridWidth * h, 0, gridWidth * h, table.getHeight());
+        }
+
+        gridRenderer.end();
     }
 
     /**
