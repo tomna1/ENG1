@@ -34,7 +34,7 @@ public class JamPackedAchievementTest {
     @Test
     public void achievedWhenTotalBuildingsPlacedEqualsMax() {
         WorldStats worldStats = mock(WorldStats.class);
-        when(worldStats.getTotalBuildingsPlaced()).thenReturn(WorldStats.maxPossibleBuildings);
+        when(worldStats.getTotalBuildingsPlaced()).thenReturn(WorldStats.MAX_POSSIBLE_BUILDINGS);
 
         JamPackedAchievement achievement = new JamPackedAchievement(validManager, worldStats);
         
@@ -45,14 +45,14 @@ public class JamPackedAchievementTest {
     @Test
     public void notAchievedWhenTotalBuildingPlacedDoesntEqualMax() {
         WorldStats worldStats = mock(WorldStats.class);
-        when(worldStats.getTotalBuildingsPlaced()).thenReturn(WorldStats.maxPossibleBuildings-1);
+        when(worldStats.getTotalBuildingsPlaced()).thenReturn(WorldStats.MAX_POSSIBLE_BUILDINGS-1);
 
         JamPackedAchievement achievement = new JamPackedAchievement(validManager, worldStats);
 
         assertEquals(false, achievement.checkIfAchieved(), 
         "checkIfAchieved should return false when max possible buildings have not been built");
 
-        when(worldStats.getTotalBuildingsPlaced()).thenReturn(WorldStats.maxPossibleBuildings+1);
+        when(worldStats.getTotalBuildingsPlaced()).thenReturn(WorldStats.MAX_POSSIBLE_BUILDINGS+1);
         assertEquals(false, achievement.checkIfAchieved(), 
         "checkIfAchieved should return false when max possible buildings have not been built");
     }

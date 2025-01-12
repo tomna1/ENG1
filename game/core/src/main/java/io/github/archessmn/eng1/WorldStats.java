@@ -11,7 +11,7 @@ import io.github.archessmn.eng1.buildings.Building;
  * if they have been completed.
  */
 public class WorldStats {
-    public final static int maxPossibleBuildings = 10;
+    public final static int MAX_POSSIBLE_BUILDINGS = 9*11;
     
     private HashMap<Building.Use, Integer> buildingUseCounts = new HashMap<>();
     private HashMap<Building.Type, Integer> buildingTypeCounts = new HashMap<>();

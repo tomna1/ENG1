@@ -19,7 +19,7 @@ public class JamPackedAchievement extends AbstractAchievement {
     }
 
     public boolean checkIfAchieved() {
-        if (worldStats.getTotalBuildingsPlaced() == WorldStats.maxPossibleBuildings) return true;
+        if (worldStats.getTotalBuildingsPlaced() == WorldStats.MAX_POSSIBLE_BUILDINGS) return true;
         return false;
     }
 
