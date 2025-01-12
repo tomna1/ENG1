@@ -51,6 +51,7 @@ jobs:
 
       # Uploads the JAR file
       - name: Upload JAR
+        if: contains("ubuntu", ${{matrix.os}})
         uses: actions/upload-artifact@v4
         with:
           name: lib-${{ matrix.os }}.jar
@@ -74,12 +75,14 @@ jobs:
     steps:
       # Fetch the jar file produced by the specified os
     - name: Download jar file
+      if: contains("ubuntu", ${{matrix.os}})
       uses: actions/download-artifact@v4
       with:
         name: lib-${{ matrix.os }}.jar
 
       # Renames the build artifact to match the os used
     - name: Rename build artifact
+      if: contains("ubuntu", ${{matrix.os}})
       run: mv ENG1-1.0.0.jar lib-${{ matrix.os }}.jar
 
     - name: Print folder structure
@@ -87,6 +90,7 @@ jobs:
   
       # Releases the build artifact to the releases section of the github
     - name: release
+      if: contains("ubuntu", ${{matrix.os}})
       uses: softprops/action-gh-release@v2
       with:
         files: lib-${{ matrix.os }}.jar
